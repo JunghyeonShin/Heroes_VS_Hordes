@@ -220,7 +220,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ArcaneMage_Hand
+      name: ArcaneMage_Hand00
       rect:
         serializedVersion: 2
         x: 491
@@ -262,7 +262,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ArcaneMage_6
+      name: ArcaneMage_Hand01
       rect:
         serializedVersion: 2
         x: 947
@@ -483,7 +483,6 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       ArcaneMage_10: 1510883496
-      ArcaneMage_6: -2001705141
       ArcaneMage_7: -179636451
       ArcaneMage_9: -1461625954
       ArcaneMage_Body: -597758545
@@ -491,7 +490,8 @@ TextureImporter:
       ArcaneMage_Hair00: 1450964138
       ArcaneMage_Hair01: -1384653908
       ArcaneMage_Hair02: -1640510643
-      ArcaneMage_Hand: 1876328376
+      ArcaneMage_Hand00: 1876328376
+      ArcaneMage_Hand01: -2001705141
       ArcaneMage_Head: 74785725
       ArcaneMage_LeftEar: -577491415
       ArcaneMage_LeftEye: 11327922
