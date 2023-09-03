@@ -19,8 +19,9 @@ public class TestProjectile : MonoBehaviour
     {
         if (null != TargetMonster)
         {
-            var projectileToMonsterVec = (TargetMonster.position - transform.position).normalized;
-            var moveVec = new Vector2(projectileToMonsterVec.x, projectileToMonsterVec.y) * _moveSpeed * Time.fixedDeltaTime;
+            var projectileToMonsterVec = (TargetMonster.position - transform.position);
+            var projectileToMonsterNormalVec = new Vector2(projectileToMonsterVec.x, projectileToMonsterVec.y).normalized;
+            var moveVec = projectileToMonsterNormalVec * _moveSpeed * Time.fixedDeltaTime;
             _rigid.MovePosition(_rigid.position + moveVec);
         }
     }
