@@ -6,7 +6,8 @@ namespace ProtoType
 
     public class TestMonsterController : MonoBehaviour
     {
-        [SerializeField] Transform _target;
+        [SerializeField] private Transform _target;
+        [SerializeField] private float _moveSpeed = 3f;
 
         private Rigidbody2D _rigid;
 
@@ -22,10 +23,14 @@ namespace ProtoType
         private void FixedUpdate()
         {
             var monsterToHeroVec = _target.position - transform.position;
-            var lookAngle = Vector2.Angle(Vector2.up, new Vector2(monsterToHeroVec.x, monsterToHeroVec.y).normalized);
-            if (_IsLocatedTargetRightSide(monsterToHeroVec.x))
+            var monsterToHeroNormalVec = new Vector2(monsterToHeroVec.x, monsterToHeroVec.y).normalized;
+            var lookAngle = Vector2.Angle(Vector2.up, monsterToHeroNormalVec);
+            if (_IsLocatedTargetRightSide(monsterToHeroNormalVec.x))
                 lookAngle *= REVERSE_ANGLE;
             _rigid.rotation = lookAngle;
+
+            var moveVec = monsterToHeroNormalVec * _moveSpeed * Time.fixedDeltaTime;
+            _rigid.MovePosition(_rigid.position + moveVec);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
