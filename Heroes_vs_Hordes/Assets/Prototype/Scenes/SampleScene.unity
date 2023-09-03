@@ -1752,7 +1752,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 610207887760575085}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 5, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1845,6 +1845,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00a01ad852d240b43b053b3e4154abab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _projectile: {fileID: 610207887760575085}
+  _overlapSize: {x: 25, y: 40}
+  _attackDelayTime: 1.5
   _moveSpeed: 5
 --- !u!95 &6094470436943608959
 Animator:
@@ -2103,8 +2106,8 @@ GameObject:
   - component: {fileID: 4664500225743927578}
   - component: {fileID: 7474323226657742963}
   - component: {fileID: 7903485183194318781}
-  m_Layer: 0
-  m_Name: Enemy_Bat
+  m_Layer: 10
+  m_Name: Monster_Bat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
