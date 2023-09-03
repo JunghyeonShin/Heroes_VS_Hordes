@@ -12,6 +12,7 @@ namespace ProtoType
 
         private const float REVERSE_ANGLE = -1f;
         private const float CHECK_DIRECTION = 0f;
+        private const string TAG_WEAPON = "Weapon";
 
         private void Awake()
         {
@@ -20,11 +21,17 @@ namespace ProtoType
 
         private void FixedUpdate()
         {
-            var enemyToHeroVec = _target.position - transform.position;
-            var lookAngle = Vector2.Angle(Vector2.up, new Vector2(enemyToHeroVec.x, enemyToHeroVec.y).normalized);
-            if (_IsLocatedTargetRightSide(enemyToHeroVec.x))
+            var monsterToHeroVec = _target.position - transform.position;
+            var lookAngle = Vector2.Angle(Vector2.up, new Vector2(monsterToHeroVec.x, monsterToHeroVec.y).normalized);
+            if (_IsLocatedTargetRightSide(monsterToHeroVec.x))
                 lookAngle *= REVERSE_ANGLE;
             _rigid.rotation = lookAngle;
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.CompareTag(TAG_WEAPON))
+                collision.gameObject.SetActive(false);
         }
 
         private bool _IsLocatedTargetRightSide(float value)

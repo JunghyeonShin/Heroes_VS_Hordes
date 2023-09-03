@@ -83,8 +83,10 @@ namespace ProtoType
                 _animator.SetTrigger(ANIMATOR_TRIGGER_ATTACK);
                 await UniTask.Delay(TimeSpan.FromSeconds(ATTACK_TIME));
                 var createProjectilePos = transform.TransformPoint(CREATE_PROJECTILE_POSITION);
-                var projectile = GameObject.Instantiate(_projectile);
-                projectile.transform.position = createProjectilePos;
+                var projectileGO = GameObject.Instantiate(_projectile);
+                projectileGO.transform.position = createProjectilePos;
+                var projectile = projectileGO.AddComponent<TestProjectile>();
+                projectile.TargetMonster = _monster.transform;
                 await UniTask.Delay(TimeSpan.FromSeconds(_attackDelayTime - ATTACK_TIME));
             }
         }
