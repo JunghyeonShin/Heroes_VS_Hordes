@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3188427498201608475}
   - component: {fileID: 810105362479065202}
   m_Layer: 0
-  m_Name: Enemy_Bat
+  m_Name: Monster_Bat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

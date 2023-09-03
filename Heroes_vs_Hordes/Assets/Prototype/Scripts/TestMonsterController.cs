@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestEnemyController : MonoBehaviour
+public class TestMonsterController : MonoBehaviour
 {
     [SerializeField] Transform _target;
 
