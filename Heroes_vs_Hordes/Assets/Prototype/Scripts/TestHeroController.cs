@@ -12,8 +12,9 @@ namespace ProtoType
         private Rigidbody2D _rigid;
         private Vector2 _inputVec;
 
-        private const float CHECK_DIRECTION = 0f;
         private const float ANGLE_180 = 180f;
+        private const float CHECK_DIRECTION = 0f;
+
         private void Awake()
         {
             _rigid = GetComponent<Rigidbody2D>();
@@ -24,15 +25,15 @@ namespace ProtoType
             var moveVec = _inputVec * _moveSpeed * Time.fixedDeltaTime;
             _rigid.MovePosition(_rigid.position + moveVec);
 
-            var theta = Vector2.Angle(Vector2.up, _inputVec.normalized);
+            var angle = Vector2.Angle(Vector2.up, _inputVec.normalized);
             if (_inputVec.Equals(Vector2.zero))
-                _rigid.rotation = theta;
+                _rigid.rotation = angle;
             else
             {
                 if (_IsRightSide(_inputVec.x))
-                    _rigid.rotation = ANGLE_180 - theta;
+                    _rigid.rotation = ANGLE_180 - angle;
                 else
-                    _rigid.rotation = ANGLE_180 + theta;
+                    _rigid.rotation = ANGLE_180 + angle;
             }
         }
 
