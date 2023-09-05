@@ -23,7 +23,7 @@ public abstract class UI_Base : MonoBehaviour
 
     protected abstract void _SetCanvas();
 
-    protected void _BindeEvent(GameObject go, Action action)
+    protected void _BindEvent(GameObject go, Action action)
     {
         var eventHandler = Utils.GetOrAddComponent<UI_EventHandler>(go);
         eventHandler.OnClickHandler -= action;
@@ -45,17 +45,17 @@ public abstract class UI_Base : MonoBehaviour
         _Bind<TextMeshProUGUI>(type);
     }
 
-    protected Button GetButton(int idx)
+    protected Button _GetButton(int idx)
     {
         return _Get<Button>(idx);
     }
 
-    protected GameObject GetGameObject(int idx)
+    protected GameObject _GetGameObject(int idx)
     {
         return _Get<GameObject>(idx);
     }
 
-    protected TextMeshProUGUI GetText(int idx)
+    protected TextMeshProUGUI _GetText(int idx)
     {
         return _Get<TextMeshProUGUI>(idx);
     }
