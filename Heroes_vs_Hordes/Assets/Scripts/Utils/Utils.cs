@@ -32,4 +32,9 @@ public class Utils
             return transform.gameObject;
         return null;
     }
+
+    public static void SetActive(GameObject go, bool active)
+    {
+        go.SetActive(active);
+    }
 }

@@ -7,6 +7,7 @@ public class TestProjectile : MonoBehaviour
     [SerializeField] private float _moveSpeed = 5f;
 
     private Rigidbody2D _rigid;
+    private Vector2 _moveVec;
 
     public Transform TargetMonster { get; set; }
 
@@ -15,14 +16,15 @@ public class TestProjectile : MonoBehaviour
         _rigid = GetComponent<Rigidbody2D>();
     }
 
+    private void OnEnable()
+    {
+        var projectileToMonsterVec = (TargetMonster.position - transform.position);
+        var projectileToMonsterNormalVec = new Vector2(projectileToMonsterVec.x, projectileToMonsterVec.y).normalized;
+        _moveVec = projectileToMonsterNormalVec * _moveSpeed * Time.fixedDeltaTime;
+    }
+
     private void FixedUpdate()
     {
-        if (null != TargetMonster)
-        {
-            var projectileToMonsterVec = (TargetMonster.position - transform.position);
-            var projectileToMonsterNormalVec = new Vector2(projectileToMonsterVec.x, projectileToMonsterVec.y).normalized;
-            var moveVec = projectileToMonsterNormalVec * _moveSpeed * Time.fixedDeltaTime;
-            _rigid.MovePosition(_rigid.position + moveVec);
-        }
+        _rigid.MovePosition(_rigid.position + _moveVec);
     }
 }

@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 84128243334680509}
   - component: {fileID: 3188427498201608475}
   - component: {fileID: 810105362479065202}
-  m_Layer: 0
-  m_Name: Monster_Bat
+  m_Layer: 10
+  m_Name: Normal_Bat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -148,7 +148,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 7
+  m_Constraints: 4
 --- !u!95 &810105362479065202
 Animator:
   serializedVersion: 5

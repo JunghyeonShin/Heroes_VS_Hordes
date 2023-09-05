@@ -1,15 +1,20 @@
 namespace ProtoType
 {
+    using System;
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
 
     public class TestMonsterController : MonoBehaviour
     {
-        [SerializeField] private Transform _target;
         [SerializeField] private float _moveSpeed = 3f;
 
+        public event Action OnDieHandler;
+        public event Action<GameObject> ReturnMonsterHandler;
+
         private Rigidbody2D _rigid;
+
+        public Transform Target { get; set; }
 
         private const float REVERSE_ANGLE = -1f;
         private const float CHECK_DIRECTION = 0f;
@@ -22,7 +27,7 @@ namespace ProtoType
 
         private void FixedUpdate()
         {
-            var monsterToHeroVec = _target.position - transform.position;
+            var monsterToHeroVec = Target.position - transform.position;
             var monsterToHeroNormalVec = new Vector2(monsterToHeroVec.x, monsterToHeroVec.y).normalized;
             var lookAngle = Vector2.Angle(Vector2.up, monsterToHeroNormalVec);
             if (_IsLocatedTargetRightSide(monsterToHeroNormalVec.x))
@@ -36,7 +41,15 @@ namespace ProtoType
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.CompareTag(TAG_WEAPON))
-                collision.gameObject.SetActive(false);
+            {
+                Utils.SetActive(gameObject, false);
+                Utils.SetActive(collision.gameObject, false);
+            }
+        }
+
+        private void OnDisable()
+        {
+            OnDieHandler?.Invoke();
         }
 
         private bool _IsLocatedTargetRightSide(float value)
