@@ -40,7 +40,7 @@ public class UIManager
     public void ShowSceneUI<T>(string key, Action<T> callback) where T : UI_Scene
     {
         // 기존에 활성화 되어있는 UI들을 모두 닫음
-        while (_currentPopupUIStack.Count <= EMPTY_VALUE)
+        while (_currentPopupUIStack.Count > EMPTY_VALUE)
             _ClosePopupUI();
         if (null != CurrentSceneUI)
         {
@@ -91,7 +91,10 @@ public class UIManager
     public void ClosePopupUI(UI_Popup popupUI)
     {
         if (_currentPopupUIStack.Count <= EMPTY_VALUE)
+        {
+            Debug.LogError("No open PopupUI!");
             return;
+        }
 
         if (popupUI != _currentPopupUIStack.Peek())
         {
