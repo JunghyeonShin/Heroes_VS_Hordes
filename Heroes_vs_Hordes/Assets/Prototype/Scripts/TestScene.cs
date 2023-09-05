@@ -6,7 +6,9 @@ namespace ProtoType
 
     public class TestScene : MonoBehaviour
     {
-        private GameObject _testHero;
+        [SerializeField] private TestRepositionBackground[] _testRepositionBackgrounds;
+        [SerializeField] private TestHeroController _testHeroController;
+
         private ObjectPool _testMonsterPool = new ObjectPool();
         private Queue<GameObject> _useTestMonsterQueue = new Queue<GameObject>();
 
@@ -17,7 +19,6 @@ namespace ProtoType
         private const int MIN_CREATE_MONSTER_COUNT = 2;
         private const int MAX_CREATE_MONSTER_COUNT = 5;
         private const string NAME_ROOT_POOL = "[ROOT_POOL]";
-        private const string RESOURCE_TEST_HERO = "ArcaneMage";
         private const string RESOURCE_TEST_MONSTER = "Normal_Bat";
         private const string RESOURCE_UI_TEST_SCENE = "UI_TestScene";
 
@@ -34,12 +35,9 @@ namespace ProtoType
                 testSceneUI.OnClickReturnButton += _ReturnAllMonster;
             });
 
-            // Test Hero 积己
-            Manager.Instance.Resource.Instantiate(RESOURCE_TEST_HERO, null, (arcaneMage) =>
-            {
-                _testHero = arcaneMage;
-                var heroController = Utils.GetOrAddComponent<TestHeroController>(_testHero);
-            });
+            // Reposition Background 窍扁 困茄 技泼
+            for (int ii = 0; ii < _testRepositionBackgrounds.Length; ++ii)
+                _testRepositionBackgrounds[ii].HeroController = _testHeroController;
 
             // Test Monster 积己
             var poolGO = new GameObject(NAME_ROOT_POOL);
@@ -64,7 +62,7 @@ namespace ProtoType
                 _useTestMonsterQueue.Enqueue(monster);
 
                 var monsterController = Utils.GetOrAddComponent<TestMonsterController>(monster);
-                monsterController.Target = _testHero.transform;
+                monsterController.Target = _testHeroController.transform;
                 monsterController.ReturnMonsterHandler -= _ReturnMonster;
                 monsterController.ReturnMonsterHandler += _ReturnMonster;
 

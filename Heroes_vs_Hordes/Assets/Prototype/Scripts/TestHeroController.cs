@@ -9,7 +9,7 @@ namespace ProtoType
 
     public class TestHeroController : MonoBehaviour
     {
-        [SerializeField] private GameObject _projectile;
+        [SerializeField] private Transform _backgroundCollisionArea;
         [SerializeField] private Vector2 _overlapSize = new Vector2(25f, 40f);
         [SerializeField] private float _attackDelayTime = 1.5f;
         [SerializeField] private float _moveSpeed = 5f;
@@ -18,7 +18,8 @@ namespace ProtoType
         private Rigidbody2D _rigid;
         private Animator _animator;
         private TestMonsterController _monster;
-        private Vector2 _inputVec;
+
+        public Vector2 InputVec { get; set; }
 
         private const float ANGLE_180 = 180f;
         private const float ATTACK_TIME = 0.06f;
@@ -37,10 +38,11 @@ namespace ProtoType
         {
             _rigid = GetComponent<Rigidbody2D>();
             _animator = GetComponent<Animator>();
+        }
 
-
+        private void Start()
+        {
             var poolGO = new GameObject(NAME_PROJECTILE);
-
             Manager.Instance.Resource.LoadAsync<GameObject>(RESOURCE_PROJECTILE, (projectile) =>
             {
                 _projectilePool.InitPool(projectile, poolGO, CREATE_PROJECTILE_COUNT);
@@ -49,15 +51,15 @@ namespace ProtoType
 
         private void FixedUpdate()
         {
-            var moveVec = _inputVec * _moveSpeed * Time.fixedDeltaTime;
+            var moveVec = InputVec * _moveSpeed * Time.fixedDeltaTime;
             _rigid.MovePosition(_rigid.position + moveVec);
 
-            var angle = Vector2.Angle(Vector2.up, _inputVec.normalized);
-            if (_inputVec.Equals(Vector2.zero))
+            var angle = Vector2.Angle(Vector2.up, InputVec.normalized);
+            if (InputVec.Equals(Vector2.zero))
                 _rigid.rotation = angle;
             else
             {
-                if (_IsRightSide(_inputVec.x))
+                if (_IsRightSide(InputVec.x))
                     _rigid.rotation = ANGLE_180 - angle;
                 else
                     _rigid.rotation = ANGLE_180 + angle;
@@ -67,6 +69,11 @@ namespace ProtoType
         private void Update()
         {
             _DetectMonster();
+        }
+
+        private void LateUpdate()
+        {
+            _backgroundCollisionArea.position = transform.position;
         }
 
         private bool _IsRightSide(float value)
@@ -114,7 +121,7 @@ namespace ProtoType
 
         private void OnMove(InputValue value)
         {
-            _inputVec = value.Get<Vector2>();
+            InputVec = value.Get<Vector2>();
         }
     }
 }
