@@ -42,7 +42,7 @@ namespace ProtoType
         {
             if (collision.CompareTag(TAG_WEAPON))
             {
-                Utils.SetActive(gameObject, false);
+                ReturnMonsterHandler?.Invoke(gameObject);
                 Utils.SetActive(collision.gameObject, false);
             }
         }
