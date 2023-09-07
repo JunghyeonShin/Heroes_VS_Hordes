@@ -18,7 +18,7 @@ namespace ProtoType
 
         protected override void _Init()
         {
-            _BindButton((typeof(EButtons)));
+            _BindButton(typeof(EButtons));
 
             _BindEvent(_GetButton((int)EButtons.SpawnButton).gameObject, _SpawnMonster);
             _BindEvent(_GetButton((int)EButtons.ReturnButton).gameObject, _ReturnMonster);
