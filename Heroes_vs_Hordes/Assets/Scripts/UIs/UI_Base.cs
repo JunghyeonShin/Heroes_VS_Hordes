@@ -40,24 +40,34 @@ public abstract class UI_Base : MonoBehaviour
         _Bind<GameObject>(type);
     }
 
+    protected void _BindSlider(Type type)
+    {
+        _Bind<Slider>(type);
+    }
+
     protected void _BindText(Type type)
     {
         _Bind<TextMeshProUGUI>(type);
     }
 
-    protected Button _GetButton(int idx)
+    protected Button _GetButton(int index)
     {
-        return _Get<Button>(idx);
+        return _Get<Button>(index);
     }
 
-    protected GameObject _GetGameObject(int idx)
+    protected GameObject _GetGameObject(int index)
     {
-        return _Get<GameObject>(idx);
+        return _Get<GameObject>(index);
     }
 
-    protected TextMeshProUGUI _GetText(int idx)
+    protected Slider _GetSlider(int index)
     {
-        return _Get<TextMeshProUGUI>(idx);
+        return _Get<Slider>(index);
+    }
+
+    protected TextMeshProUGUI _GetText(int index)
+    {
+        return _Get<TextMeshProUGUI>(index);
     }
 
     private void _Bind<T>(Type type) where T : UnityEngine.Object
