@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 4688200809533361693}
   - component: {fileID: 6817491815828058630}
   m_Layer: 5
-  m_Name: ExitText
+  m_Name: GiveUpIngameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1636,7 +1636,7 @@ GameObject:
   - component: {fileID: 3830062983798792205}
   - component: {fileID: 7838983291623575503}
   m_Layer: 5
-  m_Name: ExitButton
+  m_Name: GiveUpIngameButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2138,7 +2138,7 @@ GameObject:
   - component: {fileID: 5010302257796903391}
   - component: {fileID: 4189137211406960894}
   m_Layer: 5
-  m_Name: ExitIcon
+  m_Name: GiveUpIngameIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

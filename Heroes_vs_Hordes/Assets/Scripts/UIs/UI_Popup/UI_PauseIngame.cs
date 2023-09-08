@@ -7,7 +7,7 @@ public class UI_PauseIngame : UI_Popup
     private enum EButtons
     {
         RestartButton,
-        ExitButton
+        GiveUpIngameButton
     }
 
     protected override void _Init()
@@ -15,16 +15,18 @@ public class UI_PauseIngame : UI_Popup
         _BindButton(typeof(EButtons));
 
         _BindEvent(_GetButton((int)EButtons.RestartButton).gameObject, _RestartIngame);
-        _BindEvent(_GetButton((int)EButtons.ExitButton).gameObject, _ExitIngame);
+        _BindEvent(_GetButton((int)EButtons.GiveUpIngameButton).gameObject, _GiveUpIngame);
     }
 
     private void _RestartIngame()
     {
-
+        Manager.Instance.Ingame.ControlIngame(true);
+        _ClosePopupUI();
     }
 
-    private void _ExitIngame()
+    private void _GiveUpIngame()
     {
-
+        Manager.Instance.Ingame.GiveUpIngame();
+        Manager.Instance.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE);
     }
 }
