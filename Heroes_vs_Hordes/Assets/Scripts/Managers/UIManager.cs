@@ -37,14 +37,14 @@ public class UIManager
             canvas.sortingOrder = DEFAULT_SORTING_ORDER;
     }
 
-    public void ShowSceneUI<T>(string key, Action<T> callback) where T : UI_Scene
+    public void ShowSceneUI<T>(string key, Action<T> callback = null) where T : UI_Scene
     {
         // 기존에 활성화 되어있는 UI들을 모두 닫음
         while (_currentPopupUIStack.Count > EMPTY_VALUE)
             _ClosePopupUI();
         if (null != CurrentSceneUI)
         {
-            CurrentSceneUI.gameObject.SetActive(false);
+            Utils.SetActive(CurrentSceneUI.gameObject, false);
             CurrentSceneUI = null;
         }
 
@@ -52,6 +52,7 @@ public class UIManager
         if (_uIDic.TryGetValue(key, out var uI))
         {
             T sceneUI = uI as T;
+            Utils.SetActive(sceneUI.gameObject, true);
             CurrentSceneUI = sceneUI;
             callback?.Invoke(sceneUI);
             return;
@@ -67,12 +68,13 @@ public class UIManager
         });
     }
 
-    public void ShowPopupUI<T>(string key, Action<T> callback) where T : UI_Popup
+    public void ShowPopupUI<T>(string key, Action<T> callback = null) where T : UI_Popup
     {
         // 캐시 확인
         if (_uIDic.TryGetValue(key, out var uI))
         {
             T popupUI = uI as T;
+            Utils.SetActive(popupUI.gameObject, true);
             _currentPopupUIStack.Push(popupUI);
             callback?.Invoke(popupUI);
             return;
@@ -108,7 +110,7 @@ public class UIManager
     private void _ClosePopupUI()
     {
         var popupUI = _currentPopupUIStack.Pop();
-        popupUI.gameObject.SetActive(false);
+        Utils.SetActive(popupUI.gameObject, false);
         --_sortingOrder;
     }
 }
