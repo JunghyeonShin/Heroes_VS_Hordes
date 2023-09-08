@@ -10,6 +10,7 @@ public class UIManager
 
     private Dictionary<string, UI_Base> _uIDic = new Dictionary<string, UI_Base>();
     private Stack<UI_Popup> _currentPopupUIStack = new Stack<UI_Popup>();
+    private Dictionary<string, ObjectPool> _uIElementDic = new Dictionary<string, ObjectPool>();
 
     public UI_Scene CurrentSceneUI { get; set; }
 
@@ -20,6 +21,46 @@ public class UIManager
     public void Init()
     {
         _rootUI = new GameObject(NAME_ROOT_UI);
+        _InstantiateEssentialUI();
+    }
+
+    #region InitUI
+    private void _InstantiateEssentialUI()
+    {
+        _InstantiateUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME);
+        _InstantiateUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE);
+
+        _InstantiateUIElement(Define.RESOURCE_UI_NORMAL_BATTLE_WAVE, 8);
+        _InstantiateUIElement(Define.RESOURCE_UI_COIN_RUSH_WAVE, 2);
+    }
+
+    private void _InstantiateUI<T>(string key) where T : UI_Base
+    {
+        Manager.Instance.Resource.Instantiate(key, _rootUI.transform, (go) =>
+        {
+            var uI = Utils.GetOrAddComponent<T>(go);
+            _uIDic.Add(key, uI);
+            Utils.SetActive(go, false);
+        });
+    }
+
+    private void _InstantiateUIElement(string key, int count)
+    {
+        var pool = new ObjectPool();
+        Manager.Instance.Resource.LoadAsync<GameObject>(key, (elementUI) =>
+        {
+            pool.InitPool(elementUI, _rootUI, count);
+            _uIElementDic.Add(key, pool);
+        });
+    }
+    #endregion
+
+    #region UI
+    public T FindUI<T>(string key) where T : UI_Base
+    {
+        if (_uIDic.TryGetValue(key, out var uI))
+            return uI as T;
+        return null;
     }
 
     public void SetCanvas(GameObject go, bool sort)
@@ -113,4 +154,20 @@ public class UIManager
         Utils.SetActive(popupUI.gameObject, false);
         --_sortingOrder;
     }
+    #endregion
+
+    #region UI_Element
+    public GameObject GetElementUI(string key)
+    {
+        if (_uIElementDic.TryGetValue(key, out var pool))
+            return pool.GetObject();
+        return null;
+    }
+
+    public void ReturnElementUI(string key, GameObject elementUI)
+    {
+        if (_uIElementDic.TryGetValue(key, out var pool))
+            pool.ReturnObject(elementUI);
+    }
+    #endregion
 }

@@ -80,7 +80,10 @@ public class UI_IngameScene : UI_Scene
     #region Event
     private void _PauseIngame()
     {
-        Manager.Instance.UI.ShowPopupUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME);
+        Manager.Instance.UI.ShowPopupUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME, (pauseIngameUI) =>
+        {
+            pauseIngameUI.UpdateWavePanel();
+        });
         Manager.Instance.Ingame.ControlIngame(false);
     }
     #endregion 

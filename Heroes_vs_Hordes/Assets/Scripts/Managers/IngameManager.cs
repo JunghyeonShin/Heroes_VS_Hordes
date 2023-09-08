@@ -24,7 +24,6 @@ public class IngameManager : MonoBehaviour
     private const float RESTORE_TIMESCALE = 1f;
     #region TEST
     private const int ANNIHILATION_MODE = 1;
-    private const int MAX_WAVE_INDEX = 4;
     #endregion
 
     private void Update()
@@ -83,7 +82,7 @@ public class IngameManager : MonoBehaviour
     {
         ProgressWave = false;
         Time.timeScale = PAUSE_INGAME;
-        if (CurrentWaveIndex < MAX_WAVE_INDEX - 1)
+        if (CurrentWaveIndex < Define.MAX_WAVE_INDEX - 1)
             Manager.Instance.UI.ShowPopupUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE, (clearWaveUI) =>
             {
                 clearWaveUI.SetClearWaveText();

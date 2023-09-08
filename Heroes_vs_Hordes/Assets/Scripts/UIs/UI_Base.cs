@@ -16,7 +16,7 @@ public abstract class UI_Base : MonoBehaviour
 
     private void OnEnable()
     {
-
+        _SetCanvas();
     }
 
     protected abstract void _Init();
