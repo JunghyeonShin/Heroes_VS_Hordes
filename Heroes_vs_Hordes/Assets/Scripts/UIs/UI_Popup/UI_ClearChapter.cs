@@ -6,7 +6,7 @@ public class UI_ClearChapter : UI_Popup
 {
     private enum EButtons
     {
-        CloseButton,
+        ExitIngameButton,
         RewardChapterButton
     }
 
@@ -28,13 +28,13 @@ public class UI_ClearChapter : UI_Popup
         _BindGameObject(typeof(EGameObjects));
         _BindText(typeof(ETexts));
 
-        _BindEvent(_GetButton((int)EButtons.CloseButton).gameObject, _MoveToMainScene);
+        _BindEvent(_GetButton((int)EButtons.ExitIngameButton).gameObject, _ExitIngame);
         _BindEvent(_GetButton((int)EButtons.RewardChapterButton).gameObject, _GetReward);
     }
 
-    private void _MoveToMainScene()
+    private void _ExitIngame()
     {
-
+        Manager.Instance.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE);
     }
 
     private void _GetReward()
