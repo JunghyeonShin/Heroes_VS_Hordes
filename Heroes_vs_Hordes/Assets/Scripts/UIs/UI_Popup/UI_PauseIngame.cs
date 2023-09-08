@@ -18,6 +18,7 @@ public class UI_PauseIngame : UI_Popup
         _BindEvent(_GetButton((int)EButtons.GiveUpIngameButton).gameObject, _GiveUpIngame);
     }
 
+    #region Event
     private void _RestartIngame()
     {
         Manager.Instance.Ingame.ControlIngame(true);
@@ -29,4 +30,5 @@ public class UI_PauseIngame : UI_Popup
         Manager.Instance.Ingame.GiveUpIngame();
         Manager.Instance.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE);
     }
+    #endregion
 }

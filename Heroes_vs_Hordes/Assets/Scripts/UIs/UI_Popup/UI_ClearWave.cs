@@ -30,15 +30,17 @@ public class UI_ClearWave : UI_Popup
         _clearWaveText = _GetText((int)ETexts.ClearWaveText);
     }
 
-    public void SetClearWaveText()
-    {
-        _clearWaveText.text = $"웨이브 {Manager.Instance.Ingame.CurrentWaveIndex + ADJUST_WAVE} 클리어";
-    }
-
+    #region Event
     private void _StartNextWave()
     {
         var ingame = Manager.Instance.Ingame;
         ingame.StartIngame(ingame.CurrentWaveIndex + ADJUST_WAVE);
         _ClosePopupUI();
+    }
+    #endregion
+
+    public void SetClearWaveText()
+    {
+        _clearWaveText.text = $"웨이브 {Manager.Instance.Ingame.CurrentWaveIndex + ADJUST_WAVE} 클리어";
     }
 }

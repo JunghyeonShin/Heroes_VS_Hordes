@@ -38,6 +38,7 @@ public class UI_MainScene : UI_Scene
         _chapterText = _GetText((int)ETexts.ChapterText);
     }
 
+    #region Event
     private void _PlayChapter()
     {
         Manager.Instance.UI.ShowSceneUI<UI_IngameScene>(Define.RESOURCE_UI_INGAME_SCENE, (ingameSceneUI) =>
@@ -55,4 +56,5 @@ public class UI_MainScene : UI_Scene
     {
 
     }
+    #endregion
 }

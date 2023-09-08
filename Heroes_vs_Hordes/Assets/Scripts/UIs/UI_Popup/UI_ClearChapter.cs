@@ -32,6 +32,7 @@ public class UI_ClearChapter : UI_Popup
         _BindEvent(_GetButton((int)EButtons.RewardChapterButton).gameObject, _GetReward);
     }
 
+    #region Event
     private void _ExitIngame()
     {
         Manager.Instance.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE);
@@ -41,4 +42,5 @@ public class UI_ClearChapter : UI_Popup
     {
 
     }
+    #endregion
 }

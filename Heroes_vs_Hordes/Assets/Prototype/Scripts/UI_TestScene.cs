@@ -24,6 +24,7 @@ namespace ProtoType
             _BindEvent(_GetButton((int)EButtons.ReturnButton).gameObject, _ReturnMonster);
         }
 
+        #region Event
         private void _SpawnMonster()
         {
             OnClickSpawnButton?.Invoke();
@@ -33,5 +34,6 @@ namespace ProtoType
         {
             OnClickReturnButton?.Invoke();
         }
+        #endregion
     }
 }
