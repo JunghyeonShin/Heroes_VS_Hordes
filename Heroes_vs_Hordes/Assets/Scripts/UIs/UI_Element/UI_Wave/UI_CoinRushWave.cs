@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UI_CoinRushWave : UI_Element
+public class UI_CoinRushWave : UI_Wave
 {
     private enum EGameObjects
     {
@@ -23,25 +23,24 @@ public class UI_CoinRushWave : UI_Element
         _currentCoinIcon = _GetGameObject((int)EGameObjects.CurrentCoinIcon);
     }
 
-    public override void InitUIElement(int elementIndex, Transform parent, Vector2 elementPosition, Vector2 elementSize, Vector2 iconSize)
+    public override void InitWaveUIElement(int elementIndex, Transform parent, Vector2 elementPosition, Vector2 elementSize, Vector2 iconSize)
     {
-        _elementIndex = elementIndex;
-        transform.SetParent(parent);
-        var rectTransform = transform.GetComponent<RectTransform>();
-        rectTransform.anchoredPosition = elementPosition;
-        rectTransform.localScale = Vector3.one;
-        rectTransform.sizeDelta = elementSize;
+        base.InitWaveUIElement(elementIndex, parent, elementPosition, elementSize, iconSize);
 
         _InitIconTransform(_nextCoinIcon, iconSize);
         _InitIconTransform(_currentCoinIcon, iconSize + ADJUST_CURRENT_BATTLE_ICON_SIZE);
     }
 
-    public override void UpdateUIElement()
+    public override void UpdateWaveUIElement()
     {
         var currentWaveIndex = Manager.Instance.Ingame.CurrentWaveIndex;
         if (currentWaveIndex == _elementIndex)
             _ActiveWaveIcon(false, true);
+    }
 
+    public override void ReturnWaveUI()
+    {
+        Manager.Instance.UI.ReturnElementUI(Define.RESOURCE_UI_COIN_RUSH_WAVE, gameObject);
     }
 
     private void _InitIconTransform(GameObject icon, Vector2 size)

@@ -23,7 +23,7 @@ public class UI_PauseIngame : UI_Popup
     }
 
     private GameObject _totalWaves;
-    private List<UI_Element> _wavePanelList = new List<UI_Element>();
+    private List<UI_Wave> _wavePanelList = new List<UI_Wave>();
 
     private readonly WavePanelTransform[] _fourWavePanelTranforms = new WavePanelTransform[]
     {
@@ -60,25 +60,28 @@ public class UI_PauseIngame : UI_Popup
 
     public void InitWavePanel()
     {
+        // 사용한 WaveUI를 반납 후 리스트 정리
+        for (int ii = 0; ii < _wavePanelList.Count; ++ii)
+            _wavePanelList[ii].ReturnWaveUI();
         _wavePanelList.Clear();
 
+        // 사용할 WaveUI를 가져옴
         for (int ii = 0; ii < Define.MAX_WAVE_INDEX - 1; ++ii)
             _InitWavePanel<UI_NormalBattleWave>(Define.RESOURCE_UI_NORMAL_BATTLE_WAVE, ii);
-
         _InitWavePanel<UI_CoinRushWave>(Define.RESOURCE_UI_COIN_RUSH_WAVE, Define.MAX_WAVE_INDEX - 1);
     }
 
     public void UpdateWavePanel()
     {
         for (int ii = 0; ii < _wavePanelList.Count; ++ii)
-            _wavePanelList[ii].UpdateUIElement();
+            _wavePanelList[ii].UpdateWaveUIElement();
     }
 
-    private void _InitWavePanel<T>(string wavePanelName, int index) where T : UI_Element
+    private void _InitWavePanel<T>(string wavePanelName, int index) where T : UI_Wave
     {
         var wave = Manager.Instance.UI.GetElementUI(wavePanelName);
         var waveUI = Utils.GetOrAddComponent<T>(wave);
-        waveUI.InitUIElement(index, _totalWaves.transform, _fourWavePanelTranforms[index].PanelPosition, _fourWavePanelTranforms[index].PanelSize, _fourWavePanelTranforms[index].IconSize);
+        waveUI.InitWaveUIElement(index, _totalWaves.transform, _fourWavePanelTranforms[index].PanelPosition, _fourWavePanelTranforms[index].PanelSize, _fourWavePanelTranforms[index].IconSize);
         Utils.SetActive(wave, true);
         _wavePanelList.Add(waveUI);
     }

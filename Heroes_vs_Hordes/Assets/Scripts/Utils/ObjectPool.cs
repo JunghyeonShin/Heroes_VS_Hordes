@@ -30,6 +30,8 @@ public class ObjectPool
     public void ReturnObject(GameObject go)
     {
         Utils.SetActive(go, false);
+        if (null != _parent)
+            go.transform.SetParent(_parent.transform);
         _poolQueue.Enqueue(go);
     }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_NormalBattleWave : UI_Element
+public class UI_NormalBattleWave : UI_Wave
 {
     private enum EGameObjects
     {
@@ -32,7 +32,9 @@ public class UI_NormalBattleWave : UI_Element
 
     private Slider _waveSlider;
 
+    private const float INIT_WAVE_SLIDER_VALUE = 0f;
     private const float CLEAR_WAVE_SLIDER_VALUE = 1f;
+    private const int PREV_WAVE_INDEX = 1;
 
     private readonly Vector2 ADJUST_CURRENT_BATTLE_ICON_SIZE = new Vector2(10f, 15f);
 
@@ -59,34 +61,41 @@ public class UI_NormalBattleWave : UI_Element
         _waveSlider = _GetSlider((int)ESliders.WaveSlider);
     }
 
-    public override void InitUIElement(int elementIndex, Transform parent, Vector2 elementPosition, Vector2 elementSize, Vector2 iconSize)
+    public override void InitWaveUIElement(int elementIndex, Transform parent, Vector2 elementPosition, Vector2 elementSize, Vector2 iconSize)
     {
-        _elementIndex = elementIndex;
-        transform.SetParent(parent);
-        var rectTransform = transform.GetComponent<RectTransform>();
-        rectTransform.anchoredPosition = elementPosition;
-        rectTransform.localScale = Vector3.one;
-        rectTransform.sizeDelta = elementSize;
+        base.InitWaveUIElement(elementIndex, parent, elementPosition, elementSize, iconSize);
 
         _InitIconTransform(_nextBattleIcon, iconSize);
         _InitIconTransform(_currentBattleIcon, iconSize + ADJUST_CURRENT_BATTLE_ICON_SIZE);
         _InitIconTransform(_finishedBattleIcon, iconSize);
+
+        _waveSlider.value = INIT_WAVE_SLIDER_VALUE;
+        var currentWaveIndex = Manager.Instance.Ingame.CurrentWaveIndex;
+        if (currentWaveIndex == _elementIndex)
+            _ActiveWaveIcon(false, true, false);
+        else
+            _ActiveWaveIcon(true, false, false);
     }
 
-    public override void UpdateUIElement()
+    public override void UpdateWaveUIElement()
     {
         var currentWaveIndex = Manager.Instance.Ingame.CurrentWaveIndex;
         if (currentWaveIndex == _elementIndex)
             _ActiveWaveIcon(false, true, false);
-        else if (_elementIndex <= currentWaveIndex - 1)
+        else if (_elementIndex <= currentWaveIndex - PREV_WAVE_INDEX)
         {
             _ActiveWaveIcon(false, false, true);
             _waveSlider.value = CLEAR_WAVE_SLIDER_VALUE;
-            if (currentWaveIndex - 1 == _elementIndex)
+            if (currentWaveIndex - PREV_WAVE_INDEX == _elementIndex)
                 _fillSliderImage.sprite = _redSliderSprite;
             else
                 _fillSliderImage.sprite = _yellowSliderSprite;
         }
+    }
+
+    public override void ReturnWaveUI()
+    {
+        Manager.Instance.UI.ReturnElementUI(Define.RESOURCE_UI_NORMAL_BATTLE_WAVE, gameObject);
     }
 
     private void _InitIconTransform(GameObject icon, Vector2 size)

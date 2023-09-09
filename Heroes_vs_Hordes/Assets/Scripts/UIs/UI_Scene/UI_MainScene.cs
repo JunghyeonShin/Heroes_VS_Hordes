@@ -43,10 +43,10 @@ public class UI_MainScene : UI_Scene
     {
         Manager.Instance.UI.ShowSceneUI<UI_IngameScene>(Define.RESOURCE_UI_INGAME_SCENE, (ingameSceneUI) =>
         {
+            Manager.Instance.Ingame.StartIngame(FIRST_WAVE_INDEX);
+
             var pauseIngameUI = Manager.Instance.UI.FindUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME);
             pauseIngameUI.InitWavePanel();
-
-            Manager.Instance.Ingame.StartIngame(FIRST_WAVE_INDEX);
         });
     }
 
