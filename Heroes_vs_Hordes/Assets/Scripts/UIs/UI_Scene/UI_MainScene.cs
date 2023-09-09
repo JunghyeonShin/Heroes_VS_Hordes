@@ -47,6 +47,9 @@ public class UI_MainScene : UI_Scene
 
             var pauseIngameUI = Manager.Instance.UI.FindUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME);
             pauseIngameUI.InitWavePanel();
+
+            var clearWaveUI = Manager.Instance.UI.FindUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE);
+            clearWaveUI.InitWavePanel();
         });
     }
 

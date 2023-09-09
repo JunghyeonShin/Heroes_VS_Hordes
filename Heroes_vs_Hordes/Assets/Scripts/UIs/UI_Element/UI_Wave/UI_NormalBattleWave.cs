@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,6 +36,7 @@ public class UI_NormalBattleWave : UI_Wave
 
     private const float INIT_WAVE_SLIDER_VALUE = 0f;
     private const float CLEAR_WAVE_SLIDER_VALUE = 1f;
+    private const float SLIDER_PROGRESS_SPEED = 0.2f;
     private const int PREV_WAVE_INDEX = 1;
 
     private readonly Vector2 ADJUST_CURRENT_BATTLE_ICON_SIZE = new Vector2(10f, 15f);
@@ -93,6 +96,11 @@ public class UI_NormalBattleWave : UI_Wave
         }
     }
 
+    public override void UpdateWaveUIAnimation(Action completeAnimationCallback)
+    {
+        _UpdateWaveUIAnimation(completeAnimationCallback).Forget();
+    }
+
     public override void ReturnWaveUI()
     {
         Manager.Instance.UI.ReturnElementUI(Define.RESOURCE_UI_NORMAL_BATTLE_WAVE, gameObject);
@@ -109,5 +117,21 @@ public class UI_NormalBattleWave : UI_Wave
         Utils.SetActive(_nextBattleIcon, nextBattleWaveIconActive);
         Utils.SetActive(_currentBattleIcon, currentBattleWaveIconActive);
         Utils.SetActive(_finishedBattleIcon, finishedBattleWaveIconActive);
+    }
+
+    private async UniTaskVoid _UpdateWaveUIAnimation(Action completeAnimationCallback)
+    {
+        _ActiveWaveIcon(false, false, true);
+        _fillSliderImage.sprite = _redSliderSprite;
+        var sliderValue = INIT_WAVE_SLIDER_VALUE;
+        while (sliderValue < CLEAR_WAVE_SLIDER_VALUE)
+        {
+            sliderValue += SLIDER_PROGRESS_SPEED;
+            if (sliderValue > CLEAR_WAVE_SLIDER_VALUE)
+                sliderValue = CLEAR_WAVE_SLIDER_VALUE;
+            _waveSlider.value = Mathf.Lerp(INIT_WAVE_SLIDER_VALUE, CLEAR_WAVE_SLIDER_VALUE, sliderValue);
+            await UniTask.Delay(TimeSpan.FromSeconds(SLIDER_PROGRESS_SPEED), ignoreTimeScale: true);
+        }
+        completeAnimationCallback?.Invoke();
     }
 }

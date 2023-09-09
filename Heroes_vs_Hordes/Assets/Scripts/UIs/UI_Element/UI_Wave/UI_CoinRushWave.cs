@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,6 +37,11 @@ public class UI_CoinRushWave : UI_Wave
         var currentWaveIndex = Manager.Instance.Ingame.CurrentWaveIndex;
         if (currentWaveIndex == _elementIndex)
             _ActiveWaveIcon(false, true);
+    }
+
+    public override void UpdateWaveUIAnimation(Action completeAnimationCallback)
+    {
+
     }
 
     public override void ReturnWaveUI()

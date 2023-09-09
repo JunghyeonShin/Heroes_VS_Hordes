@@ -4,13 +4,6 @@ using UnityEngine;
 
 public class UI_PauseIngame : UI_Popup
 {
-    private struct WavePanelTransform
-    {
-        public Vector2 PanelPosition { get; set; }
-        public Vector2 PanelSize { get; set; }
-        public Vector2 IconSize { get; set; }
-    }
-
     private enum EButtons
     {
         RestartButton,

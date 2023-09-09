@@ -22,6 +22,7 @@ public class IngameManager : MonoBehaviour
     private const float PAUSE_INGAME = 0f;
     private const float RESTART_INGAME = 1f;
     private const float RESTORE_TIMESCALE = 1f;
+    private const int NEXT_WAVE_INDEX = 1;
     #region TEST
     private const int ANNIHILATION_MODE = 1;
     #endregion
@@ -29,7 +30,6 @@ public class IngameManager : MonoBehaviour
     private void Update()
     {
         _CheckIngameProgressTime();
-
         #region TEST
         if (Input.GetKeyDown(KeyCode.F))
             RemainingMonsterHandler?.Invoke(0);
@@ -82,10 +82,12 @@ public class IngameManager : MonoBehaviour
     {
         ProgressWave = false;
         Time.timeScale = PAUSE_INGAME;
-        if (CurrentWaveIndex < Define.MAX_WAVE_INDEX - 1)
+        CurrentWaveIndex += NEXT_WAVE_INDEX;
+        if (CurrentWaveIndex < Define.MAX_WAVE_INDEX)
             Manager.Instance.UI.ShowPopupUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE, (clearWaveUI) =>
             {
                 clearWaveUI.SetClearWaveText();
+                clearWaveUI.UpdateWavePanel();
             });
         else
             Manager.Instance.UI.ShowPopupUI<UI_ClearChapter>(Define.RESOURCE_UI_CLEAR_CHAPTER);

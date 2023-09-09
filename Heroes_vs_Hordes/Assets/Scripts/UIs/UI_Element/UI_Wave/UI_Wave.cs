@@ -1,13 +1,21 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+public struct WavePanelTransform
+{
+    public Vector2 PanelPosition { get; set; }
+    public Vector2 PanelSize { get; set; }
+    public Vector2 IconSize { get; set; }
+}
 
 public abstract class UI_Wave : UI_Element
 {
     protected int _elementIndex;
 
     /// <summary>
-    /// 웨이브 UI 요소를 초기화할 때 호출
+    /// Wave UI 요소를 초기화할 때 호출
     /// </summary>
     /// <param name="elementIndex">UI 요소의 목차</param>
     /// <param name="parent">UI 요소의 부모</param>
@@ -25,12 +33,18 @@ public abstract class UI_Wave : UI_Element
     }
 
     /// <summary>
-    /// 웨이브 UI 요소를 업데이트할 때 호출
+    /// Wave UI 요소를 업데이트할 때 호출
     /// </summary>
     public abstract void UpdateWaveUI();
 
     /// <summary>
-    /// 웨이브 UI를 반납할 때 호출
+    /// Wave UI 요소를 애니메이션 처리를 통해 업데이트할 때 호출
+    /// </summary>
+    /// <param name="completeAnimationAction">애니메이션 완료 콜백</param>
+    public abstract void UpdateWaveUIAnimation(Action completeAnimationCallback);
+
+    /// <summary>
+    /// Wave UI를 반납할 때 호출
     /// </summary>
     public abstract void ReturnWaveUI();
 }
