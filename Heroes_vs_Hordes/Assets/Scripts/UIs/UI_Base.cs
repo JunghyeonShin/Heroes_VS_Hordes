@@ -40,6 +40,11 @@ public abstract class UI_Base : MonoBehaviour
         _Bind<GameObject>(type);
     }
 
+    protected void _BindImage(Type type)
+    {
+        _Bind<Image>(type);
+    }
+
     protected void _BindSlider(Type type)
     {
         _Bind<Slider>(type);
@@ -58,6 +63,11 @@ public abstract class UI_Base : MonoBehaviour
     protected GameObject _GetGameObject(int index)
     {
         return _Get<GameObject>(index);
+    }
+
+    protected Image _GetImage(int index)
+    {
+        return _Get<Image>(index);
     }
 
     protected Slider _GetSlider(int index)

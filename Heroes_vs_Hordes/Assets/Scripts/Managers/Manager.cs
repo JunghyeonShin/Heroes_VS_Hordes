@@ -38,10 +38,11 @@ public class Manager : MonoBehaviour
     {
         CreateInstance();
 
-        _ingame = Utils.GetOrAddComponent<IngameManager>(gameObject);
         _resource = new ResourceManager();
         _uI = new UIManager();
+        _ingame = Utils.GetOrAddComponent<IngameManager>(gameObject);
 
+        _resource.Init();
         _uI.Init();
     }
 }

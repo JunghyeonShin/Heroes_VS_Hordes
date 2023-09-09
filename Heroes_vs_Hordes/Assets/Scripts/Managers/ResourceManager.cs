@@ -11,6 +11,19 @@ public class ResourceManager
     private Dictionary<string, UnityEngine.Object> _resourceDic = new Dictionary<string, UnityEngine.Object>();
     private Dictionary<string, AsyncOperationHandle> _handleDic = new Dictionary<string, AsyncOperationHandle>();
 
+    public void Init()
+    {
+        _LoadEssentialResource();
+    }
+
+    #region InitResource
+    private void _LoadEssentialResource()
+    {
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_SLIDER_YELLOW, null);
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_SLIDER_RED, null);
+    }
+    #endregion
+
     public void LoadAsync<T>(string key, Action<T> callback) where T : UnityEngine.Object
     {
         // 캐시 확인

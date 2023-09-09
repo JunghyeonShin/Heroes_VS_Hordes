@@ -12,6 +12,11 @@ public class UI_NormalBattleWave : UI_Element
         FinishedBattleIcon
     }
 
+    private enum EImages
+    {
+        FillSliderImage
+    }
+
     private enum ESliders
     {
         WaveSlider
@@ -21,6 +26,10 @@ public class UI_NormalBattleWave : UI_Element
     private GameObject _currentBattleIcon;
     private GameObject _finishedBattleIcon;
 
+    private Image _fillSliderImage;
+    private Sprite _redSliderSprite;
+    private Sprite _yellowSliderSprite;
+
     private Slider _waveSlider;
 
     private const float CLEAR_WAVE_SLIDER_VALUE = 1f;
@@ -29,12 +38,23 @@ public class UI_NormalBattleWave : UI_Element
 
     protected override void _Init()
     {
-        _BindSlider(typeof(ESliders));
         _BindGameObject(typeof(EGameObjects));
+        _BindImage(typeof(EImages));
+        _BindSlider(typeof(ESliders));
 
         _nextBattleIcon = _GetGameObject((int)EGameObjects.NextBattleIcon);
         _currentBattleIcon = _GetGameObject((int)EGameObjects.CurrentBattleIcon);
         _finishedBattleIcon = _GetGameObject((int)EGameObjects.FinishedBattleIcon);
+
+        _fillSliderImage = _GetImage((int)EImages.FillSliderImage);
+        Manager.Instance.Resource.LoadAsync<Sprite>(Define.RESOURCE_SPRITES_SLIDER_RED, (sprite) =>
+        {
+            _redSliderSprite = sprite;
+        });
+        Manager.Instance.Resource.LoadAsync<Sprite>(Define.RESOURCE_SPRITES_SLIDER_YELLOW, (sprite) =>
+        {
+            _yellowSliderSprite = sprite;
+        });
 
         _waveSlider = _GetSlider((int)ESliders.WaveSlider);
     }
@@ -58,10 +78,14 @@ public class UI_NormalBattleWave : UI_Element
         var currentWaveIndex = Manager.Instance.Ingame.CurrentWaveIndex;
         if (currentWaveIndex == _elementIndex)
             _ActiveWaveIcon(false, true, false);
-        else if (currentWaveIndex - 1 == _elementIndex)
+        else if (_elementIndex <= currentWaveIndex - 1)
         {
             _ActiveWaveIcon(false, false, true);
             _waveSlider.value = CLEAR_WAVE_SLIDER_VALUE;
+            if (currentWaveIndex - 1 == _elementIndex)
+                _fillSliderImage.sprite = _redSliderSprite;
+            else
+                _fillSliderImage.sprite = _yellowSliderSprite;
         }
     }
 
