@@ -25,7 +25,7 @@ public class UI_PauseIngame : UI_Popup
     private GameObject _totalWaves;
     private List<UI_Wave> _wavePanelList = new List<UI_Wave>();
 
-    private readonly WavePanelTransform[] _fourWavePanelTranforms = new WavePanelTransform[]
+    private readonly WavePanelTransform[] FOUR_WAVE_PANEL_TRANSFORMS = new WavePanelTransform[]
     {
         new WavePanelTransform() { PanelPosition = new Vector2(-125f, 0f), PanelSize = new Vector2(125f, 40f), IconSize = new Vector2(50f, 55f) },
         new WavePanelTransform() { PanelPosition = Vector2.zero, PanelSize = new Vector2(125f, 40f), IconSize = new Vector2(50f, 55f) },
@@ -74,14 +74,14 @@ public class UI_PauseIngame : UI_Popup
     public void UpdateWavePanel()
     {
         for (int ii = 0; ii < _wavePanelList.Count; ++ii)
-            _wavePanelList[ii].UpdateWaveUIElement();
+            _wavePanelList[ii].UpdateWaveUI();
     }
 
     private void _InitWavePanel<T>(string wavePanelName, int index) where T : UI_Wave
     {
         var wave = Manager.Instance.UI.GetElementUI(wavePanelName);
         var waveUI = Utils.GetOrAddComponent<T>(wave);
-        waveUI.InitWaveUIElement(index, _totalWaves.transform, _fourWavePanelTranforms[index].PanelPosition, _fourWavePanelTranforms[index].PanelSize, _fourWavePanelTranforms[index].IconSize);
+        waveUI.InitWaveUI(index, _totalWaves.transform, FOUR_WAVE_PANEL_TRANSFORMS[index].PanelPosition, FOUR_WAVE_PANEL_TRANSFORMS[index].PanelSize, FOUR_WAVE_PANEL_TRANSFORMS[index].IconSize);
         Utils.SetActive(wave, true);
         _wavePanelList.Add(waveUI);
     }

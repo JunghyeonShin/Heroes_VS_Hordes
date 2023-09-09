@@ -14,7 +14,7 @@ public abstract class UI_Wave : UI_Element
     /// <param name="elementPosition">UI 요소의 위치</param>
     /// <param name="elementSize">UI 요소의 크기</param>
     /// <param name="iconSize">UI 요소의 아이콘 크기</param>
-    public virtual void InitWaveUIElement(int elementIndex, Transform parent, Vector2 elementPosition, Vector2 elementSize, Vector2 iconSize)
+    public virtual void InitWaveUI(int elementIndex, Transform parent, Vector2 elementPosition, Vector2 elementSize, Vector2 iconSize)
     {
         _elementIndex = elementIndex;
         transform.SetParent(parent);
@@ -27,7 +27,7 @@ public abstract class UI_Wave : UI_Element
     /// <summary>
     /// 웨이브 UI 요소를 업데이트할 때 호출
     /// </summary>
-    public abstract void UpdateWaveUIElement();
+    public abstract void UpdateWaveUI();
 
     /// <summary>
     /// 웨이브 UI를 반납할 때 호출

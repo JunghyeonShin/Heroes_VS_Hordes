@@ -61,9 +61,9 @@ public class UI_NormalBattleWave : UI_Wave
         _waveSlider = _GetSlider((int)ESliders.WaveSlider);
     }
 
-    public override void InitWaveUIElement(int elementIndex, Transform parent, Vector2 elementPosition, Vector2 elementSize, Vector2 iconSize)
+    public override void InitWaveUI(int elementIndex, Transform parent, Vector2 elementPosition, Vector2 elementSize, Vector2 iconSize)
     {
-        base.InitWaveUIElement(elementIndex, parent, elementPosition, elementSize, iconSize);
+        base.InitWaveUI(elementIndex, parent, elementPosition, elementSize, iconSize);
 
         _InitIconTransform(_nextBattleIcon, iconSize);
         _InitIconTransform(_currentBattleIcon, iconSize + ADJUST_CURRENT_BATTLE_ICON_SIZE);
@@ -77,7 +77,7 @@ public class UI_NormalBattleWave : UI_Wave
             _ActiveWaveIcon(true, false, false);
     }
 
-    public override void UpdateWaveUIElement()
+    public override void UpdateWaveUI()
     {
         var currentWaveIndex = Manager.Instance.Ingame.CurrentWaveIndex;
         if (currentWaveIndex == _elementIndex)

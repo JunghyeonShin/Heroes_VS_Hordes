@@ -23,15 +23,15 @@ public class UI_CoinRushWave : UI_Wave
         _currentCoinIcon = _GetGameObject((int)EGameObjects.CurrentCoinIcon);
     }
 
-    public override void InitWaveUIElement(int elementIndex, Transform parent, Vector2 elementPosition, Vector2 elementSize, Vector2 iconSize)
+    public override void InitWaveUI(int elementIndex, Transform parent, Vector2 elementPosition, Vector2 elementSize, Vector2 iconSize)
     {
-        base.InitWaveUIElement(elementIndex, parent, elementPosition, elementSize, iconSize);
+        base.InitWaveUI(elementIndex, parent, elementPosition, elementSize, iconSize);
 
         _InitIconTransform(_nextCoinIcon, iconSize);
         _InitIconTransform(_currentCoinIcon, iconSize + ADJUST_CURRENT_BATTLE_ICON_SIZE);
     }
 
-    public override void UpdateWaveUIElement()
+    public override void UpdateWaveUI()
     {
         var currentWaveIndex = Manager.Instance.Ingame.CurrentWaveIndex;
         if (currentWaveIndex == _elementIndex)
