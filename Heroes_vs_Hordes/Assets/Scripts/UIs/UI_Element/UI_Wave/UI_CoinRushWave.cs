@@ -46,6 +46,7 @@ public class UI_CoinRushWave : UI_Wave
 
     public override void ReturnWaveUI()
     {
+        _ActiveWaveIcon(true, false);
         Manager.Instance.UI.ReturnElementUI(Define.RESOURCE_UI_COIN_RUSH_WAVE, gameObject);
     }
 
