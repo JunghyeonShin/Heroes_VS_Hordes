@@ -48,6 +48,7 @@ public class UI_PauseIngame : UI_Popup
     {
         Manager.Instance.Ingame.GiveUpIngame();
         Manager.Instance.Object.ReturnMap(Define.RESOURCE_MAP_00);
+        Manager.Instance.Object.ReturnHero(Define.RESOURCE_HERO_ARCANE_MAGE);
         Manager.Instance.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE);
     }
     #endregion

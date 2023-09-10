@@ -52,13 +52,19 @@ public class UI_MainScene : UI_Scene
             clearWaveUI.InitWavePanel();
 
             // 맵 생성
-            Manager.Instance.Object.GetMap(Define.RESOURCE_MAP_00, (map) =>
+            Manager.Instance.Object.GetMap(Define.RESOURCE_MAP_00, (mapGO) =>
             {
-                Utils.SetActive(map, true);
+                var mapController = Utils.GetOrAddComponent<MapController>(mapGO);
+                Utils.SetActive(mapGO, true);
+
+                // 영웅 생성
+                Manager.Instance.Object.GetHero(Define.RESOURCE_HERO_ARCANE_MAGE, (heroGO) =>
+                {
+                    var hero = Utils.GetOrAddComponent<Hero>(heroGO);
+                    mapController.SetHeroController(hero.HeroController);
+                    Utils.SetActive(heroGO, true);
+                });
             });
-
-            // 영웅 생성
-
 
             // 인게임 시작
             Manager.Instance.Ingame.StartIngame(FIRST_WAVE_INDEX);

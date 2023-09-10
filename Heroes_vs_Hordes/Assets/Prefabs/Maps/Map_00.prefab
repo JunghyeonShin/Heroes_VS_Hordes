@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5752515237021899724}
   - component: {fileID: 3801140054376480334}
   - component: {fileID: 3424941920267812125}
+  - component: {fileID: 3743857692064634365}
   m_Layer: 0
   m_Name: Tilemap_Quadrant_2
   m_TagString: Untagged
@@ -19627,6 +19628,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
+--- !u!114 &3743857692064634365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 949591388902880634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77d226b0a713c9e40b1e3c162ce065fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1527429628899387367
 GameObject:
   m_ObjectHideFlags: 0
@@ -19641,6 +19654,7 @@ GameObject:
   - component: {fileID: 6035231432722100518}
   - component: {fileID: 6046708358566884147}
   - component: {fileID: 3372659868797075289}
+  - component: {fileID: 2281332473767323358}
   m_Layer: 0
   m_Name: Tilemap_Quadrant_3
   m_TagString: Untagged
@@ -39254,6 +39268,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
+--- !u!114 &2281332473767323358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1527429628899387367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77d226b0a713c9e40b1e3c162ce065fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2443644930353765326
 GameObject:
   m_ObjectHideFlags: 0
@@ -39316,10 +39342,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tilemaps:
-  - {fileID: 3231840900799102579}
-  - {fileID: 949591388902880634}
-  - {fileID: 1527429628899387367}
-  - {fileID: 8340907406919294644}
+  - {fileID: 4040510117630170873}
+  - {fileID: 3743857692064634365}
+  - {fileID: 2281332473767323358}
+  - {fileID: 6071685136548548030}
 --- !u!1 &3231840900799102579
 GameObject:
   m_ObjectHideFlags: 0
@@ -39334,6 +39360,7 @@ GameObject:
   - component: {fileID: 841365156586176068}
   - component: {fileID: 5543219933335894154}
   - component: {fileID: 4950441901295748423}
+  - component: {fileID: 4040510117630170873}
   m_Layer: 0
   m_Name: Tilemap_Quadrant_1
   m_TagString: Untagged
@@ -58947,6 +58974,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
+--- !u!114 &4040510117630170873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3231840900799102579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77d226b0a713c9e40b1e3c162ce065fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8340907406919294644
 GameObject:
   m_ObjectHideFlags: 0
@@ -58961,6 +59000,7 @@ GameObject:
   - component: {fileID: 2542551733836886816}
   - component: {fileID: 8479987306229562429}
   - component: {fileID: 5282070788914089256}
+  - component: {fileID: 6071685136548548030}
   m_Layer: 0
   m_Name: Tilemap_Quadrant_4
   m_TagString: Untagged
@@ -78574,3 +78614,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
+--- !u!114 &6071685136548548030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8340907406919294644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77d226b0a713c9e40b1e3c162ce065fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

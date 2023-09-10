@@ -6,6 +6,8 @@ public class Define
 {
     #region Resource
     #region Prefab
+    // Hero
+    public const string RESOURCE_HERO_ARCANE_MAGE = "ArcaneMage";
     // Map
     public const string RESOURCE_MAP_00 = "Map_00";
     // UI_Scene

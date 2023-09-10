@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1213549829809543838}
   - component: {fileID: 6847360470633700729}
   - component: {fileID: 4290907972775705502}
+  - component: {fileID: 5818978294733417257}
   m_Layer: 0
   m_Name: ArcaneMageController
   m_TagString: Untagged
@@ -161,6 +162,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5818978294733417257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2213567343342531717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36105952cd67b7142a6f17b366274e43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _backgroundCollisionArea: {fileID: 2899380300069664327}
+  _moveSpeed: 10
 --- !u!1 &2257015632540133075
 GameObject:
   m_ObjectHideFlags: 0
@@ -842,6 +857,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8295833069917769776}
+  - component: {fileID: 293876006324027398}
   m_Layer: 0
   m_Name: ArcaneMage
   m_TagString: Untagged
@@ -866,6 +882,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &293876006324027398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4879729978705329563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0da0690e3004ec7418f1d918c99b7079, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _heroController: {fileID: 5818978294733417257}
 --- !u!1 &4902925678535683211
 GameObject:
   m_ObjectHideFlags: 0
