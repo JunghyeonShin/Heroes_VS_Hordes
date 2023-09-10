@@ -31,7 +31,12 @@ public class IngameManager : MonoBehaviour
     {
         _CheckIngameProgressTime();
         #region TEST
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            var spawnMonster = Utils.GetOrAddComponent<SpawnMonster>(Manager.Instance.Object.MonsterSpawner);
+            spawnMonster.Spawn(Define.RESOURCE_MONSTER_NORMAL_BAT, 10);
+        }
+        else if (Input.GetKeyDown(KeyCode.C))
             RemainingMonsterHandler?.Invoke(0);
         #endregion
     }
