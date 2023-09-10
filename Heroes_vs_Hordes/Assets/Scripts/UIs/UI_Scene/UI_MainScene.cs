@@ -43,13 +43,25 @@ public class UI_MainScene : UI_Scene
     {
         Manager.Instance.UI.ShowSceneUI<UI_IngameScene>(Define.RESOURCE_UI_INGAME_SCENE, (ingameSceneUI) =>
         {
-            Manager.Instance.Ingame.StartIngame(FIRST_WAVE_INDEX);
-
+            // UI_PauseIngame의 웨이브 진행도 초기 세팅
             var pauseIngameUI = Manager.Instance.UI.FindUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME);
             pauseIngameUI.InitWavePanel();
 
+            // UI_ClearWave의 웨이브 진행도 초기 세팅
             var clearWaveUI = Manager.Instance.UI.FindUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE);
             clearWaveUI.InitWavePanel();
+
+            // 맵 생성
+            Manager.Instance.Object.GetMap(Define.RESOURCE_MAP_00, (map) =>
+            {
+                Utils.SetActive(map, true);
+            });
+
+            // 영웅 생성
+
+
+            // 인게임 시작
+            Manager.Instance.Ingame.StartIngame(FIRST_WAVE_INDEX);
         });
     }
 

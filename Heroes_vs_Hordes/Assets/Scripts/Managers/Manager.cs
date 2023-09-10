@@ -27,10 +27,12 @@ public class Manager : MonoBehaviour
     #endregion
 
     private IngameManager _ingame;
+    private ObjectManager _object;
     private ResourceManager _resource;
     private UIManager _uI;
 
     public IngameManager Ingame { get { return _ingame; } }
+    public ObjectManager Object { get { return _object; } }
     public ResourceManager Resource { get { return _resource; } }
     public UIManager UI { get { return _uI; } }
 
@@ -39,10 +41,12 @@ public class Manager : MonoBehaviour
         CreateInstance();
 
         _resource = new ResourceManager();
+        _object = new ObjectManager();
         _uI = new UIManager();
         _ingame = Utils.GetOrAddComponent<IngameManager>(gameObject);
 
         _resource.Init();
+        _object.Init();
         _uI.Init();
     }
 }

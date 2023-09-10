@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3801140054376480334}
   - component: {fileID: 3424941920267812125}
   m_Layer: 0
-  m_Name: Tilemap (3)
+  m_Name: Tilemap_Quadrant_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19642,7 +19642,7 @@ GameObject:
   - component: {fileID: 6046708358566884147}
   - component: {fileID: 3372659868797075289}
   m_Layer: 0
-  m_Name: Tilemap (2)
+  m_Name: Tilemap_Quadrant_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39264,8 +39264,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4816830074637005193}
   - component: {fileID: 6098059660889483712}
+  - component: {fileID: 1229845782397129928}
   m_Layer: 0
-  m_Name: Background
+  m_Name: Map_00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39284,9 +39285,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1106527822207957959}
-  - {fileID: 5839052183274638038}
-  - {fileID: 1374322318679855164}
   - {fileID: 7794864924915640700}
+  - {fileID: 1374322318679855164}
+  - {fileID: 5839052183274638038}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -39302,6 +39303,23 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
+--- !u!114 &1229845782397129928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2443644930353765326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78870b2f72d0ff74aa24692a255aa6b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tilemaps:
+  - {fileID: 3231840900799102579}
+  - {fileID: 949591388902880634}
+  - {fileID: 1527429628899387367}
+  - {fileID: 8340907406919294644}
 --- !u!1 &3231840900799102579
 GameObject:
   m_ObjectHideFlags: 0
@@ -39317,7 +39335,7 @@ GameObject:
   - component: {fileID: 5543219933335894154}
   - component: {fileID: 4950441901295748423}
   m_Layer: 0
-  m_Name: Tilemap
+  m_Name: Tilemap_Quadrant_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58944,7 +58962,7 @@ GameObject:
   - component: {fileID: 8479987306229562429}
   - component: {fileID: 5282070788914089256}
   m_Layer: 0
-  m_Name: Tilemap (1)
+  m_Name: Tilemap_Quadrant_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

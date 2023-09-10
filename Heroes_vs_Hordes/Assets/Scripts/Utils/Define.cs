@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class Define
 {
-    // Resource
+    #region Resource
+    #region Prefab
+    // Map
+    public const string RESOURCE_MAP_00 = "Map_00";
     // UI_Scene
     public const string RESOURCE_UI_INGAME_SCENE = "UI_IngameScene";
     public const string RESOURCE_UI_MAIN_SCENE = "UI_MainScene";
@@ -15,9 +18,13 @@ public class Define
     // UI_Element
     public const string RESOURCE_UI_NORMAL_BATTLE_WAVE = "UI_NormalBattleWave";
     public const string RESOURCE_UI_COIN_RUSH_WAVE = "UI_CoinRushWave";
-    // Sprites
+    #endregion
+
+    #region Sprite
     public const string RESOURCE_SPRITES_SLIDER_YELLOW = "Slider_Yellow";
     public const string RESOURCE_SPRITES_SLIDER_RED = "Slider_Red";
+    #endregion
+    #endregion
 
     // IngameManager
     public const int TIME_ATTACK_MODE = 0;

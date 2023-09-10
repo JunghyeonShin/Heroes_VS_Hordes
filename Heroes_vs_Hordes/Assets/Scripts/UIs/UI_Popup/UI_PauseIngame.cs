@@ -47,6 +47,7 @@ public class UI_PauseIngame : UI_Popup
     private void _GiveUpIngame()
     {
         Manager.Instance.Ingame.GiveUpIngame();
+        Manager.Instance.Object.ReturnMap(Define.RESOURCE_MAP_00);
         Manager.Instance.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE);
     }
     #endregion
