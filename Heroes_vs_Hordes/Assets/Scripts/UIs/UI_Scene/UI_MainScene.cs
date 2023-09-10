@@ -63,6 +63,9 @@ public class UI_MainScene : UI_Scene
                     var hero = Utils.GetOrAddComponent<Hero>(heroGO);
                     mapController.SetHeroController(hero.HeroController);
                     Utils.SetActive(heroGO, true);
+
+                    // 카메라 팔로워 세팅
+                    Manager.Instance.CameraController.SetFollower(hero.HeroController.transform);
                 });
             });
 

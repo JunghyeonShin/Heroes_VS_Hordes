@@ -42,7 +42,7 @@ public class IngameManager : MonoBehaviour
     /// <param name="waveIndex">실행할 웨이브 목차</param>
     public void StartIngame(int waveIndex)
     {
-        Time.timeScale = RESTORE_TIMESCALE;
+        Utils.SetTimeScale(RESTORE_TIMESCALE);
         CurrentWaveIndex = waveIndex;
         WavePanelHandler?.Invoke();
         #region TEST
@@ -60,19 +60,9 @@ public class IngameManager : MonoBehaviour
     {
         ProgressWave = control;
         if (control)
-            Time.timeScale = RESTART_INGAME;
+            Utils.SetTimeScale(RESTART_INGAME);
         else
-            Time.timeScale = PAUSE_INGAME;
-    }
-
-    /// <summary>
-    /// 인게임을 중간에 포기할 때 호출
-    /// </summary>
-    public void GiveUpIngame()
-    {
-        ProgressWave = false;
-        Time.timeScale = RESTORE_TIMESCALE;
-        _waveProgressTime = INIT_WAVE_PROGRESS_TIME;
+            Utils.SetTimeScale(PAUSE_INGAME);
     }
 
     /// <summary>
@@ -81,7 +71,7 @@ public class IngameManager : MonoBehaviour
     public void ClearIngame()
     {
         ProgressWave = false;
-        Time.timeScale = PAUSE_INGAME;
+        Utils.SetTimeScale(PAUSE_INGAME);
         CurrentWaveIndex += NEXT_WAVE_INDEX;
         if (CurrentWaveIndex < Define.MAX_WAVE_INDEX)
             Manager.Instance.UI.ShowPopupUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE, (clearWaveUI) =>
@@ -91,6 +81,16 @@ public class IngameManager : MonoBehaviour
             });
         else
             Manager.Instance.UI.ShowPopupUI<UI_ClearChapter>(Define.RESOURCE_UI_CLEAR_CHAPTER);
+    }
+
+    /// <summary>
+    /// 인게임을 중간에 포기하거나 클리어하고 나갈 때 호출
+    /// </summary>
+    public void ExitIngame()
+    {
+        ProgressWave = false;
+        Utils.SetTimeScale(RESTORE_TIMESCALE);
+        _waveProgressTime = INIT_WAVE_PROGRESS_TIME;
     }
 
     private void _CheckIngameProgressTime()

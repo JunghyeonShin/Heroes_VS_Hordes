@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class MainScene : MonoBehaviour
 {
+    [SerializeField] private CameraController _cameraController;
+
     private void Awake()
     {
         Manager.CreateInstance();
+        Manager.Instance.CameraController = _cameraController;
     }
 
     private void Start()

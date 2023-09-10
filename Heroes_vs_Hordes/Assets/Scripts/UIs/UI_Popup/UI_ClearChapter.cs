@@ -35,9 +35,12 @@ public class UI_ClearChapter : UI_Popup
     #region Event
     private void _ExitIngame()
     {
-        Manager.Instance.Object.ReturnMap(Define.RESOURCE_MAP_00);
-        Manager.Instance.Object.ReturnHero(Define.RESOURCE_HERO_ARCANE_MAGE);
-        Manager.Instance.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE);
+        var manager = Manager.Instance;
+        manager.Ingame.ExitIngame();
+        manager.Object.ReturnMap(Define.RESOURCE_MAP_00);
+        manager.Object.ReturnHero(Define.RESOURCE_HERO_ARCANE_MAGE);
+        manager.CameraController.SetFollower();
+        manager.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE);
     }
 
     private void _GetReward()

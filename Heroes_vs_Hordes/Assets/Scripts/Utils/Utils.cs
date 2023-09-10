@@ -37,4 +37,9 @@ public class Utils
     {
         go.SetActive(active);
     }
+
+    public static void SetTimeScale(float timeScale)
+    {
+        Time.timeScale = timeScale;
+    }
 }

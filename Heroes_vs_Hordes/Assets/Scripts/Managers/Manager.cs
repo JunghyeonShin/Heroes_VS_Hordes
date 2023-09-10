@@ -35,6 +35,7 @@ public class Manager : MonoBehaviour
     public ObjectManager Object { get { return _object; } }
     public ResourceManager Resource { get { return _resource; } }
     public UIManager UI { get { return _uI; } }
+    public CameraController CameraController { get; set; }
 
     private void Awake()
     {
