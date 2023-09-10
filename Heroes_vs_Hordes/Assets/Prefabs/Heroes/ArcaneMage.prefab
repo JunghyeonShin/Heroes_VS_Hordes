@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36105952cd67b7142a6f17b366274e43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _backgroundCollisionArea: {fileID: 2899380300069664327}
+  _mapCollisionArea: {fileID: 2899380300069664327}
   _moveSpeed: 10
 --- !u!1 &2257015632540133075
 GameObject:
@@ -990,8 +990,8 @@ GameObject:
   - component: {fileID: 2899380300069664327}
   - component: {fileID: 1585077520073678973}
   m_Layer: 0
-  m_Name: BackgroundCollisionArea
-  m_TagString: BackgroundCollisionArea
+  m_Name: MapCollisionArea
+  m_TagString: MapCollisionArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

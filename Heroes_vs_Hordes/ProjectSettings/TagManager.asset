@@ -6,7 +6,7 @@ TagManager:
   tags:
   - Weapon
   - Background
-  - BackgroundCollisionArea
+  - MapCollisionArea
   layers:
   - Default
   - TransparentFX

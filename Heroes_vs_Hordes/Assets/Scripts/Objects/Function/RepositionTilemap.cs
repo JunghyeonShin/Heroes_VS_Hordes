@@ -9,11 +9,11 @@ public class RepositionTilemap : MonoBehaviour
     private const float TILE_MOVE_SIZE = 88f;
     private const int MOVE_RIGHT = 0;
     private const int MOVE_UP = 0;
-    private const string TAG_BACKGROUND_COLLISION_AREA = "BackgroundCollisionArea";
+    private const string TAG_MAP_COLLISION_AREA = "MapCollisionArea";
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag(TAG_BACKGROUND_COLLISION_AREA))
+        if (collision.CompareTag(TAG_MAP_COLLISION_AREA))
         {
             var differentX = Mathf.Abs(HeroController.transform.position.x - transform.position.x);
             var differentY = Mathf.Abs(HeroController.transform.position.y - transform.position.y);
