@@ -32,8 +32,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c30b704ca287dd44e8695a33271db3ec
-    m_Address: ArcaneMage
+  - m_GUID: 2c0ecba676fcc8d4ab937f67058306f4
+    m_Address: MapCollisionArea
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -84,6 +84,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0463f0fc268120042a3ff95c67454e6e
     m_Address: Map_00
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c30b704ca287dd44e8695a33271db3ec
+    m_Address: ArcaneMage
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

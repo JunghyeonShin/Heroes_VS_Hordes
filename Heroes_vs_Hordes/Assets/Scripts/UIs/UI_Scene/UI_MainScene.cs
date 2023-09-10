@@ -58,14 +58,20 @@ public class UI_MainScene : UI_Scene
                 Utils.SetActive(mapGO, true);
 
                 // 영웅 생성
-                Manager.Instance.Object.GetHero(Define.RESOURCE_HERO_ARCANE_MAGE, (heroGO) =>
+                Manager.Instance.Object.GetHero(Define.RESOURCE_HERO_ARCANE_MAGE, (hero) =>
                 {
-                    var hero = Utils.GetOrAddComponent<Hero>(heroGO);
-                    mapController.SetHeroController(hero.HeroController);
-                    Utils.SetActive(heroGO, true);
+                    var heroController = Utils.GetOrAddComponent<HeroController>(hero);
+                    mapController.SetHeroController(heroController);
+                    Utils.SetActive(hero, true);
+
+                    {
+                        var chaseHero = Utils.GetOrAddComponent<ChaseHero>(Manager.Instance.Object.MapCollisionArea);
+                        chaseHero.HeroTransform = hero.transform;
+                        Utils.SetActive(Manager.Instance.Object.MapCollisionArea, true);
+                    }
 
                     // 카메라 팔로워 세팅
-                    Manager.Instance.CameraController.SetFollower(hero.HeroController.transform);
+                    Manager.Instance.CameraController.SetFollower(hero.transform);
                 });
             });
 

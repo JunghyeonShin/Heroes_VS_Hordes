@@ -12,6 +12,8 @@ public class ObjectManager
 
     private GameObject _rootObject;
 
+    public GameObject MapCollisionArea { get; private set; }
+
     private const int DEFAULT_INSTANTIATE_MONSTER_COUNT = 50;
     private const string NAME_ROOT_OBJECT = "[ROOT_OBJECT]";
 
@@ -19,6 +21,11 @@ public class ObjectManager
     {
         _rootObject = new GameObject(NAME_ROOT_OBJECT);
 
+        Manager.Instance.Resource.Instantiate(Define.RESOURCE_MAP_COLLISION_AREA, _rootObject.transform, (mapCollisionArea) =>
+        {
+            MapCollisionArea = mapCollisionArea;
+            Utils.SetActive(MapCollisionArea, false);
+        });
         _InitMonster(Define.RESOURCE_MONSTER_NORMAL_BAT, DEFAULT_INSTANTIATE_MONSTER_COUNT);
     }
 

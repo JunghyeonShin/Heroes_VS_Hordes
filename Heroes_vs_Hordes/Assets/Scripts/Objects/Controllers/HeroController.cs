@@ -5,7 +5,6 @@ using UnityEngine.InputSystem;
 
 public class HeroController : MonoBehaviour
 {
-    [SerializeField] private Transform _mapCollisionArea;
     [SerializeField] private float _moveSpeed = 10f;
 
     private Rigidbody2D _rigid;
@@ -18,6 +17,11 @@ public class HeroController : MonoBehaviour
     private void Awake()
     {
         _rigid = GetComponent<Rigidbody2D>();
+    }
+
+    private void OnEnable()
+    {
+        transform.position = Vector3.zero;
     }
 
     private void FixedUpdate()
@@ -35,17 +39,6 @@ public class HeroController : MonoBehaviour
             else
                 _rigid.rotation = ANGLE_180 + angle;
         }
-    }
-
-    private void LateUpdate()
-    {
-        _mapCollisionArea.position = transform.position;
-    }
-
-    public void InitTransform()
-    {
-        transform.position = Vector3.zero;
-        _mapCollisionArea.position = Vector3.zero;
     }
 
     private bool _IsRightSide(float value)

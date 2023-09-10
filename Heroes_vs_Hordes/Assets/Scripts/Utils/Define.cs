@@ -8,6 +8,7 @@ public class Define
     #region Prefab
     // Map
     public const string RESOURCE_MAP_00 = "Map_00";
+    public const string RESOURCE_MAP_COLLISION_AREA = "MapCollisionArea";
     // Hero
     public const string RESOURCE_HERO_ARCANE_MAGE = "ArcaneMage";
     // Monster
