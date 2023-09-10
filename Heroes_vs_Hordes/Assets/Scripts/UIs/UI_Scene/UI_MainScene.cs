@@ -65,9 +65,19 @@ public class UI_MainScene : UI_Scene
                     Utils.SetActive(hero, true);
 
                     {
-                        var chaseHero = Utils.GetOrAddComponent<ChaseHero>(Manager.Instance.Object.MapCollisionArea);
+                        var mapCollisionArea = Manager.Instance.Object.MapCollisionArea;
+                        var chaseHero = Utils.GetOrAddComponent<ChaseHero>(mapCollisionArea);
                         chaseHero.HeroTransform = hero.transform;
-                        Utils.SetActive(Manager.Instance.Object.MapCollisionArea, true);
+                        Utils.SetActive(mapCollisionArea, true);
+                    }
+
+                    {
+                        var monsterSpawner = Manager.Instance.Object.MonsterSpawner;
+                        var chaseHero = Utils.GetOrAddComponent<ChaseHero>(monsterSpawner);
+                        chaseHero.HeroTransform = hero.transform;
+                        var spawnMonster = Utils.GetOrAddComponent<SpawnMonster>(monsterSpawner);
+                        spawnMonster.Target = hero.transform;
+                        Utils.SetActive(monsterSpawner, true);
                     }
 
                     // 카메라 팔로워 세팅

@@ -51,6 +51,7 @@ public class UI_PauseIngame : UI_Popup
         manager.Object.ReturnMap(Define.RESOURCE_MAP_00);
         manager.Object.ReturnHero(Define.RESOURCE_HERO_ARCANE_MAGE);
         Utils.SetActive(manager.Object.MapCollisionArea, false);
+        Utils.SetActive(manager.Object.MonsterSpawner, false);
         manager.CameraController.SetFollower();
         manager.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE);
     }

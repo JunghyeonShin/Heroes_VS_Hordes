@@ -13,6 +13,7 @@ public class ObjectManager
     private GameObject _rootObject;
 
     public GameObject MapCollisionArea { get; private set; }
+    public GameObject MonsterSpawner { get; private set; }
 
     private const int DEFAULT_INSTANTIATE_MONSTER_COUNT = 50;
     private const string NAME_ROOT_OBJECT = "[ROOT_OBJECT]";
@@ -26,6 +27,13 @@ public class ObjectManager
             MapCollisionArea = mapCollisionArea;
             Utils.SetActive(MapCollisionArea, false);
         });
+
+        Manager.Instance.Resource.Instantiate(Define.RESOURCE_MONSTER_SPAWNER, _rootObject.transform, (monsterSpawner) =>
+        {
+            MonsterSpawner = monsterSpawner;
+            Utils.SetActive(MonsterSpawner, false);
+        });
+
         _InitMonster(Define.RESOURCE_MONSTER_NORMAL_BAT, DEFAULT_INSTANTIATE_MONSTER_COUNT);
     }
 
@@ -82,7 +90,10 @@ public class ObjectManager
     {
         // 캐시 확인
         if (_monsterPoolDic.TryGetValue(key, out var monsterPool))
+        {
             callback?.Invoke(monsterPool.GetObject());
+            return;
+        }
 
         // 몬스터 오브젝트 생성 후 캐싱
         _InitMonster(key, DEFAULT_INSTANTIATE_MONSTER_COUNT, callback);

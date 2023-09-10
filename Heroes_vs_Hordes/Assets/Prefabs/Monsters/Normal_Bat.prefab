@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 84128243334680509}
   - component: {fileID: 3188427498201608475}
   - component: {fileID: 810105362479065202}
+  - component: {fileID: 9162776329102473843}
   m_Layer: 10
   m_Name: Normal_Bat
   m_TagString: Untagged
@@ -170,3 +171,16 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &9162776329102473843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829923838201807053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34d7138aef987dd41ae4480ddbeccdc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _moveSpeed: 3
