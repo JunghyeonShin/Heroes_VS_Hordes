@@ -11,6 +11,8 @@ public class Define
     public const string RESOURCE_MAP_00 = "Map_00";
     // Hero
     public const string RESOURCE_HERO_ARCANE_MAGE = "ArcaneMage";
+    // Weapon
+    public const string RESOURCE_ARCANE_MAGE_PROJECTILE = "ArcaneMage_Projectile";
     // Monster
     public const string RESOURCE_MONSTER_SPAWNER = "MonsterSpawner";
     public const string RESOURCE_MONSTER_NORMAL_BAT = "Normal_Bat";
@@ -34,6 +36,11 @@ public class Define
 
     #region TAG
     public const string TAG_REPOSITION_AREA = "RepositionArea";
+    public const string TAG_MONSTER = "Monster";
+    #endregion
+
+    #region Layer
+    public const string LAYER_MONSTER = "Monster";
     #endregion
 
     #region Ability
@@ -45,6 +52,10 @@ public class Define
     public const int HERO_ABILITY_CRITICAL = 5;
     public const int HERO_ABILITY_MOVE_SPEED = 6;
     public const int HERO_ABILITY_PROJECTILE_SPEED = 7;
+    #endregion
+
+    #region Animator
+    public const string ANIMATOR_TRIGGER_ATTACK = "Attack";
     #endregion
 
     // IngameManager
