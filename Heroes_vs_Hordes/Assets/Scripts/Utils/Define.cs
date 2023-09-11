@@ -36,6 +36,17 @@ public class Define
     public const string TAG_REPOSITION_AREA = "RepositionArea";
     #endregion
 
+    #region Ability
+    // Hero
+    public const int HERO_ABILITY_HEALTH = 1;
+    public const int HERO_ABILITY_DEFENCE = 2;
+    public const int HERO_ABILITY_ATTACK = 3;
+    public const int HERO_ABILITY_ATTACK_COOLDOWN = 4;
+    public const int HERO_ABILITY_CRITICAL = 5;
+    public const int HERO_ABILITY_MOVE_SPEED = 6;
+    public const int HERO_ABILITY_PROJECTILE_SPEED = 7;
+    #endregion
+
     // IngameManager
     public const int TIME_ATTACK_MODE = 0;
 
