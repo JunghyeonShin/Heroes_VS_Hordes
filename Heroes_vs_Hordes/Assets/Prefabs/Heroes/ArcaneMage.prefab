@@ -769,6 +769,7 @@ GameObject:
   - component: {fileID: 8520247043997316193}
   - component: {fileID: 3380923203779282545}
   - component: {fileID: 7482478725188684888}
+  - component: {fileID: 2883649255798308435}
   - component: {fileID: 6014556725729511180}
   m_Layer: 0
   m_Name: ArcaneMage
@@ -803,7 +804,7 @@ Transform:
   - {fileID: 1505207095532500330}
   - {fileID: 5680264146950177786}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!70 &1651914288719423504
 CapsuleCollider2D:
@@ -918,6 +919,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2883649255798308435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5688420793257766216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e79177573d3d5cc48b849fac430253a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6014556725729511180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -930,8 +943,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36105952cd67b7142a6f17b366274e43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapCollisionArea: {fileID: 0}
-  _moveSpeed: 10
 --- !u!1 &6513996127239521547
 GameObject:
   m_ObjectHideFlags: 0
