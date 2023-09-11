@@ -13,6 +13,7 @@ public class HeroController : MonoBehaviour
 
     private const float ANGLE_180 = 180f;
     private const float CHECK_DIRECTION = 0f;
+    private const float INIT_ROTATION_VALUE = 0f;
 
     private void Awake()
     {
@@ -22,6 +23,7 @@ public class HeroController : MonoBehaviour
     private void OnEnable()
     {
         transform.position = Vector3.zero;
+        _rigid.rotation = INIT_ROTATION_VALUE;
     }
 
     private void FixedUpdate()
@@ -31,7 +33,7 @@ public class HeroController : MonoBehaviour
 
         var angle = Vector2.Angle(Vector2.up, InputVec.normalized);
         if (InputVec.Equals(Vector2.zero))
-            _rigid.rotation = angle;
+            _rigid.rotation = _rigid.rotation;
         else
         {
             if (_IsRightSide(InputVec.x))
