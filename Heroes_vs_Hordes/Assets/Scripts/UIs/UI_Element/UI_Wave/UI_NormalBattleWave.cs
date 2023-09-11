@@ -11,7 +11,8 @@ public class UI_NormalBattleWave : UI_Wave
     {
         NextBattleIcon,
         CurrentBattleIcon,
-        FinishedBattleIcon
+        FinishedBattleIcon,
+        BlockPanel
     }
 
     private enum EImages
@@ -27,6 +28,7 @@ public class UI_NormalBattleWave : UI_Wave
     private GameObject _nextBattleIcon;
     private GameObject _currentBattleIcon;
     private GameObject _finishedBattleIcon;
+    private GameObject _blockPanel;
 
     private Image _fillSliderImage;
     private Sprite _redSliderSprite;
@@ -39,6 +41,7 @@ public class UI_NormalBattleWave : UI_Wave
     private const float SLIDER_PROGRESS_SPEED = 0.02f;
     private const int PREV_WAVE_INDEX = 1;
 
+    private readonly Vector2 ADJUST_BLOCK_PANEL_SIZE = new Vector2(0f, 20f);
     private readonly Vector2 ADJUST_CURRENT_BATTLE_ICON_SIZE = new Vector2(10f, 15f);
 
     protected override void _Init()
@@ -50,6 +53,7 @@ public class UI_NormalBattleWave : UI_Wave
         _nextBattleIcon = _GetGameObject((int)EGameObjects.NextBattleIcon);
         _currentBattleIcon = _GetGameObject((int)EGameObjects.CurrentBattleIcon);
         _finishedBattleIcon = _GetGameObject((int)EGameObjects.FinishedBattleIcon);
+        _blockPanel = _GetGameObject((int)EGameObjects.BlockPanel);
 
         _fillSliderImage = _GetImage((int)EImages.FillSliderImage);
         Manager.Instance.Resource.LoadAsync<Sprite>(Define.RESOURCE_SPRITES_SLIDER_RED, (sprite) =>
@@ -67,10 +71,11 @@ public class UI_NormalBattleWave : UI_Wave
     public override void InitWaveUI(int elementIndex, Transform parent, Vector2 elementPosition, Vector2 elementSize, Vector2 iconSize)
     {
         base.InitWaveUI(elementIndex, parent, elementPosition, elementSize, iconSize);
+        _InitTransform(_blockPanel, elementSize + ADJUST_BLOCK_PANEL_SIZE);
 
-        _InitIconTransform(_nextBattleIcon, iconSize);
-        _InitIconTransform(_currentBattleIcon, iconSize + ADJUST_CURRENT_BATTLE_ICON_SIZE);
-        _InitIconTransform(_finishedBattleIcon, iconSize);
+        _InitTransform(_nextBattleIcon, iconSize);
+        _InitTransform(_currentBattleIcon, iconSize + ADJUST_CURRENT_BATTLE_ICON_SIZE);
+        _InitTransform(_finishedBattleIcon, iconSize);
 
         _waveSlider.value = INIT_WAVE_SLIDER_VALUE;
         var currentWaveIndex = Manager.Instance.Ingame.CurrentWaveIndex;
@@ -108,7 +113,7 @@ public class UI_NormalBattleWave : UI_Wave
         Manager.Instance.UI.ReturnElementUI(Define.RESOURCE_UI_NORMAL_BATTLE_WAVE, gameObject);
     }
 
-    private void _InitIconTransform(GameObject icon, Vector2 size)
+    private void _InitTransform(GameObject icon, Vector2 size)
     {
         var rectTransform = icon.GetComponent<RectTransform>();
         rectTransform.sizeDelta = size;

@@ -28,8 +28,8 @@ public class UI_CoinRushWave : UI_Wave
     {
         base.InitWaveUI(elementIndex, parent, elementPosition, elementSize, iconSize);
 
-        _InitIconTransform(_nextCoinIcon, iconSize);
-        _InitIconTransform(_currentCoinIcon, iconSize + ADJUST_CURRENT_BATTLE_ICON_SIZE);
+        _InitTransform(_nextCoinIcon, iconSize);
+        _InitTransform(_currentCoinIcon, iconSize + ADJUST_CURRENT_BATTLE_ICON_SIZE);
     }
 
     public override void UpdateWaveUI()
@@ -50,7 +50,7 @@ public class UI_CoinRushWave : UI_Wave
         Manager.Instance.UI.ReturnElementUI(Define.RESOURCE_UI_COIN_RUSH_WAVE, gameObject);
     }
 
-    private void _InitIconTransform(GameObject icon, Vector2 size)
+    private void _InitTransform(GameObject icon, Vector2 size)
     {
         var rectTransform = icon.GetComponent<RectTransform>();
         rectTransform.sizeDelta = size;
