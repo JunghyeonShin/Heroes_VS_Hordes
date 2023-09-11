@@ -12,7 +12,7 @@ public class ObjectManager
 
     private GameObject _rootObject;
 
-    public GameObject MapCollisionArea { get; private set; }
+    public GameObject RepositionArea { get; private set; }
     public GameObject MonsterSpawner { get; private set; }
 
     private const int DEFAULT_INSTANTIATE_MONSTER_COUNT = 50;
@@ -22,10 +22,10 @@ public class ObjectManager
     {
         _rootObject = new GameObject(NAME_ROOT_OBJECT);
 
-        Manager.Instance.Resource.Instantiate(Define.RESOURCE_MAP_COLLISION_AREA, _rootObject.transform, (mapCollisionArea) =>
+        Manager.Instance.Resource.Instantiate(Define.RESOURCE_REPOSITION_AREA, _rootObject.transform, (repositionArea) =>
         {
-            MapCollisionArea = mapCollisionArea;
-            Utils.SetActive(MapCollisionArea, false);
+            RepositionArea = repositionArea;
+            Utils.SetActive(RepositionArea, false);
         });
 
         Manager.Instance.Resource.Instantiate(Define.RESOURCE_MONSTER_SPAWNER, _rootObject.transform, (monsterSpawner) =>

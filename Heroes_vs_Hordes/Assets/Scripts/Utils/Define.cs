@@ -7,7 +7,7 @@ public class Define
     #region Resource
     #region Prefab
     // Map
-    public const string RESOURCE_MAP_COLLISION_AREA = "MapCollisionArea";
+    public const string RESOURCE_REPOSITION_AREA = "RepositionArea";
     public const string RESOURCE_MAP_00 = "Map_00";
     // Hero
     public const string RESOURCE_HERO_ARCANE_MAGE = "ArcaneMage";
@@ -30,6 +30,10 @@ public class Define
     public const string RESOURCE_SPRITES_SLIDER_YELLOW = "Slider_Yellow";
     public const string RESOURCE_SPRITES_SLIDER_RED = "Slider_Red";
     #endregion
+    #endregion
+
+    #region TAG
+    public const string TAG_REPOSITION_AREA = "RepositionArea";
     #endregion
 
     // IngameManager

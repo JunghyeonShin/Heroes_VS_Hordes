@@ -65,7 +65,7 @@ public class UI_MainScene : UI_Scene
                     Utils.SetActive(hero, true);
 
                     {
-                        var mapCollisionArea = Manager.Instance.Object.MapCollisionArea;
+                        var mapCollisionArea = Manager.Instance.Object.RepositionArea;
                         var chaseHero = Utils.GetOrAddComponent<ChaseHero>(mapCollisionArea);
                         chaseHero.HeroTransform = hero.transform;
                         Utils.SetActive(mapCollisionArea, true);
@@ -76,7 +76,7 @@ public class UI_MainScene : UI_Scene
                         var chaseHero = Utils.GetOrAddComponent<ChaseHero>(monsterSpawner);
                         chaseHero.HeroTransform = hero.transform;
                         var spawnMonster = Utils.GetOrAddComponent<SpawnMonster>(monsterSpawner);
-                        spawnMonster.Target = hero.transform;
+                        spawnMonster.HeroController = heroController;
                         Utils.SetActive(monsterSpawner, true);
                     }
 
