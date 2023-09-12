@@ -18,6 +18,8 @@ public class Define
     public const string RESOURCE_MONSTER_NORMAL_BAT = "Normal_Bat";
     // DamageText
     public const string RESROUCE_DAMAGE_TEXT = "DamageText";
+    // ExperienceGem
+    public const string RESOURCE_EXPERIENCE_GEM = "ExperienceGem";
     // UI_Scene
     public const string RESOURCE_UI_INGAME_SCENE = "UI_IngameScene";
     public const string RESOURCE_UI_MAIN_SCENE = "UI_MainScene";

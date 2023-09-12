@@ -10,6 +10,7 @@ public class ObjectManager
     private Dictionary<string, GameObject> _heroDic = new Dictionary<string, GameObject>();
     private Dictionary<string, ObjectPool> _monsterPoolDic = new Dictionary<string, ObjectPool>();
     private ObjectPool _damageTextPool = new ObjectPool();
+    private ObjectPool _experienceGemPool = new ObjectPool();
 
     private GameObject _rootObject;
 
@@ -18,6 +19,7 @@ public class ObjectManager
 
     private const int DEFAULT_INSTANTIATE_MONSTER_COUNT = 50;
     private const int DEFAULT_INSTANTIATE_DAMAGE_TEXT_COUNT = 50;
+    private const int DEFAULT_INSTANTIATE_EXPERIENCE_GEM_COUNT = 50;
     private const string NAME_ROOT_OBJECT = "[ROOT_OBJECT]";
 
     public void Init()
@@ -41,6 +43,11 @@ public class ObjectManager
         Manager.Instance.Resource.LoadAsync<GameObject>(Define.RESROUCE_DAMAGE_TEXT, (damageText) =>
         {
             _damageTextPool.InitPool(damageText, _rootObject, DEFAULT_INSTANTIATE_DAMAGE_TEXT_COUNT);
+        });
+
+        Manager.Instance.Resource.LoadAsync<GameObject>(Define.RESOURCE_EXPERIENCE_GEM, (damageText) =>
+        {
+            _experienceGemPool.InitPool(damageText, _rootObject, DEFAULT_INSTANTIATE_EXPERIENCE_GEM_COUNT);
         });
     }
 
@@ -133,6 +140,18 @@ public class ObjectManager
     public void ReturnDamageText(GameObject damageText)
     {
         _damageTextPool.ReturnObject(damageText);
+    }
+    #endregion
+
+    #region ExperienceGem
+    public GameObject GetExperienceGem()
+    {
+        return _experienceGemPool.GetObject();
+    }
+
+    public void ReturnExperienceGem(GameObject experienceGem)
+    {
+        _experienceGemPool.ReturnObject(experienceGem);
     }
     #endregion
 }

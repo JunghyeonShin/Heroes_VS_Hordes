@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonsterController : MonoBehaviour
+public class Monster : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed = 3f;
 
@@ -29,6 +29,16 @@ public class MonsterController : MonoBehaviour
 
         var moveVec = monsterToHeroNormalVec * _moveSpeed * Time.fixedDeltaTime;
         _rigid.MovePosition(_rigid.position + moveVec);
+    }
+
+    public void OnDamaged(float damage)
+    {
+        var experienceGemGO = Manager.Instance.Object.GetExperienceGem();
+        var experienceGem = Utils.GetOrAddComponent<ExperienceGem>(experienceGemGO);
+        experienceGem.Init(transform.position);
+        Utils.SetActive(experienceGemGO, true);
+
+        Utils.SetActive(gameObject, false);
     }
 
     private bool _IsLocatedTargetRightSide(float value)

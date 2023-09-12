@@ -47,6 +47,9 @@ public class Projectile : MonoBehaviour
             damageText.Init(initDamageTextPos, _attack, _isCritical);
             Utils.SetActive(damageTextGO, true);
 
+            var monster = Utils.GetOrAddComponent<Monster>(collision.gameObject);
+            monster.OnDamaged(_attack);
+
             _returnObjectHandler?.Invoke(gameObject);
             Utils.SetActive(gameObject, false);
         }
