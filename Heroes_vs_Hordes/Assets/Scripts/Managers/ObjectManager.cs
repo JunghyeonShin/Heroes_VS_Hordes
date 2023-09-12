@@ -16,6 +16,7 @@ public class ObjectManager
 
     public GameObject RepositionArea { get; private set; }
     public GameObject MonsterSpawner { get; private set; }
+    public GameObject LevelUpText { get; private set; }
 
     private const int DEFAULT_INSTANTIATE_MONSTER_COUNT = 50;
     private const int DEFAULT_INSTANTIATE_DAMAGE_TEXT_COUNT = 50;
@@ -36,6 +37,12 @@ public class ObjectManager
         {
             MonsterSpawner = monsterSpawner;
             Utils.SetActive(MonsterSpawner, false);
+        });
+
+        Manager.Instance.Resource.Instantiate(Define.RESROUCE_LEVEL_UP_TEXT, _rootObject.transform, (levelUpText) =>
+        {
+            LevelUpText = levelUpText;
+            Utils.SetActive(LevelUpText, false);
         });
 
         _InitMonster(Define.RESOURCE_MONSTER_NORMAL_BAT, DEFAULT_INSTANTIATE_MONSTER_COUNT);

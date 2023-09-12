@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI_IngameScene : UI_Scene
 {
@@ -22,11 +23,12 @@ public class UI_IngameScene : UI_Scene
 
     private enum ESliders
     {
-        LevelSlider
+        ExpSlider
     }
 
     private enum ETexts
     {
+        LevelText,
         TimeText,
         MonsterText,
         WaveText
@@ -37,6 +39,8 @@ public class UI_IngameScene : UI_Scene
     private GameObject _waveImage;
 
     private Animator _wavePanelAnimator;
+    private Slider _expSlider;
+    private TextMeshProUGUI _levelText;
     private TextMeshProUGUI _timeText;
     private TextMeshProUGUI _monsterText;
     private TextMeshProUGUI _waveText;
@@ -44,6 +48,7 @@ public class UI_IngameScene : UI_Scene
     private const float DELAY_TIME_SHOWING_WAVE_PANEL = 1f;
     private const float FINISHED_TIME_SHOWING_WAVE_PANEL = 1f;
     private const float SIXTY_SECONDS = 60f;
+    private const int INIT_LEVEL = 1;
     private const int ADJUST_WAVE_INDEX = 1;
     private const int NON_REMAINING_MONSTER_COUNT = 0;
     private const string ANIMATOR_TRIGGER_MOVE_WAVE_PANEL = "MoveWavePanel";
@@ -62,6 +67,9 @@ public class UI_IngameScene : UI_Scene
         _wavePanelAnimator = _GetGameObject((int)EGameObjects.WavePanel).GetComponent<Animator>();
         _BindEvent(_GetButton((int)EButtons.PauseButton).gameObject, _PauseIngame);
 
+        _expSlider = _GetSlider((int)ESliders.ExpSlider);
+
+        _levelText = _GetText((int)ETexts.LevelText);
         _timeText = _GetText((int)ETexts.TimeText);
         _monsterText = _GetText((int)ETexts.MonsterText);
         _waveText = _GetText((int)ETexts.WaveText);
@@ -71,10 +79,14 @@ public class UI_IngameScene : UI_Scene
         ingame.WavePanelHandler += _SetWaveIndex;
         ingame.TimePassHandler -= _SetTimeText;
         ingame.TimePassHandler += _SetTimeText;
-        ingame.RemainingMonsterHandler -= _SetMonsterText;
-        ingame.RemainingMonsterHandler += _SetMonsterText;
+        ingame.ChangeHeroExpHandler -= _SetExpSlider;
+        ingame.ChangeHeroExpHandler += _SetExpSlider;
+        ingame.ChangeHeroLevelHandler -= _SetLevel;
+        ingame.ChangeHeroLevelHandler += _SetLevel;
         ingame.ChangeModeHandler -= _ChangeMode;
         ingame.ChangeModeHandler += _ChangeMode;
+        ingame.RemainingMonsterHandler -= _SetMonsterText;
+        ingame.RemainingMonsterHandler += _SetMonsterText;
     }
 
     #region Event
@@ -104,19 +116,41 @@ public class UI_IngameScene : UI_Scene
         Manager.Instance.Ingame.ProgressWave = true;
     }
 
+    private void _SetTimeText(float time)
+    {
+        var minute = Mathf.FloorToInt(time / SIXTY_SECONDS);
+        var second = Mathf.FloorToInt(time % SIXTY_SECONDS);
+        _timeText.text = $"{minute}:{second}";
+    }
+
+    private void _SetExpSlider(float value)
+    {
+        _expSlider.value = value;
+    }
+
+    private void _SetLevel(int level)
+    {
+        _levelText.text = level.ToString();
+        if (level > INIT_LEVEL)
+            _EnhanceHeroAbility().Forget();
+    }
+
+    private async UniTaskVoid _EnhanceHeroAbility()
+    {
+        await UniTask.Delay(TimeSpan.FromSeconds(0.6f));
+
+        Manager.Instance.UI.ShowPopupUI<UI_EnhanceHeroAbility>(Define.RESOURCE_UI_ENHANCE_HERO_ABILITY, (enhanceHeroAbilityUI) =>
+        {
+            Manager.Instance.Ingame.ControlIngame(false);
+        });
+    }
+
     private void _ChangeMode(int mode)
     {
         Utils.SetActive(_timeCheckPanel, Define.TIME_ATTACK_MODE == mode);
         Utils.SetActive(_monsterCheckPanel, Define.TIME_ATTACK_MODE != mode);
         if (_monsterCheckPanel.activeSelf)
             _monsterText.text = mode.ToString();
-    }
-
-    private void _SetTimeText(float time)
-    {
-        var minute = Mathf.FloorToInt(time / SIXTY_SECONDS);
-        var second = Mathf.FloorToInt(time % SIXTY_SECONDS);
-        _timeText.text = $"{minute}:{second}";
     }
 
     private void _SetMonsterText(int remainingCount)

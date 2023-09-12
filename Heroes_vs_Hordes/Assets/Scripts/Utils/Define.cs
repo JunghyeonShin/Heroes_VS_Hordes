@@ -16,8 +16,9 @@ public class Define
     // Monster
     public const string RESOURCE_MONSTER_SPAWNER = "MonsterSpawner";
     public const string RESOURCE_MONSTER_NORMAL_BAT = "Normal_Bat";
-    // DamageText
+    // Text
     public const string RESROUCE_DAMAGE_TEXT = "DamageText";
+    public const string RESROUCE_LEVEL_UP_TEXT = "LevelUpText";
     // ExperienceGem
     public const string RESOURCE_EXPERIENCE_GEM = "ExperienceGem";
     // UI_Scene
@@ -27,6 +28,7 @@ public class Define
     public const string RESOURCE_UI_CLEAR_CHAPTER = "UI_ClearChapter";
     public const string RESOURCE_UI_CLEAR_WAVE = "UI_ClearWave";
     public const string RESOURCE_UI_PAUSE_INGAME = "UI_PauseIngame";
+    public const string RESOURCE_UI_ENHANCE_HERO_ABILITY = "UI_EnhanceHeroAbility";
     // UI_Element
     public const string RESOURCE_UI_NORMAL_BATTLE_WAVE = "UI_NormalBattleWave";
     public const string RESOURCE_UI_COIN_RUSH_WAVE = "UI_CoinRushWave";

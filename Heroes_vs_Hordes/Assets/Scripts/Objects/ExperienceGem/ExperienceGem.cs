@@ -14,6 +14,7 @@ public class ExperienceGem : MonoBehaviour
     private const float PROGRESS_TIME = 0.02f;
     private const float EXPERIENCE_DISTANCE = 0.3f;
     private const float LINEAR_CURVE_DISTANCE = 1f;
+    private const float INCREASE_EXP_VALUE = 1;
 
     private void Awake()
     {
@@ -63,9 +64,10 @@ public class ExperienceGem : MonoBehaviour
                 transform.position = BezierCurve.LinearCurve(startPos, targetHero.transform.position, time);
             else
                 transform.position = BezierCurve.QuadraticCurve(startPos, tempPos, targetHero.transform.position, time);
-            await UniTask.Delay(TimeSpan.FromSeconds(PROGRESS_TIME));
+            await UniTask.Delay(TimeSpan.FromSeconds(PROGRESS_TIME), ignoreTimeScale: true);
         }
 
+        targetHero.GetExp(INCREASE_EXP_VALUE);
         Manager.Instance.Object.ReturnExperienceGem(gameObject);
     }
 }
