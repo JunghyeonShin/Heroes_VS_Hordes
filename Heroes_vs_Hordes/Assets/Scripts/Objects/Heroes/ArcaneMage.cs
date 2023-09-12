@@ -72,7 +72,7 @@ public class ArcaneMage : Hero
         var initProjectilePos = transform.TransformPoint(CREATE_PROJECTILE_POSITION);
         var projectileGO = _GetProjectile();
         var projectile = Utils.GetOrAddComponent<Projectile>(projectileGO);
-        projectile.Init(initProjectilePos, targetPos, ProjectileSpeed, _ReturnProjectile);
+        projectile.Init(initProjectilePos, targetPos, ProjectileSpeed, _attack, _IsCritical(), _ReturnProjectile);
         Utils.SetActive(projectileGO, true);
     }
 

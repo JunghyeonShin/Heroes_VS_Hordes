@@ -21,6 +21,8 @@ public abstract class Hero : MonoBehaviour
     public float ProjectileSpeed { get; private set; }
 
     private const float DEFAULT_ABILITY_VALUE = 1f;
+    private const float MIN_CRITICAL_VALUE = 0f;
+    private const float MAX_CRITICAL_VALUE = 1f;
 
     protected virtual void Awake()
     {
@@ -48,5 +50,13 @@ public abstract class Hero : MonoBehaviour
         _critical = heroCommonAbility.Critical + heroIndividualAbility.Critical;
         MoveSpeed = heroCommonAbility.MoveSpeed * (DEFAULT_ABILITY_VALUE + heroIndividualAbility.MoveSpeed);
         ProjectileSpeed = heroCommonAbility.ProjectileSpeed * (DEFAULT_ABILITY_VALUE + heroIndividualAbility.ProjectileSpeed);
+    }
+
+    protected bool _IsCritical()
+    {
+        var randomValue = UnityEngine.Random.Range(MIN_CRITICAL_VALUE, MAX_CRITICAL_VALUE);
+        if (randomValue <= _critical)
+            return true;
+        return false;
     }
 }

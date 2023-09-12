@@ -8,9 +8,11 @@ public class Projectile : MonoBehaviour
     private Rigidbody2D _rigid;
     private Vector2 _moveVec;
 
-    private Action<GameObject> _returnObjectHandler;
     private Vector3 _targetPos;
     private float _moveSpeed;
+    private float _attack;
+    private bool _isCritical;
+    private Action<GameObject> _returnObjectHandler;
 
     private void Awake()
     {
@@ -38,11 +40,13 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    public void Init(Vector3 initPos, Vector3 targetPos, float moveSpeed, Action<GameObject> returnObjectCallback)
+    public void Init(Vector3 initPos, Vector3 targetPos, float moveSpeed, float attack, bool isCritical, Action<GameObject> returnObjectCallback)
     {
         transform.position = initPos;
         _targetPos = targetPos;
         _moveSpeed = moveSpeed;
+        _attack = attack;
+        _isCritical = isCritical;
 
         _returnObjectHandler -= returnObjectCallback;
         _returnObjectHandler += returnObjectCallback;
