@@ -15,7 +15,7 @@ public class ArcaneMage : Hero
     private const string NAME_ROOT_PROJECTILE = "[ROOT_PROJECTILE]";
 
     private readonly Vector2 OVERLAP_SIZE = new Vector2(22.5f, 40f);
-    private readonly Vector3 CREATE_PROJECTILE_POSITION = new Vector3(1f, -0.276f, 0f);
+    private readonly Vector3 INIT_PROJECTILE_POSITION = new Vector3(1f, -0.276f, 0f);
 
     protected override void Awake()
     {
@@ -69,10 +69,10 @@ public class ArcaneMage : Hero
         _animator.SetTrigger(Define.ANIMATOR_TRIGGER_ATTACK);
         await UniTask.Delay(TimeSpan.FromSeconds(ATTACK_TIME));
 
-        var initProjectilePos = transform.TransformPoint(CREATE_PROJECTILE_POSITION);
+        var initProjectilePos = transform.TransformPoint(INIT_PROJECTILE_POSITION);
         var projectileGO = _GetProjectile();
         var projectile = Utils.GetOrAddComponent<Projectile>(projectileGO);
-        projectile.Init(initProjectilePos, targetPos, ProjectileSpeed, _attack, _IsCritical(), _ReturnProjectile);
+        projectile.Init(initProjectilePos, targetPos, ProjectileSpeed, _IsCritical(), _attack, _ReturnProjectile);
         Utils.SetActive(projectileGO, true);
     }
 

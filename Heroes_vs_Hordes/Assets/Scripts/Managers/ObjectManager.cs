@@ -9,6 +9,7 @@ public class ObjectManager
     private Dictionary<string, GameObject> _mapDic = new Dictionary<string, GameObject>();
     private Dictionary<string, GameObject> _heroDic = new Dictionary<string, GameObject>();
     private Dictionary<string, ObjectPool> _monsterPoolDic = new Dictionary<string, ObjectPool>();
+    private ObjectPool _damageTextPool = new ObjectPool();
 
     private GameObject _rootObject;
 
@@ -16,6 +17,7 @@ public class ObjectManager
     public GameObject MonsterSpawner { get; private set; }
 
     private const int DEFAULT_INSTANTIATE_MONSTER_COUNT = 50;
+    private const int DEFAULT_INSTANTIATE_DAMAGE_TEXT_COUNT = 50;
     private const string NAME_ROOT_OBJECT = "[ROOT_OBJECT]";
 
     public void Init()
@@ -35,6 +37,11 @@ public class ObjectManager
         });
 
         _InitMonster(Define.RESOURCE_MONSTER_NORMAL_BAT, DEFAULT_INSTANTIATE_MONSTER_COUNT);
+
+        Manager.Instance.Resource.LoadAsync<GameObject>(Define.RESROUCE_DAMAGE_TEXT, (damageText) =>
+        {
+            _damageTextPool.InitPool(damageText, _rootObject, DEFAULT_INSTANTIATE_DAMAGE_TEXT_COUNT);
+        });
     }
 
     #region Map
@@ -114,6 +121,18 @@ public class ObjectManager
             _monsterPoolDic.Add(key, objectPool);
             callback?.Invoke(objectPool.GetObject());
         });
+    }
+    #endregion
+
+    #region DamageText
+    public GameObject GetDamageText()
+    {
+        return _damageTextPool.GetObject();
+    }
+
+    public void ReturnDamageText(GameObject damageText)
+    {
+        _damageTextPool.ReturnObject(damageText);
     }
     #endregion
 }

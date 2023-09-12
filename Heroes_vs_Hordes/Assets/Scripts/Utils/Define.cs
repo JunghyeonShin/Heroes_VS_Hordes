@@ -16,6 +16,8 @@ public class Define
     // Monster
     public const string RESOURCE_MONSTER_SPAWNER = "MonsterSpawner";
     public const string RESOURCE_MONSTER_NORMAL_BAT = "Normal_Bat";
+    // DamageText
+    public const string RESROUCE_DAMAGE_TEXT = "DamageText";
     // UI_Scene
     public const string RESOURCE_UI_INGAME_SCENE = "UI_IngameScene";
     public const string RESOURCE_UI_MAIN_SCENE = "UI_MainScene";

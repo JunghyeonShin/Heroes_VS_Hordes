@@ -14,6 +14,11 @@ public class Projectile : MonoBehaviour
     private bool _isCritical;
     private Action<GameObject> _returnObjectHandler;
 
+    private const float MIN_DAMAGE_TEXT_POSITION_X = -1f;
+    private const float MAX_DAMAGE_TEXT_POSITION_X = 1f;
+    private const float DAMAGE_TEXT_POSITION_Y = 1f;
+    private const float TWO_MULTIPLES_VALUE = 2f;
+
     private void Awake()
     {
         _rigid = GetComponent<Rigidbody2D>();
@@ -35,18 +40,28 @@ public class Projectile : MonoBehaviour
     {
         if (collision.CompareTag(Define.TAG_MONSTER))
         {
+            var randomPos = new Vector3(UnityEngine.Random.Range(MIN_DAMAGE_TEXT_POSITION_X, MAX_DAMAGE_TEXT_POSITION_X), DAMAGE_TEXT_POSITION_Y, 0f);
+            var initDamageTextPos = collision.transform.position + randomPos;
+            var damageTextGO = Manager.Instance.Object.GetDamageText();
+            var damageText = Utils.GetOrAddComponent<DamageText>(damageTextGO);
+            damageText.Init(initDamageTextPos, _attack, _isCritical);
+            Utils.SetActive(damageTextGO, true);
+
             _returnObjectHandler?.Invoke(gameObject);
             Utils.SetActive(gameObject, false);
         }
     }
 
-    public void Init(Vector3 initPos, Vector3 targetPos, float moveSpeed, float attack, bool isCritical, Action<GameObject> returnObjectCallback)
+    public void Init(Vector3 initPos, Vector3 targetPos, float moveSpeed, bool isCritical, float attack, Action<GameObject> returnObjectCallback)
     {
         transform.position = initPos;
         _targetPos = targetPos;
         _moveSpeed = moveSpeed;
-        _attack = attack;
         _isCritical = isCritical;
+        if (_isCritical)
+            _attack = attack * TWO_MULTIPLES_VALUE;
+        else
+            _attack = attack;
 
         _returnObjectHandler -= returnObjectCallback;
         _returnObjectHandler += returnObjectCallback;
