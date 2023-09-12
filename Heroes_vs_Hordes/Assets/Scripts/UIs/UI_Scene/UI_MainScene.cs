@@ -58,30 +58,35 @@ public class UI_MainScene : UI_Scene
                 Utils.SetActive(mapGO, true);
 
                 // 영웅 생성
-                Manager.Instance.Object.GetHero(Define.RESOURCE_HERO_ARCANE_MAGE, (hero) =>
+                Manager.Instance.Object.GetHero(Define.RESOURCE_HERO_ARCANE_MAGE, (heroGO) =>
                 {
-                    var heroController = Utils.GetOrAddComponent<HeroController>(hero);
+                    var hero = heroGO.GetComponent<Hero>();
+                    hero.SetHeroAbilities();
+
+                    var heroController = Utils.GetOrAddComponent<HeroController>(heroGO);
+
                     mapController.SetHeroController(heroController);
-                    Utils.SetActive(hero, true);
 
                     {
-                        var mapCollisionArea = Manager.Instance.Object.MapCollisionArea;
+                        var mapCollisionArea = Manager.Instance.Object.RepositionArea;
                         var chaseHero = Utils.GetOrAddComponent<ChaseHero>(mapCollisionArea);
-                        chaseHero.HeroTransform = hero.transform;
+                        chaseHero.HeroTransform = heroGO.transform;
                         Utils.SetActive(mapCollisionArea, true);
                     }
 
                     {
                         var monsterSpawner = Manager.Instance.Object.MonsterSpawner;
                         var chaseHero = Utils.GetOrAddComponent<ChaseHero>(monsterSpawner);
-                        chaseHero.HeroTransform = hero.transform;
+                        chaseHero.HeroTransform = heroGO.transform;
                         var spawnMonster = Utils.GetOrAddComponent<SpawnMonster>(monsterSpawner);
-                        spawnMonster.Target = hero.transform;
+                        spawnMonster.HeroController = heroController;
                         Utils.SetActive(monsterSpawner, true);
                     }
 
                     // 카메라 팔로워 세팅
-                    Manager.Instance.CameraController.SetFollower(hero.transform);
+                    Manager.Instance.CameraController.SetFollower(heroGO.transform);
+
+                    Utils.SetActive(heroGO, true);
                 });
             });
 

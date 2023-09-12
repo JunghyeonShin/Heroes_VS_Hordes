@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3188427498201608475}
   - component: {fileID: 810105362479065202}
   - component: {fileID: 9162776329102473843}
+  - component: {fileID: 5239215740555884851}
   m_Layer: 10
   m_Name: Normal_Bat
   m_TagString: Untagged
@@ -184,3 +185,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveSpeed: 3
+--- !u!114 &5239215740555884851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829923838201807053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ae41cdb77215694bafd791cf0841d28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

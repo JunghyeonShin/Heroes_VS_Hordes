@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 5351071842059190298}
   - component: {fileID: 1664173542489185642}
   m_Layer: 0
-  m_Name: MapCollisionArea
-  m_TagString: MapCollisionArea
+  m_Name: RepositionArea
+  m_TagString: RepositionArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1664173542489185642
 BoxCollider2D:
