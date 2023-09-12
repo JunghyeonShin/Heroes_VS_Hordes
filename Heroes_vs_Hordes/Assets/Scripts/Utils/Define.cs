@@ -40,6 +40,7 @@ public class Define
 
     #region TAG
     public const string TAG_REPOSITION_AREA = "RepositionArea";
+    public const string TAG_HERO = "Hero";
     public const string TAG_MONSTER = "Monster";
     #endregion
 
