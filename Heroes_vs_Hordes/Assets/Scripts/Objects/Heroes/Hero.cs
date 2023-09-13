@@ -82,7 +82,6 @@ public abstract class Hero : MonoBehaviour
     public void GetExp(float exp)
     {
         _exp += exp;
-        Debug.Log(_exp);
         if (_levelUp)
             return;
 
@@ -110,6 +109,11 @@ public abstract class Hero : MonoBehaviour
     {
         _levelUp = true;
 
+        var levelUpTextGO = Manager.Instance.Object.LevelUpText;
+        var levelUpText = Utils.GetOrAddComponent<LevelUpText>(levelUpTextGO);
+        levelUpText.FloatLevelUpText(transform);
+        Utils.SetActive(levelUpTextGO, true);
+
         _level += INCREASE_LEVEL_VALUE;
         _changeLevelHandler?.Invoke(_level);
         await UniTask.WaitUntil(() => _levelUpPostProcessing);
@@ -118,7 +122,6 @@ public abstract class Hero : MonoBehaviour
         _levelUpPostProcessing = false;
 
         _exp -= expToNextLevel;
-        Debug.Log(_exp);
         _GetExp();
     }
 

@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 public class DamageText : MonoBehaviour
 {
@@ -26,19 +25,14 @@ public class DamageText : MonoBehaviour
         _damageText = GetComponent<TextMeshPro>();
     }
 
-    private void OnEnable()
-    {
-        _FloatingDamageText().Forget();
-    }
-
-    public void Init(Vector3 initPos, float value, bool isCritical)
+    public void FloatDamageText(Vector3 initPos, float value, bool isCritical)
     {
         _rectTransform.anchoredPosition = initPos;
-
         if (isCritical)
             _SetDamageText($"{value}!", CRITICAL_COLOR);
         else
             _SetDamageText($"{value}", Color.white);
+        _FloatingDamageText().Forget();
     }
 
     private async UniTaskVoid _FloatingDamageText()

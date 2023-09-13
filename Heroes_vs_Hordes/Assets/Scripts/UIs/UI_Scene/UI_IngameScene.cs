@@ -48,6 +48,7 @@ public class UI_IngameScene : UI_Scene
     private const float DELAY_TIME_SHOWING_WAVE_PANEL = 1f;
     private const float FINISHED_TIME_SHOWING_WAVE_PANEL = 1f;
     private const float SIXTY_SECONDS = 60f;
+    private const float DELAY_ENHANCE_HERO_ABILITY = 1.2f;
     private const int INIT_LEVEL = 1;
     private const int ADJUST_WAVE_INDEX = 1;
     private const int NON_REMAINING_MONSTER_COUNT = 0;
@@ -137,7 +138,7 @@ public class UI_IngameScene : UI_Scene
 
     private async UniTaskVoid _EnhanceHeroAbility()
     {
-        await UniTask.Delay(TimeSpan.FromSeconds(0.6f));
+        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_ENHANCE_HERO_ABILITY));
 
         Manager.Instance.UI.ShowPopupUI<UI_EnhanceHeroAbility>(Define.RESOURCE_UI_ENHANCE_HERO_ABILITY, (enhanceHeroAbilityUI) =>
         {
