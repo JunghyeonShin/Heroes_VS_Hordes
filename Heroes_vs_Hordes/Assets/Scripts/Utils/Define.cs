@@ -25,6 +25,7 @@ public class Define
     public const string RESOURCE_UI_INGAME_SCENE = "UI_IngameScene";
     public const string RESOURCE_UI_MAIN_SCENE = "UI_MainScene";
     // UI_Popup
+    public const string RESOURCE_UI_LOADING = "UI_Loading";
     public const string RESOURCE_UI_CLEAR_CHAPTER = "UI_ClearChapter";
     public const string RESOURCE_UI_CLEAR_WAVE = "UI_ClearWave";
     public const string RESOURCE_UI_PAUSE_INGAME = "UI_PauseIngame";
