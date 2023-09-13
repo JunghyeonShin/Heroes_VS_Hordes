@@ -12,6 +12,8 @@ public class UI_Loading : UI_Popup
         LoadingText
     }
 
+    public event Action OnLoadCompleteHandler;
+
     private TextMeshProUGUI _loadingText;
     private bool _loading;
     private bool _fadeOut;
@@ -19,7 +21,8 @@ public class UI_Loading : UI_Popup
     private const float ALPHA_ZERO = 0f;
     private const float ALPHA_ONE = 1f;
     private const float DELAY_TIME = 0.5f;
-    private const float LOAD_COMPLETE_TIME = 1f;
+    private const float DELAY_LOAD_COMPLETE_TIME = 1f;
+    private const float DELAY_LOAD_COMPLETE_EVENT_TIME = 0.2f;
     private const float PROGRESS_TIME = 0.02f;
     private const float ZERO_SECOND = 0f;
     private const float ONE_SECOND = 1f;
@@ -84,8 +87,12 @@ public class UI_Loading : UI_Popup
     private async UniTaskVoid _LoadComplete()
     {
         Utils.SetActive(_loadingText.gameObject, false);
-        await UniTask.Delay(TimeSpan.FromSeconds(LOAD_COMPLETE_TIME));
+        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_LOAD_COMPLETE_TIME));
 
         _ClosePopupUI();
+        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_LOAD_COMPLETE_EVENT_TIME));
+
+        OnLoadCompleteHandler?.Invoke();
+        OnLoadCompleteHandler -= Manager.Instance.Ingame.StartIngame;
     }
 }

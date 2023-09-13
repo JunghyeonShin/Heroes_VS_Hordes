@@ -21,9 +21,9 @@ public class MainScene : MonoBehaviour
         Manager.Instance.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE);
         Manager.Instance.UI.ShowPopupUI<UI_Loading>(Define.RESOURCE_UI_LOADING, (loadingUI) =>
         {
-            loadingUI.StartLoading();
             _completeLoadingHandler -= loadingUI.CompleteLoading;
             _completeLoadingHandler += loadingUI.CompleteLoading;
+            loadingUI.StartLoading();
 
             _CheckLoadComplete().Forget();
         });

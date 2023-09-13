@@ -25,6 +25,7 @@ public class IngameManager : MonoBehaviour
     private const float PAUSE_INGAME = 0f;
     private const float RESTART_INGAME = 1f;
     private const float RESTORE_TIMESCALE = 1f;
+    private const int INIT_WAVE_INDEX = 0;
     private const int NEXT_WAVE_INDEX = 1;
     #region TEST
     private const int ANNIHILATION_MODE = 1;
@@ -45,13 +46,69 @@ public class IngameManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 인게임을 처음 진입하여 초기 세팅할 때 호출
+    /// </summary>
+    public void InitIngame(UI_Loading loadingUI)
+    {
+        CurrentWaveIndex = INIT_WAVE_INDEX;
+
+        // UI_PauseIngame의 웨이브 진행도 초기 세팅
+        var pauseIngameUI = Manager.Instance.UI.FindUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME);
+        pauseIngameUI.InitWavePanel();
+
+        // UI_ClearWave의 웨이브 진행도 초기 세팅
+        var clearWaveUI = Manager.Instance.UI.FindUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE);
+        clearWaveUI.InitWavePanel();
+
+        // 맵 생성
+        Manager.Instance.Object.GetMap(Define.RESOURCE_MAP_00, (mapGO) =>
+        {
+            Utils.SetActive(mapGO, true);
+
+            // 영웅 생성
+            Manager.Instance.Object.GetHero(Define.RESOURCE_HERO_ARCANE_MAGE, (heroGO) =>
+            {
+                var hero = heroGO.GetComponent<Hero>();
+                hero.SetHeroAbilities();
+
+                var heroController = Utils.GetOrAddComponent<HeroController>(heroGO);
+
+                var mapController = Utils.GetOrAddComponent<MapController>(mapGO);
+                mapController.SetHeroController(heroController);
+
+                {
+                    var mapCollisionArea = Manager.Instance.Object.RepositionArea;
+                    var chaseHero = Utils.GetOrAddComponent<ChaseHero>(mapCollisionArea);
+                    chaseHero.HeroTransform = heroGO.transform;
+                    Utils.SetActive(mapCollisionArea, true);
+                }
+
+                {
+                    var monsterSpawner = Manager.Instance.Object.MonsterSpawner;
+                    var chaseHero = Utils.GetOrAddComponent<ChaseHero>(monsterSpawner);
+                    chaseHero.HeroTransform = heroGO.transform;
+                    var spawnMonster = Utils.GetOrAddComponent<SpawnMonster>(monsterSpawner);
+                    spawnMonster.HeroController = heroController;
+                    Utils.SetActive(monsterSpawner, true);
+                }
+
+                // 카메라 팔로워 세팅
+                Manager.Instance.CameraController.SetFollower(heroGO.transform);
+
+                Utils.SetActive(heroGO, true);
+
+                loadingUI.CompleteLoading();
+            });
+        });
+    }
+
+    /// <summary>
     /// 인게임을 처음 실행하거나 웨이브를 클리어하고 다음 웨이브를 실행할 때 호출
     /// </summary>
     /// <param name="waveIndex">실행할 웨이브 목차</param>
-    public void StartIngame(int waveIndex)
+    public void StartIngame()
     {
         Utils.SetTimeScale(RESTORE_TIMESCALE);
-        CurrentWaveIndex = waveIndex;
         WavePanelHandler?.Invoke();
         #region TEST
         _totalWaveProgressTime = 10f;
