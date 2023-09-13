@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +7,8 @@ using UnityEngine;
 public class MainScene : MonoBehaviour
 {
     [SerializeField] private CameraController _cameraController;
+
+    private Action _completeLoadingHandler;
 
     private void Awake()
     {
@@ -18,6 +22,18 @@ public class MainScene : MonoBehaviour
         Manager.Instance.UI.ShowPopupUI<UI_Loading>(Define.RESOURCE_UI_LOADING, (loadingUI) =>
         {
             loadingUI.StartLoading();
+            _completeLoadingHandler -= loadingUI.CompleteLoading;
+            _completeLoadingHandler += loadingUI.CompleteLoading;
+
+            _CheckLoadComplete().Forget();
         });
+    }
+
+    private async UniTaskVoid _CheckLoadComplete()
+    {
+        while (Manager.Instance.LoadComplete())
+            await UniTask.Yield();
+
+        _completeLoadingHandler?.Invoke();
     }
 }

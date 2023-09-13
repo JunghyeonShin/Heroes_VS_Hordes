@@ -12,6 +12,8 @@ public class ObjectManager
     private ObjectPool _damageTextPool = new ObjectPool();
     private ObjectPool _experienceGemPool = new ObjectPool();
 
+    private bool[] _loadCompletes;
+
     private GameObject _rootObject;
 
     public GameObject RepositionArea { get; private set; }
@@ -21,41 +23,67 @@ public class ObjectManager
     private const int DEFAULT_INSTANTIATE_MONSTER_COUNT = 50;
     private const int DEFAULT_INSTANTIATE_DAMAGE_TEXT_COUNT = 50;
     private const int DEFAULT_INSTANTIATE_EXPERIENCE_GEM_COUNT = 50;
+    private const int INDEX_TOTAL_VALUE = 6;
+    private const int INDEX_REPOSITION_AREA = 0;
+    private const int INDEX_MONSTER_SPAWNER = 1;
+    private const int INDEX_LEVEL_UP_TEXT = 2;
+    private const int INDEX_DAMAGE_TEXT = 3;
+    private const int INDEX_EXPERIENCE_GEM = 4;
+    private const int INDEX_MONSTER_NORMAL_BAT = 5;
     private const string NAME_ROOT_OBJECT = "[ROOT_OBJECT]";
 
     public void Init()
     {
         _rootObject = new GameObject(NAME_ROOT_OBJECT);
 
+        _loadCompletes = new bool[INDEX_TOTAL_VALUE];
         Manager.Instance.Resource.Instantiate(Define.RESOURCE_REPOSITION_AREA, _rootObject.transform, (repositionArea) =>
         {
             RepositionArea = repositionArea;
             Utils.SetActive(RepositionArea, false);
+            _loadCompletes[INDEX_REPOSITION_AREA] = true;
         });
 
         Manager.Instance.Resource.Instantiate(Define.RESOURCE_MONSTER_SPAWNER, _rootObject.transform, (monsterSpawner) =>
         {
             MonsterSpawner = monsterSpawner;
             Utils.SetActive(MonsterSpawner, false);
+            _loadCompletes[INDEX_MONSTER_SPAWNER] = true;
         });
 
         Manager.Instance.Resource.Instantiate(Define.RESROUCE_LEVEL_UP_TEXT, _rootObject.transform, (levelUpText) =>
         {
             LevelUpText = levelUpText;
             Utils.SetActive(LevelUpText, false);
+            _loadCompletes[INDEX_LEVEL_UP_TEXT] = true;
         });
-
-        _InitMonster(Define.RESOURCE_MONSTER_NORMAL_BAT, DEFAULT_INSTANTIATE_MONSTER_COUNT);
 
         Manager.Instance.Resource.LoadAsync<GameObject>(Define.RESROUCE_DAMAGE_TEXT, (damageText) =>
         {
             _damageTextPool.InitPool(damageText, _rootObject, DEFAULT_INSTANTIATE_DAMAGE_TEXT_COUNT);
+            _loadCompletes[INDEX_DAMAGE_TEXT] = true;
         });
 
         Manager.Instance.Resource.LoadAsync<GameObject>(Define.RESOURCE_EXPERIENCE_GEM, (damageText) =>
         {
             _experienceGemPool.InitPool(damageText, _rootObject, DEFAULT_INSTANTIATE_EXPERIENCE_GEM_COUNT);
+            _loadCompletes[INDEX_EXPERIENCE_GEM] = true;
         });
+
+        _InitMonster(Define.RESOURCE_MONSTER_NORMAL_BAT, DEFAULT_INSTANTIATE_MONSTER_COUNT, (monster) =>
+        {
+            _loadCompletes[INDEX_MONSTER_NORMAL_BAT] = true;
+        });
+    }
+
+    public bool LoadComplete()
+    {
+        for (int ii = 0; ii < _loadCompletes.Length; ++ii)
+        {
+            if (false == _loadCompletes[ii])
+                return false;
+        }
+        return true;
     }
 
     #region Map

@@ -16,10 +16,10 @@ public class UI_Loading : UI_Popup
     private bool _loading;
     private bool _fadeOut;
 
-    private const float INIT_ALPHA = 0.01f;
     private const float ALPHA_ZERO = 0f;
     private const float ALPHA_ONE = 1f;
     private const float DELAY_TIME = 0.5f;
+    private const float LOAD_COMPLETE_TIME = 1f;
     private const float PROGRESS_TIME = 0.02f;
     private const float ZERO_SECOND = 0f;
     private const float ONE_SECOND = 1f;
@@ -35,13 +35,15 @@ public class UI_Loading : UI_Popup
     {
         _loading = true;
         _fadeOut = true;
-        _loadingText.alpha = INIT_ALPHA;
+        _loadingText.alpha = ALPHA_ZERO;
+        Utils.SetActive(_loadingText.gameObject, true);
         _Loading().Forget();
     }
 
     public void CompleteLoading()
     {
         _loading = false;
+        _LoadComplete().Forget();
     }
 
     private async UniTaskVoid _Loading()
@@ -77,5 +79,13 @@ public class UI_Loading : UI_Popup
     private void _Fading(float minAlpha, float maxAlpha, float time)
     {
         _loadingText.alpha = Mathf.Lerp(minAlpha, maxAlpha, time);
+    }
+
+    private async UniTaskVoid _LoadComplete()
+    {
+        Utils.SetActive(_loadingText.gameObject, false);
+        await UniTask.Delay(TimeSpan.FromSeconds(LOAD_COMPLETE_TIME));
+
+        _ClosePopupUI();
     }
 }

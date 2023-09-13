@@ -25,32 +25,66 @@ public class UIManager
     }
 
     #region InitUI
-    private void _InstantiateEssentialUI()
-    {
-        _InstantiateUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME);
-        _InstantiateUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE);
+    private bool[] _loadCompletes;
 
-        _InstantiateUIElement(Define.RESOURCE_UI_NORMAL_BATTLE_WAVE, 8);
-        _InstantiateUIElement(Define.RESOURCE_UI_COIN_RUSH_WAVE, 2);
+    private const int INDEX_TOTAL_VALUE = 4;
+    private const int INDEX_UI_PAUSE_INGAME = 0;
+    private const int INDEX_UI_CLEAR_WAVE = 1;
+    private const int INDEX_UI_NORMAL_BATTLE_WAVE = 2;
+    private const int INDEX_UI_COIN_RUSH_WAVE = 3;
+
+    public bool LoadComplete()
+    {
+        for (int ii = 0; ii < _loadCompletes.Length; ++ii)
+        {
+            if (false == _loadCompletes[ii])
+                return false;
+        }
+        return true;
     }
 
-    private void _InstantiateUI<T>(string key) where T : UI_Base
+    private void _InstantiateEssentialUI()
+    {
+        _loadCompletes = new bool[INDEX_TOTAL_VALUE];
+
+        _InstantiateUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME, () =>
+        {
+            _loadCompletes[INDEX_UI_PAUSE_INGAME] = true;
+        });
+        _InstantiateUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE, () =>
+        {
+            _loadCompletes[INDEX_UI_CLEAR_WAVE] = true;
+        });
+
+        _InstantiateUIElement(Define.RESOURCE_UI_NORMAL_BATTLE_WAVE, 8, () =>
+        {
+            _loadCompletes[INDEX_UI_NORMAL_BATTLE_WAVE] = true;
+        });
+        _InstantiateUIElement(Define.RESOURCE_UI_COIN_RUSH_WAVE, 2, () =>
+        {
+            _loadCompletes[INDEX_UI_COIN_RUSH_WAVE] = true;
+        });
+    }
+
+    private void _InstantiateUI<T>(string key, Action callback) where T : UI_Base
     {
         Manager.Instance.Resource.Instantiate(key, _rootUI.transform, (go) =>
         {
             var uI = Utils.GetOrAddComponent<T>(go);
             _uIDic.Add(key, uI);
+            callback?.Invoke();
             Utils.SetActive(go, false);
         });
     }
 
-    private void _InstantiateUIElement(string key, int count)
+    private void _InstantiateUIElement(string key, int count, Action callback)
     {
         var pool = new ObjectPool();
         Manager.Instance.Resource.LoadAsync<GameObject>(key, (elementUI) =>
         {
             pool.InitPool(elementUI, _rootUI, count);
             _uIElementDic.Add(key, pool);
+            callback?.Invoke();
         });
     }
     #endregion

@@ -6,11 +6,17 @@ using UnityEngine.Networking;
 
 public class DataManager : MonoBehaviour
 {
+    private bool[] _loadCompletes;
+
     public HeroAbility HeroCommonAbility { get; private set; }
     public Dictionary<string, HeroAbility> HeroIndividualAbility { get; private set; }
 
     public List<float> RequiredExp { get; private set; }
 
+    private const int INDEX_TOTAL_VALUE = 3;
+    private const int INDEX_HERO_COMMON_ABILITY = 0;
+    private const int INDEX_HERO_INDIVIDUAL_ABILITY = 1;
+    private const int INDEX_REQUIRED_EXP = 2;
     private const int HERO_ABILITY_KEY = 0;
     private const string URL_HERO_COMMON_ABILITY = "https://docs.google.com/spreadsheets/d/12WFyu9JDe1fl3O3zK9XvCx2CUZ7UbsYBBLUWCyyKdT8/export?format=tsv&range=A2:H";
     private const string URL_HERO_INDIVIDUAL_ABILITY = "https://docs.google.com/spreadsheets/d/12WFyu9JDe1fl3O3zK9XvCx2CUZ7UbsYBBLUWCyyKdT8/export?format=tsv&gid=915946808&range=A2:H";
@@ -18,9 +24,20 @@ public class DataManager : MonoBehaviour
 
     public void Init()
     {
+        _loadCompletes = new bool[INDEX_TOTAL_VALUE];
         _LoadHeroCommonAbility().Forget();
         _LoadHeroIndividualAbility().Forget();
         _LoadRequiredExp().Forget();
+    }
+
+    public bool LoadComplete()
+    {
+        for (int ii = 0; ii < _loadCompletes.Length; ++ii)
+        {
+            if (false == _loadCompletes[ii])
+                return false;
+        }
+        return true;
     }
 
     #region Load Hero Ability
@@ -31,6 +48,7 @@ public class DataManager : MonoBehaviour
 
         var splitRawData = op.downloadHandler.text.Split('\t');
         HeroCommonAbility = _LoadHeroAbility(splitRawData);
+        _loadCompletes[INDEX_HERO_COMMON_ABILITY] = true;
     }
 
     private async UniTaskVoid _LoadHeroIndividualAbility()
@@ -45,6 +63,7 @@ public class DataManager : MonoBehaviour
             var splitData = data.Split('\t');
             HeroIndividualAbility.Add(splitData[HERO_ABILITY_KEY], _LoadHeroAbility(splitData));
         }
+        _loadCompletes[INDEX_HERO_INDIVIDUAL_ABILITY] = true;
     }
 
     private HeroAbility _LoadHeroAbility(string[] splitData)
@@ -74,6 +93,7 @@ public class DataManager : MonoBehaviour
             float.TryParse(data, out var value);
             RequiredExp.Add(value);
         }
+        _loadCompletes[INDEX_REQUIRED_EXP] = true;
     }
     #endregion
 }
