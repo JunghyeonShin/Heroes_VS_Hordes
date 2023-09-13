@@ -6,9 +6,12 @@ using UnityEngine;
 public class IngameManager : MonoBehaviour
 {
     public event Action WavePanelHandler;
+    public event Action ChangeHeroLevelPostProcessingHandler;
     public event Action<float> TimePassHandler;
-    public event Action<int> RemainingMonsterHandler;
+    public event Action<float> ChangeHeroExpHandler;
+    public event Action<int> ChangeHeroLevelHandler;
     public event Action<int> ChangeModeHandler;
+    public event Action<int> RemainingMonsterHandler;
 
     private float _totalWaveProgressTime;
     private float _waveProgressTime;
@@ -97,6 +100,23 @@ public class IngameManager : MonoBehaviour
         Utils.SetTimeScale(RESTORE_TIMESCALE);
         _waveProgressTime = INIT_WAVE_PROGRESS_TIME;
     }
+
+    #region Hero
+    public void ChangeHeroExp(float value)
+    {
+        ChangeHeroExpHandler?.Invoke(value);
+    }
+
+    public void ChangeHeroLevel(int level)
+    {
+        ChangeHeroLevelHandler?.Invoke(level);
+    }
+
+    public void ChangeHeroLevelPostProcessing()
+    {
+        ChangeHeroLevelPostProcessingHandler?.Invoke();
+    }
+    #endregion
 
     private void _CheckIngameProgressTime()
     {

@@ -9,13 +9,18 @@ public class ObjectManager
     private Dictionary<string, GameObject> _mapDic = new Dictionary<string, GameObject>();
     private Dictionary<string, GameObject> _heroDic = new Dictionary<string, GameObject>();
     private Dictionary<string, ObjectPool> _monsterPoolDic = new Dictionary<string, ObjectPool>();
+    private ObjectPool _damageTextPool = new ObjectPool();
+    private ObjectPool _experienceGemPool = new ObjectPool();
 
     private GameObject _rootObject;
 
     public GameObject RepositionArea { get; private set; }
     public GameObject MonsterSpawner { get; private set; }
+    public GameObject LevelUpText { get; private set; }
 
     private const int DEFAULT_INSTANTIATE_MONSTER_COUNT = 50;
+    private const int DEFAULT_INSTANTIATE_DAMAGE_TEXT_COUNT = 50;
+    private const int DEFAULT_INSTANTIATE_EXPERIENCE_GEM_COUNT = 50;
     private const string NAME_ROOT_OBJECT = "[ROOT_OBJECT]";
 
     public void Init()
@@ -34,7 +39,23 @@ public class ObjectManager
             Utils.SetActive(MonsterSpawner, false);
         });
 
+        Manager.Instance.Resource.Instantiate(Define.RESROUCE_LEVEL_UP_TEXT, _rootObject.transform, (levelUpText) =>
+        {
+            LevelUpText = levelUpText;
+            Utils.SetActive(LevelUpText, false);
+        });
+
         _InitMonster(Define.RESOURCE_MONSTER_NORMAL_BAT, DEFAULT_INSTANTIATE_MONSTER_COUNT);
+
+        Manager.Instance.Resource.LoadAsync<GameObject>(Define.RESROUCE_DAMAGE_TEXT, (damageText) =>
+        {
+            _damageTextPool.InitPool(damageText, _rootObject, DEFAULT_INSTANTIATE_DAMAGE_TEXT_COUNT);
+        });
+
+        Manager.Instance.Resource.LoadAsync<GameObject>(Define.RESOURCE_EXPERIENCE_GEM, (damageText) =>
+        {
+            _experienceGemPool.InitPool(damageText, _rootObject, DEFAULT_INSTANTIATE_EXPERIENCE_GEM_COUNT);
+        });
     }
 
     #region Map
@@ -114,6 +135,30 @@ public class ObjectManager
             _monsterPoolDic.Add(key, objectPool);
             callback?.Invoke(objectPool.GetObject());
         });
+    }
+    #endregion
+
+    #region DamageText
+    public GameObject GetDamageText()
+    {
+        return _damageTextPool.GetObject();
+    }
+
+    public void ReturnDamageText(GameObject damageText)
+    {
+        _damageTextPool.ReturnObject(damageText);
+    }
+    #endregion
+
+    #region ExperienceGem
+    public GameObject GetExperienceGem()
+    {
+        return _experienceGemPool.GetObject();
+    }
+
+    public void ReturnExperienceGem(GameObject experienceGem)
+    {
+        _experienceGemPool.ReturnObject(experienceGem);
     }
     #endregion
 }

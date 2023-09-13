@@ -982,8 +982,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 2.5}
-  m_SizeDelta: {x: 40, y: 50}
+  m_AnchoredPosition: {x: -1.5, y: 2.5}
+  m_SizeDelta: {x: 60, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8119050505435723849
 CanvasRenderer:
@@ -1013,9 +1013,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '1
-
-'
+  m_text: 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 34539a23fd0bab04fa9036274dfd3545, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: be0319501046b294e804f3c1120e4e2b, type: 2}
@@ -1172,7 +1170,7 @@ GameObject:
   - component: {fileID: 6789708741781574701}
   - component: {fileID: 6482301487605339977}
   m_Layer: 5
-  m_Name: LevelSlider
+  m_Name: ExpSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

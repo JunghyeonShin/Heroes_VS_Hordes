@@ -97,6 +97,26 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 815451b4ecb2d7040a35e23a03fbec3b
+    m_Address: DamageText
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 28e0dd930f97b6948b2ad02f8af25bdf
+    m_Address: ExperienceGem
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 48004ab9bd6350b4d9ee7e519ee8a00c
+    m_Address: LevelUpText
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b93872ae4cad4b0409e2bb2771bef866
+    m_Address: UI_EnhanceHeroAbility
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 517234b9da778344482246fd1d937838, type: 2}
   m_SchemaSet:
