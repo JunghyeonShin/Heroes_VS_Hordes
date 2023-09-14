@@ -2,40 +2,33 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class IngameManager : MonoBehaviour
 {
-    private void Update()
+    private void Awake()
     {
-        _CheckIngameProgressTime();
+        _InitWaves();
     }
 
     #region Ingame
-    public event Action WavePanelHandler;
-    public event Action<bool> ChangeModeHandler;
-    public event Action<float> TimePassHandler;
+    public event Action<float> ChangeProgressTimeHandler;
+    public event Action<int> ChangeModeHandler;
+    public event Action<string> ShowWavePanelHandler;
 
-    private float _totalWaveProgressTime;
-    private float _waveProgressTime;
+    private List<Wave> _waveList = new List<Wave>();
 
-    public bool ProgressIngame { get; set; }
+    public Wave CurrentWave { get; private set; }
     public int CurrentWaveIndex { get; private set; }
     public int TotalWaveIndex { get; private set; }
 
-    private const float INIT_WAVE_PROGRESS_TIME = 0f;
-    private const float ZERO_SECOND = 0f;
-    private const float ONE_SECOND = 1f;
     private const float PAUSE_INGAME = 0f;
     private const float RESTART_INGAME = 1f;
     private const float RESTORE_TIMESCALE = 1f;
-    private const float DELAY_CLEAR_INGAME = 1.2f;
-    private const float DELAY_GET_EXP = 1.2f;
     private const int INIT_WAVE_INDEX = 0;
     private const int NEXT_WAVE_INDEX = 1;
-    #region TEST
-    private const int CURRENT_CHAPTER_INDEX = 0;
-    #endregion
+    private const string NAME_WAVE = "[WAVE]";
 
     /// <summary>
     /// 인게임을 처음 진입하여 초기 세팅할 때 호출
@@ -43,10 +36,10 @@ public class IngameManager : MonoBehaviour
     public void InitIngame(UI_Loading loadingUI)
     {
         _spawnMonster = false;
-        HeroLevelUpCount = INIT_HERO_LEVEL_UP_COUNT;
+        HeroLevelUpCount = Define.INIT_HERO_LEVEL_UP_COUNT;
 
         CurrentWaveIndex = INIT_WAVE_INDEX;
-        TotalWaveIndex = Manager.Instance.Data.ChapterInfoList[CURRENT_CHAPTER_INDEX].TotalWaveIndex;
+        TotalWaveIndex = Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].TotalWaveIndex;
 
         // UI_PauseIngame의 웨이브 진행도 초기 세팅
         var pauseIngameUI = Manager.Instance.UI.FindUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME);
@@ -57,7 +50,7 @@ public class IngameManager : MonoBehaviour
         clearWaveUI.InitWavePanel();
 
         // 맵 생성
-        Manager.Instance.Object.GetMap(Manager.Instance.Data.ChapterInfoList[CURRENT_CHAPTER_INDEX].MapType, (mapGO) =>
+        Manager.Instance.Object.GetMap(Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].MapType, (mapGO) =>
         {
             Utils.SetActive(mapGO, true);
 
@@ -105,10 +98,8 @@ public class IngameManager : MonoBehaviour
     public void StartIngame()
     {
         Utils.SetTimeScale(RESTORE_TIMESCALE);
-        WavePanelHandler?.Invoke();
-        _totalWaveProgressTime = Manager.Instance.Data.ChapterInfoList[CURRENT_CHAPTER_INDEX].Time;
-        TimePassHandler?.Invoke(_totalWaveProgressTime);
-        ChangeModeHandler?.Invoke(true);
+        CurrentWave = _waveList[Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[CurrentWaveIndex]];
+        CurrentWave.StartWave();
     }
 
     /// <summary>
@@ -117,7 +108,7 @@ public class IngameManager : MonoBehaviour
     /// <param name="control">인게임 조절로 false면 멈춤, true면 재시작</param>
     public void ControlIngame(bool control)
     {
-        ProgressIngame = control;
+        CurrentWave.ControlWave(control);
         if (control)
             Utils.SetTimeScale(RESTART_INGAME);
         else
@@ -129,8 +120,16 @@ public class IngameManager : MonoBehaviour
     /// </summary>
     public void ClearIngame()
     {
-        ProgressIngame = false;
-        _ClearIngame().Forget();
+        CurrentWave.ClearWave();
+    }
+
+    /// <summary>
+    /// 현재 웨이브의 클리어 후처리를 할 때 호출
+    /// </summary>
+    public void ClearIngamePostProcessing()
+    {
+        Utils.SetTimeScale(PAUSE_INGAME);
+        CurrentWaveIndex += NEXT_WAVE_INDEX;
     }
 
     /// <summary>
@@ -138,60 +137,39 @@ public class IngameManager : MonoBehaviour
     /// </summary>
     public void ExitIngame()
     {
-        ProgressIngame = false;
         Utils.SetTimeScale(RESTORE_TIMESCALE);
-        _waveProgressTime = INIT_WAVE_PROGRESS_TIME;
-
+        CurrentWave.ExitWave();
         Manager.Instance.CameraController.SetFollower();
         Utils.SetActive(Manager.Instance.Object.MonsterSpawner, false);
         Utils.SetActive(Manager.Instance.Object.RepositionArea, false);
         Manager.Instance.Object.ReturnHero(Define.RESOURCE_HERO_ARCANE_MAGE);
-        Manager.Instance.Object.ReturnMap(Manager.Instance.Data.ChapterInfoList[CURRENT_CHAPTER_INDEX].MapType);
+        Manager.Instance.Object.ReturnMap(Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].MapType);
         Manager.Instance.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE);
     }
 
-    private void _CheckIngameProgressTime()
+    public void ShowWavePanel(string wavePanelText)
     {
-        if (false == ProgressIngame)
-            return;
-
-        if (_totalWaveProgressTime > ZERO_SECOND)
-        {
-            _waveProgressTime += Time.deltaTime;
-            if (_waveProgressTime >= ONE_SECOND)
-            {
-                _waveProgressTime -= ONE_SECOND;
-                _totalWaveProgressTime -= ONE_SECOND;
-                TimePassHandler?.Invoke(_totalWaveProgressTime);
-            }
-
-            if (ZERO_SECOND == _totalWaveProgressTime)
-                ChangeModeHandler?.Invoke(false);
-        }
+        ShowWavePanelHandler?.Invoke(wavePanelText);
     }
 
-    private async UniTaskVoid _ClearIngame()
+    public void ChangeProgressWaveTime(float time)
     {
-        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_CLEAR_INGAME));
+        ChangeProgressTimeHandler?.Invoke(time);
+    }
 
-        _ReturnUsedExpGem();
-        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_GET_EXP));
+    public void ChangeMode(int mode)
+    {
+        ChangeModeHandler?.Invoke(mode);
+    }
 
-        _usedHero.GetExp(_remainingExp);
-        _remainingExp = INIT_REMAINING_EXP;
-        while (HeroLevelUpCount > INIT_HERO_LEVEL_UP_COUNT)
-            await UniTask.Yield();
-
-        Utils.SetTimeScale(PAUSE_INGAME);
-        CurrentWaveIndex += NEXT_WAVE_INDEX;
-        if (CurrentWaveIndex < TotalWaveIndex)
-            Manager.Instance.UI.ShowPopupUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE, (clearWaveUI) =>
-            {
-                clearWaveUI.SetClearWaveText();
-                clearWaveUI.UpdateWavePanel();
-            });
-        else
-            Manager.Instance.UI.ShowPopupUI<UI_ClearChapter>(Define.RESOURCE_UI_CLEAR_CHAPTER);
+    private void _InitWaves()
+    {
+        var wave = new GameObject(NAME_WAVE);
+        wave.transform.SetParent(transform);
+        var normalBattleWave = Utils.GetOrAddComponent<NormalBattleWave>(wave);
+        _waveList.Add(normalBattleWave);
+        var coinRushWave = Utils.GetOrAddComponent<CoinRushWave>(wave);
+        _waveList.Add(coinRushWave);
     }
     #endregion
 
@@ -205,7 +183,6 @@ public class IngameManager : MonoBehaviour
     private Hero _usedHero;
 
     private const int INIT_HERO_LEVEL = 1;
-    private const int INIT_HERO_LEVEL_UP_COUNT = 0;
 
     public void ChangeHeroExp(float value)
     {
@@ -221,10 +198,16 @@ public class IngameManager : MonoBehaviour
 
     public void EnhanceHeroAbility()
     {
-        if (HeroLevelUpCount > INIT_HERO_LEVEL_UP_COUNT)
+        if (HeroLevelUpCount > Define.INIT_HERO_LEVEL_UP_COUNT)
             EnhanceHeroAbilityHandler?.Invoke();
         else
             ChangeHeroLevelUpPostProcessingHandler?.Invoke();
+    }
+
+    public void GetExpAtOnce()
+    {
+        _usedHero.GetExp(_remainingExp);
+        _remainingExp = INIT_REMAINING_EXP;
     }
     #endregion
 
@@ -281,7 +264,7 @@ public class IngameManager : MonoBehaviour
         _usedExpGem.Enqueue(expGem);
     }
 
-    private void _ReturnUsedExpGem()
+    public void ReturnUsedExpGem()
     {
         while (_usedExpGem.Count > EMPTY_USED_EXP_GEM)
         {
@@ -289,7 +272,7 @@ public class IngameManager : MonoBehaviour
             if (false == expGem.gameObject.activeSelf)
                 continue;
 
-            expGem.GiveExp(_usedHero, false);
+            expGem.GiveEffect(_usedHero, false);
             _remainingExp += Define.INCREASE_HERO_EXP_VALUE;
         }
     }

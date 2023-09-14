@@ -48,7 +48,7 @@ public class Monster : MonoBehaviour
     {
         var expGemGO = Manager.Instance.Object.GetExpGem();
         var expGem = Utils.GetOrAddComponent<ExpGem>(expGemGO);
-        expGem.Init(transform.position);
+        expGem.InitTransform(transform.position);
         Utils.SetActive(expGemGO, true);
 
         _dieHandler?.Invoke();

@@ -51,10 +51,8 @@ public class UI_IngameScene : UI_Scene
     private const float DELAY_SHOWING_WAVE_PANEL = 0.2f;
     private const float DELAY_FINISHED_WAVE_PANEL = 1.2f;
     private const float DELAY_SPAWN_MONSTER = 0.2f;
-    private const float DELAY_ENHANCE_HERO_ABILITY = 1.2f;
     private const float SIXTY_SECONDS = 60f;
     private const int ZERO_SECOND = 0;
-    private const int ADJUST_WAVE_INDEX = 1;
     private const int NON_REMAINING_MONSTER_COUNT = 0;
     private const string ANIMATOR_TRIGGER_MOVE_WAVE_PANEL = "MoveWavePanel";
 
@@ -82,10 +80,10 @@ public class UI_IngameScene : UI_Scene
         _waveText = _GetText((int)ETexts.WaveText);
 
         var ingame = Manager.Instance.Ingame;
-        ingame.WavePanelHandler -= _SetWaveIndex;
-        ingame.WavePanelHandler += _SetWaveIndex;
-        ingame.TimePassHandler -= _SetTimeText;
-        ingame.TimePassHandler += _SetTimeText;
+        ingame.ShowWavePanelHandler -= _SetWaveIndex;
+        ingame.ShowWavePanelHandler += _SetWaveIndex;
+        ingame.ChangeProgressTimeHandler -= _SetTimeText;
+        ingame.ChangeProgressTimeHandler += _SetTimeText;
         ingame.ChangeModeHandler -= _ChangeMode;
         ingame.ChangeModeHandler += _ChangeMode;
 
@@ -111,26 +109,20 @@ public class UI_IngameScene : UI_Scene
     }
     #endregion
 
-    private void _SetWaveIndex()
+    private void _SetWaveIndex(string wavePanelText)
     {
-        var ingame = Manager.Instance.Ingame;
-        var isTimeAttackMode = ingame.TotalWaveIndex - ADJUST_WAVE_INDEX != ingame.CurrentWaveIndex;
-        if (isTimeAttackMode)
-            _waveText.text = $"웨이브 {ingame.CurrentWaveIndex + ADJUST_WAVE_INDEX}";
-        else
-            _waveText.text = $"코인 러쉬";
-        _ShowWavePanel(isTimeAttackMode).Forget();
+        _waveText.text = wavePanelText;
+        _ShowWavePanel().Forget();
     }
 
-    private async UniTaskVoid _ShowWavePanel(bool isTimeAttackMode)
+    private async UniTaskVoid _ShowWavePanel()
     {
         await UniTask.Delay(TimeSpan.FromSeconds(DELAY_SHOWING_WAVE_PANEL));
 
         _wavePanelAnimator.SetTrigger(ANIMATOR_TRIGGER_MOVE_WAVE_PANEL);
         await UniTask.Delay(TimeSpan.FromSeconds(DELAY_FINISHED_WAVE_PANEL));
 
-        if (isTimeAttackMode)
-            Manager.Instance.Ingame.ProgressIngame = true;
+        Manager.Instance.Ingame.CurrentWave.ProgressWave = true;
         await UniTask.Delay(TimeSpan.FromSeconds(DELAY_SPAWN_MONSTER));
 
         Manager.Instance.Ingame.StartSpawnMonster();
@@ -146,10 +138,10 @@ public class UI_IngameScene : UI_Scene
             _timeText.text = $"{minute}:{second}";
     }
 
-    private void _ChangeMode(bool isTimeAttack)
+    private void _ChangeMode(int mode)
     {
-        Utils.SetActive(_timeCheckPanel, isTimeAttack);
-        Utils.SetActive(_monsterCheckPanel, false == isTimeAttack);
+        Utils.SetActive(_timeCheckPanel, Define.INDEX_TIME_ATTACK_MODE == mode);
+        Utils.SetActive(_monsterCheckPanel, Define.INDEX_ANNIHILATION_MODE == mode);
         if (_monsterCheckPanel.activeSelf)
         {
             _annihilationModePanelAnimator.SetTrigger(ANIMATOR_TRIGGER_MOVE_WAVE_PANEL);

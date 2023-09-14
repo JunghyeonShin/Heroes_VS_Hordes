@@ -58,7 +58,14 @@ public class Define
     public const float INCREASE_HERO_EXP_VALUE = 1;
     #endregion
 
+    #region IngameManager
+    public const int INDEX_TIME_ATTACK_MODE = 0;
+    public const int INDEX_ANNIHILATION_MODE = 1;
+    public const int INIT_HERO_LEVEL_UP_COUNT = 0;
+    #endregion
+
     #region TEST
+    public const int CURRENT_CHAPTER_INDEX = 0;
     public const int MAX_WAVE_INDEX = 4;
     #endregion
 }
