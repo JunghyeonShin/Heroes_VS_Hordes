@@ -10,7 +10,7 @@ public class ObjectManager
     private Dictionary<string, GameObject> _heroDic = new Dictionary<string, GameObject>();
     private Dictionary<string, ObjectPool> _monsterPoolDic = new Dictionary<string, ObjectPool>();
     private ObjectPool _damageTextPool = new ObjectPool();
-    private ObjectPool _experienceGemPool = new ObjectPool();
+    private ObjectPool _expGemPool = new ObjectPool();
 
     private bool[] _loadCompletes;
 
@@ -22,13 +22,13 @@ public class ObjectManager
 
     private const int DEFAULT_INSTANTIATE_MONSTER_COUNT = 50;
     private const int DEFAULT_INSTANTIATE_DAMAGE_TEXT_COUNT = 50;
-    private const int DEFAULT_INSTANTIATE_EXPERIENCE_GEM_COUNT = 50;
+    private const int DEFAULT_INSTANTIATE_EXP_GEM_COUNT = 50;
     private const int INDEX_TOTAL_VALUE = 6;
     private const int INDEX_REPOSITION_AREA = 0;
     private const int INDEX_MONSTER_SPAWNER = 1;
     private const int INDEX_LEVEL_UP_TEXT = 2;
     private const int INDEX_DAMAGE_TEXT = 3;
-    private const int INDEX_EXPERIENCE_GEM = 4;
+    private const int INDEX_EXP_GEM = 4;
     private const int INDEX_MONSTER_NORMAL_BAT = 5;
     private const string NAME_ROOT_OBJECT = "[ROOT_OBJECT]";
 
@@ -64,10 +64,10 @@ public class ObjectManager
             _loadCompletes[INDEX_DAMAGE_TEXT] = true;
         });
 
-        Manager.Instance.Resource.LoadAsync<GameObject>(Define.RESOURCE_EXPERIENCE_GEM, (damageText) =>
+        Manager.Instance.Resource.LoadAsync<GameObject>(Define.RESOURCE_EXP_GEM, (damageText) =>
         {
-            _experienceGemPool.InitPool(damageText, _rootObject, DEFAULT_INSTANTIATE_EXPERIENCE_GEM_COUNT);
-            _loadCompletes[INDEX_EXPERIENCE_GEM] = true;
+            _expGemPool.InitPool(damageText, _rootObject, DEFAULT_INSTANTIATE_EXP_GEM_COUNT);
+            _loadCompletes[INDEX_EXP_GEM] = true;
         });
 
         _InitMonster(Define.RESOURCE_MONSTER_NORMAL_BAT, DEFAULT_INSTANTIATE_MONSTER_COUNT, (monster) =>
@@ -178,15 +178,15 @@ public class ObjectManager
     }
     #endregion
 
-    #region ExperienceGem
-    public GameObject GetExperienceGem()
+    #region ExpGem
+    public GameObject GetExpGem()
     {
-        return _experienceGemPool.GetObject();
+        return _expGemPool.GetObject();
     }
 
-    public void ReturnExperienceGem(GameObject experienceGem)
+    public void ReturnExpGem(GameObject expGem)
     {
-        _experienceGemPool.ReturnObject(experienceGem);
+        _expGemPool.ReturnObject(expGem);
     }
     #endregion
 }

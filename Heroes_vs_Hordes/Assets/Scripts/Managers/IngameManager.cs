@@ -30,7 +30,7 @@ public class IngameManager : MonoBehaviour
     private const float RESTART_INGAME = 1f;
     private const float RESTORE_TIMESCALE = 1f;
     private const float DELAY_CLEAR_INGAME = 1.2f;
-    private const float DELAY_GET_EXPERIENCE = 1.2f;
+    private const float DELAY_GET_EXP = 1.2f;
     private const int INIT_WAVE_INDEX = 0;
     private const int NEXT_WAVE_INDEX = 1;
     #region TEST
@@ -174,8 +174,8 @@ public class IngameManager : MonoBehaviour
     {
         await UniTask.Delay(TimeSpan.FromSeconds(DELAY_CLEAR_INGAME));
 
-        _ReturnUsedExperienceGem();
-        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_GET_EXPERIENCE));
+        _ReturnUsedExpGem();
+        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_GET_EXP));
 
         _usedHero.GetExp(_remainingExp);
         _remainingExp = INIT_REMAINING_EXP;
@@ -268,28 +268,28 @@ public class IngameManager : MonoBehaviour
     }
     #endregion
 
-    #region ExperienceGem
-    private Queue<ExperienceGem> _usedExperienceGem = new Queue<ExperienceGem>();
+    #region ExpGem
+    private Queue<ExpGem> _usedExpGem = new Queue<ExpGem>();
 
     private float _remainingExp = 0;
 
     private const float INIT_REMAINING_EXP = 0f;
-    private const int EMPTY_USED_EXPERIENCE_GEM = 0;
+    private const int EMPTY_USED_EXP_GEM = 0;
 
-    public void EnqueueUsedExperienceGem(ExperienceGem experienceGem)
+    public void EnqueueUsedExpGem(ExpGem expGem)
     {
-        _usedExperienceGem.Enqueue(experienceGem);
+        _usedExpGem.Enqueue(expGem);
     }
 
-    private void _ReturnUsedExperienceGem()
+    private void _ReturnUsedExpGem()
     {
-        while (_usedExperienceGem.Count > EMPTY_USED_EXPERIENCE_GEM)
+        while (_usedExpGem.Count > EMPTY_USED_EXP_GEM)
         {
-            var experienceGem = _usedExperienceGem.Dequeue();
-            if (false == experienceGem.gameObject.activeSelf)
+            var expGem = _usedExpGem.Dequeue();
+            if (false == expGem.gameObject.activeSelf)
                 continue;
 
-            experienceGem.GiveExperience(_usedHero, false);
+            expGem.GiveExp(_usedHero, false);
             _remainingExp += Define.INCREASE_HERO_EXP_VALUE;
         }
     }

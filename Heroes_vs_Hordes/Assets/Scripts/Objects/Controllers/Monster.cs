@@ -46,10 +46,10 @@ public class Monster : MonoBehaviour
 
     public void OnDamaged(float damage)
     {
-        var experienceGemGO = Manager.Instance.Object.GetExperienceGem();
-        var experienceGem = Utils.GetOrAddComponent<ExperienceGem>(experienceGemGO);
-        experienceGem.Init(transform.position);
-        Utils.SetActive(experienceGemGO, true);
+        var expGemGO = Manager.Instance.Object.GetExpGem();
+        var expGem = Utils.GetOrAddComponent<ExpGem>(expGemGO);
+        expGem.Init(transform.position);
+        Utils.SetActive(expGemGO, true);
 
         _dieHandler?.Invoke();
         Utils.SetActive(gameObject, false);
