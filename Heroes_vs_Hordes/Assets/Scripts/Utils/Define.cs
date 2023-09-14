@@ -8,7 +8,6 @@ public class Define
     #region Prefab
     // Map
     public const string RESOURCE_REPOSITION_AREA = "RepositionArea";
-    public const string RESOURCE_MAP_00 = "Map_00";
     // Hero
     public const string RESOURCE_HERO_ARCANE_MAGE = "ArcaneMage";
     // Weapon
@@ -51,23 +50,9 @@ public class Define
     public const string LAYER_MONSTER = "Monster";
     #endregion
 
-    #region Ability
-    // Hero
-    public const int HERO_ABILITY_HEALTH = 1;
-    public const int HERO_ABILITY_DEFENCE = 2;
-    public const int HERO_ABILITY_ATTACK = 3;
-    public const int HERO_ABILITY_ATTACK_COOLDOWN = 4;
-    public const int HERO_ABILITY_CRITICAL = 5;
-    public const int HERO_ABILITY_MOVE_SPEED = 6;
-    public const int HERO_ABILITY_PROJECTILE_SPEED = 7;
-    #endregion
-
     #region Animator
     public const string ANIMATOR_TRIGGER_ATTACK = "Attack";
     #endregion
-
-    // IngameManager
-    public const int TIME_ATTACK_MODE = 0;
 
     #region TEST
     public const int MAX_WAVE_INDEX = 4;

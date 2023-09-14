@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,7 @@ public class Monster : MonoBehaviour
     [SerializeField] private float _moveSpeed = 3f;
 
     private Rigidbody2D _rigid;
+    private Action _dieHandler;
 
     public Transform Target { get; set; }
 
@@ -16,6 +18,17 @@ public class Monster : MonoBehaviour
     private void Awake()
     {
         _rigid = GetComponent<Rigidbody2D>();
+    }
+
+    private void OnEnable()
+    {
+        _dieHandler -= Manager.Instance.Ingame.OnDeadMonster;
+        _dieHandler += Manager.Instance.Ingame.OnDeadMonster;
+    }
+
+    private void OnDisable()
+    {
+        _dieHandler -= Manager.Instance.Ingame.OnDeadMonster;
     }
 
     private void FixedUpdate()
@@ -38,6 +51,7 @@ public class Monster : MonoBehaviour
         experienceGem.Init(transform.position);
         Utils.SetActive(experienceGemGO, true);
 
+        _dieHandler?.Invoke();
         Utils.SetActive(gameObject, false);
     }
 

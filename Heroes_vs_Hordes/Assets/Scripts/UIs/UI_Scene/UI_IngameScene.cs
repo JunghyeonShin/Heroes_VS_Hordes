@@ -45,10 +45,12 @@ public class UI_IngameScene : UI_Scene
     private TextMeshProUGUI _monsterText;
     private TextMeshProUGUI _waveText;
 
-    private const float DELAY_TIME_SHOWING_WAVE_PANEL = 1f;
-    private const float FINISHED_TIME_SHOWING_WAVE_PANEL = 1f;
-    private const float SIXTY_SECONDS = 60f;
+    private const float DELAY_SHOWING_WAVE_PANEL = 1f;
+    private const float DELAY_FINISHED_WAVE_PANEL = 1.2f;
+    private const float DELAY_SPAWN_MONSTER = 0.2f;
     private const float DELAY_ENHANCE_HERO_ABILITY = 1.2f;
+    private const float SIXTY_SECONDS = 60f;
+    private const int ZERO_SECOND = 0;
     private const int INIT_LEVEL = 1;
     private const int ADJUST_WAVE_INDEX = 1;
     private const int NON_REMAINING_MONSTER_COUNT = 0;
@@ -80,14 +82,14 @@ public class UI_IngameScene : UI_Scene
         ingame.WavePanelHandler += _SetWaveIndex;
         ingame.TimePassHandler -= _SetTimeText;
         ingame.TimePassHandler += _SetTimeText;
-        ingame.ChangeHeroExpHandler -= _SetExpSlider;
-        ingame.ChangeHeroExpHandler += _SetExpSlider;
-        ingame.ChangeHeroLevelHandler -= _SetLevel;
-        ingame.ChangeHeroLevelHandler += _SetLevel;
         ingame.ChangeModeHandler -= _ChangeMode;
         ingame.ChangeModeHandler += _ChangeMode;
         ingame.RemainingMonsterHandler -= _SetMonsterText;
         ingame.RemainingMonsterHandler += _SetMonsterText;
+        ingame.ChangeHeroExpHandler -= _SetExpSlider;
+        ingame.ChangeHeroExpHandler += _SetExpSlider;
+        ingame.ChangeHeroLevelHandler -= _SetLevel;
+        ingame.ChangeHeroLevelHandler += _SetLevel;
     }
 
     #region Event
@@ -99,29 +101,60 @@ public class UI_IngameScene : UI_Scene
         });
         Manager.Instance.Ingame.ControlIngame(false);
     }
-    #endregion 
+    #endregion
 
     private void _SetWaveIndex()
     {
-        _waveText.text = $"웨이브 {Manager.Instance.Ingame.CurrentWaveIndex + ADJUST_WAVE_INDEX}";
-        _ShowWavePanel().Forget();
+        var ingame = Manager.Instance.Ingame;
+        var isTimeAttackMode = ingame.TotalWaveIndex - ADJUST_WAVE_INDEX != ingame.CurrentWaveIndex;
+        if (isTimeAttackMode)
+            _waveText.text = $"웨이브 {ingame.CurrentWaveIndex + ADJUST_WAVE_INDEX}";
+        else
+            _waveText.text = $"코인 러쉬";
+        _ShowWavePanel(isTimeAttackMode).Forget();
     }
 
-    private async UniTaskVoid _ShowWavePanel()
+    private async UniTaskVoid _ShowWavePanel(bool isTimeAttackMode)
     {
-        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_TIME_SHOWING_WAVE_PANEL));
+        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_SHOWING_WAVE_PANEL));
 
         _wavePanelAnimator.SetTrigger(ANIMATOR_TRIGGER_MOVE_WAVE_PANEL);
-        await UniTask.Delay(TimeSpan.FromSeconds(FINISHED_TIME_SHOWING_WAVE_PANEL));
+        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_FINISHED_WAVE_PANEL));
 
-        Manager.Instance.Ingame.ProgressWave = true;
+        if (isTimeAttackMode)
+            Manager.Instance.Ingame.ProgressTimeAttack = true;
+        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_SPAWN_MONSTER));
+
+        Manager.Instance.Ingame.StartSpawnMonster();
     }
 
     private void _SetTimeText(float time)
     {
         var minute = Mathf.FloorToInt(time / SIXTY_SECONDS);
         var second = Mathf.FloorToInt(time % SIXTY_SECONDS);
-        _timeText.text = $"{minute}:{second}";
+        if (ZERO_SECOND == second)
+            _timeText.text = $"{minute}:00";
+        else
+            _timeText.text = $"{minute}:{second}";
+    }
+
+    private void _ChangeMode(bool isTimeAttack)
+    {
+        Utils.SetActive(_timeCheckPanel, isTimeAttack);
+        Utils.SetActive(_monsterCheckPanel, false == isTimeAttack);
+        if (_monsterCheckPanel.activeSelf)
+            Manager.Instance.Ingame.StopSpawnMonster();
+    }
+
+    private void _SetMonsterText()
+    {
+        if (false == _monsterCheckPanel.activeSelf)
+            return;
+
+        var ingame = Manager.Instance.Ingame;
+        _monsterText.text = ingame.RemainingMonsterCount.ToString();
+        if (ingame.RemainingMonsterCount <= NON_REMAINING_MONSTER_COUNT)
+            ingame.ClearIngame();
     }
 
     private void _SetExpSlider(float value)
@@ -144,20 +177,5 @@ public class UI_IngameScene : UI_Scene
         {
             Manager.Instance.Ingame.ControlIngame(false);
         });
-    }
-
-    private void _ChangeMode(int mode)
-    {
-        Utils.SetActive(_timeCheckPanel, Define.TIME_ATTACK_MODE == mode);
-        Utils.SetActive(_monsterCheckPanel, Define.TIME_ATTACK_MODE != mode);
-        if (_monsterCheckPanel.activeSelf)
-            _monsterText.text = mode.ToString();
-    }
-
-    private void _SetMonsterText(int remainingCount)
-    {
-        _monsterText.text = remainingCount.ToString();
-        if (remainingCount <= NON_REMAINING_MONSTER_COUNT)
-            Manager.Instance.Ingame.ClearIngame();
     }
 }

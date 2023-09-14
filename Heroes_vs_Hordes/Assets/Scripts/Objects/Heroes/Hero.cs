@@ -68,7 +68,7 @@ public abstract class Hero : MonoBehaviour
     public void SetHeroAbilities()
     {
         var heroCommonAbility = Manager.Instance.Data.HeroCommonAbility;
-        var heroIndividualAbility = Manager.Instance.Data.HeroIndividualAbility[Define.RESOURCE_HERO_ARCANE_MAGE];
+        var heroIndividualAbility = Manager.Instance.Data.HeroIndividualAbilityDic[Define.RESOURCE_HERO_ARCANE_MAGE];
 
         _health = heroCommonAbility.Health + heroIndividualAbility.Health;
         _defense = heroCommonAbility.Defense + heroIndividualAbility.Defense;
@@ -98,7 +98,7 @@ public abstract class Hero : MonoBehaviour
 
     private void _GetExp()
     {
-        var expToNextLevel = Manager.Instance.Data.RequiredExp[_level - ADJUST_LEVEL];
+        var expToNextLevel = Manager.Instance.Data.RequiredExpList[_level - ADJUST_LEVEL];
         var value = _exp / expToNextLevel;
         _changeExpHandler?.Invoke(value);
         if (_exp >= expToNextLevel)
