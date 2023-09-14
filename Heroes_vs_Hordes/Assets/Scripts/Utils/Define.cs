@@ -54,6 +54,10 @@ public class Define
     public const string ANIMATOR_TRIGGER_ATTACK = "Attack";
     #endregion
 
+    #region Objects
+    public const float INCREASE_HERO_EXP_VALUE = 1;
+    #endregion
+
     #region TEST
     public const int MAX_WAVE_INDEX = 4;
     #endregion

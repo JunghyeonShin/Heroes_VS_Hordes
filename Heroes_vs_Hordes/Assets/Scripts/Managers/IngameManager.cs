@@ -6,23 +6,22 @@ using UnityEngine;
 
 public class IngameManager : MonoBehaviour
 {
-    public event Action ChangeHeroLevelPostProcessingHandler;
-    public event Action RemainingMonsterHandler;
+    private void Update()
+    {
+        _CheckIngameProgressTime();
+    }
+
+    #region Ingame
     public event Action WavePanelHandler;
     public event Action<bool> ChangeModeHandler;
-    public event Action<float> ChangeHeroExpHandler;
     public event Action<float> TimePassHandler;
-    public event Action<int> ChangeHeroLevelHandler;
 
-    private bool _spawnMonster;
     private float _totalWaveProgressTime;
     private float _waveProgressTime;
-    private int _remainingMonsterCount = 0;
 
-    public bool ProgressTimeAttack { get; set; }
+    public bool ProgressIngame { get; set; }
     public int CurrentWaveIndex { get; private set; }
     public int TotalWaveIndex { get; private set; }
-    public int RemainingMonsterCount { get { return _remainingMonsterCount; } }
 
     private const float INIT_WAVE_PROGRESS_TIME = 0f;
     private const float ZERO_SECOND = 0f;
@@ -30,16 +29,13 @@ public class IngameManager : MonoBehaviour
     private const float PAUSE_INGAME = 0f;
     private const float RESTART_INGAME = 1f;
     private const float RESTORE_TIMESCALE = 1f;
+    private const float DELAY_CLEAR_INGAME = 1.2f;
+    private const float DELAY_GET_EXPERIENCE = 1.2f;
     private const int INIT_WAVE_INDEX = 0;
     private const int NEXT_WAVE_INDEX = 1;
     #region TEST
     private const int CURRENT_CHAPTER_INDEX = 0;
     #endregion
-
-    private void Update()
-    {
-        _CheckIngameProgressTime();
-    }
 
     /// <summary>
     /// 인게임을 처음 진입하여 초기 세팅할 때 호출
@@ -47,6 +43,7 @@ public class IngameManager : MonoBehaviour
     public void InitIngame(UI_Loading loadingUI)
     {
         _spawnMonster = false;
+        HeroLevelUpCount = INIT_HERO_LEVEL_UP_COUNT;
 
         CurrentWaveIndex = INIT_WAVE_INDEX;
         TotalWaveIndex = Manager.Instance.Data.ChapterInfoList[CURRENT_CHAPTER_INDEX].TotalWaveIndex;
@@ -68,7 +65,8 @@ public class IngameManager : MonoBehaviour
             Manager.Instance.Object.GetHero(Define.RESOURCE_HERO_ARCANE_MAGE, (heroGO) =>
             {
                 var hero = heroGO.GetComponent<Hero>();
-                hero.SetHeroAbilities();
+                _usedHero = hero;
+                _usedHero.SetHeroAbilities();
 
                 var heroController = Utils.GetOrAddComponent<HeroController>(heroGO);
 
@@ -109,7 +107,6 @@ public class IngameManager : MonoBehaviour
         Utils.SetTimeScale(RESTORE_TIMESCALE);
         WavePanelHandler?.Invoke();
         _totalWaveProgressTime = Manager.Instance.Data.ChapterInfoList[CURRENT_CHAPTER_INDEX].Time;
-        _totalWaveProgressTime = 10f;
         TimePassHandler?.Invoke(_totalWaveProgressTime);
         ChangeModeHandler?.Invoke(true);
     }
@@ -120,7 +117,7 @@ public class IngameManager : MonoBehaviour
     /// <param name="control">인게임 조절로 false면 멈춤, true면 재시작</param>
     public void ControlIngame(bool control)
     {
-        ProgressTimeAttack = control;
+        ProgressIngame = control;
         if (control)
             Utils.SetTimeScale(RESTART_INGAME);
         else
@@ -132,7 +129,8 @@ public class IngameManager : MonoBehaviour
     /// </summary>
     public void ClearIngame()
     {
-        _ClearWave().Forget();
+        ProgressIngame = false;
+        _ClearIngame().Forget();
     }
 
     /// <summary>
@@ -140,7 +138,7 @@ public class IngameManager : MonoBehaviour
     /// </summary>
     public void ExitIngame()
     {
-        ProgressTimeAttack = false;
+        ProgressIngame = false;
         Utils.SetTimeScale(RESTORE_TIMESCALE);
         _waveProgressTime = INIT_WAVE_PROGRESS_TIME;
 
@@ -152,7 +150,63 @@ public class IngameManager : MonoBehaviour
         Manager.Instance.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE);
     }
 
+    private void _CheckIngameProgressTime()
+    {
+        if (false == ProgressIngame)
+            return;
+
+        if (_totalWaveProgressTime > ZERO_SECOND)
+        {
+            _waveProgressTime += Time.deltaTime;
+            if (_waveProgressTime >= ONE_SECOND)
+            {
+                _waveProgressTime -= ONE_SECOND;
+                _totalWaveProgressTime -= ONE_SECOND;
+                TimePassHandler?.Invoke(_totalWaveProgressTime);
+            }
+
+            if (ZERO_SECOND == _totalWaveProgressTime)
+                ChangeModeHandler?.Invoke(false);
+        }
+    }
+
+    private async UniTaskVoid _ClearIngame()
+    {
+        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_CLEAR_INGAME));
+
+        _ReturnUsedExperienceGem();
+        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_GET_EXPERIENCE));
+
+        _usedHero.GetExp(_remainingExp);
+        _remainingExp = INIT_REMAINING_EXP;
+        while (HeroLevelUpCount > INIT_HERO_LEVEL_UP_COUNT)
+            await UniTask.Yield();
+
+        Utils.SetTimeScale(PAUSE_INGAME);
+        CurrentWaveIndex += NEXT_WAVE_INDEX;
+        if (CurrentWaveIndex < TotalWaveIndex)
+            Manager.Instance.UI.ShowPopupUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE, (clearWaveUI) =>
+            {
+                clearWaveUI.SetClearWaveText();
+                clearWaveUI.UpdateWavePanel();
+            });
+        else
+            Manager.Instance.UI.ShowPopupUI<UI_ClearChapter>(Define.RESOURCE_UI_CLEAR_CHAPTER);
+    }
+    #endregion
+
     #region Hero
+    public event Action<float> ChangeHeroExpHandler;
+    public event Action<int> ChangeHeroLevelHandler;
+    public event Action ChangeHeroLevelUpPostProcessingHandler;
+    public event Action EnhanceHeroAbilityHandler;
+
+    public int HeroLevelUpCount { get; set; }
+    private Hero _usedHero;
+
+    private const int INIT_HERO_LEVEL = 1;
+    private const int INIT_HERO_LEVEL_UP_COUNT = 0;
+
     public void ChangeHeroExp(float value)
     {
         ChangeHeroExpHandler?.Invoke(value);
@@ -160,16 +214,28 @@ public class IngameManager : MonoBehaviour
 
     public void ChangeHeroLevel(int level)
     {
+        if (level > INIT_HERO_LEVEL)
+            ++HeroLevelUpCount;
         ChangeHeroLevelHandler?.Invoke(level);
     }
 
-    public void ChangeHeroLevelPostProcessing()
+    public void EnhanceHeroAbility()
     {
-        ChangeHeroLevelPostProcessingHandler?.Invoke();
+        if (HeroLevelUpCount > INIT_HERO_LEVEL_UP_COUNT)
+            EnhanceHeroAbilityHandler?.Invoke();
+        else
+            ChangeHeroLevelUpPostProcessingHandler?.Invoke();
     }
     #endregion
 
     #region Monster
+    public event Action RemainingMonsterHandler;
+
+    private bool _spawnMonster;
+    private int _remainingMonsterCount = 0;
+
+    public int RemainingMonsterCount { get { return _remainingMonsterCount; } }
+
     public void StartSpawnMonster()
     {
         _spawnMonster = true;
@@ -202,42 +268,30 @@ public class IngameManager : MonoBehaviour
     }
     #endregion
 
-    private void _CheckIngameProgressTime()
+    #region ExperienceGem
+    private Queue<ExperienceGem> _usedExperienceGem = new Queue<ExperienceGem>();
+
+    private float _remainingExp = 0;
+
+    private const float INIT_REMAINING_EXP = 0f;
+    private const int EMPTY_USED_EXPERIENCE_GEM = 0;
+
+    public void EnqueueUsedExperienceGem(ExperienceGem experienceGem)
     {
-        if (false == ProgressTimeAttack)
-            return;
+        _usedExperienceGem.Enqueue(experienceGem);
+    }
 
-        if (_totalWaveProgressTime > ZERO_SECOND)
+    private void _ReturnUsedExperienceGem()
+    {
+        while (_usedExperienceGem.Count > EMPTY_USED_EXPERIENCE_GEM)
         {
-            _waveProgressTime += Time.deltaTime;
-            if (_waveProgressTime >= ONE_SECOND)
-            {
-                _waveProgressTime -= ONE_SECOND;
-                _totalWaveProgressTime -= ONE_SECOND;
-                TimePassHandler?.Invoke(_totalWaveProgressTime);
-            }
+            var experienceGem = _usedExperienceGem.Dequeue();
+            if (false == experienceGem.gameObject.activeSelf)
+                continue;
 
-            if (ZERO_SECOND == _totalWaveProgressTime)
-                ChangeModeHandler?.Invoke(false);
+            experienceGem.GiveExperience(_usedHero, false);
+            _remainingExp += Define.INCREASE_HERO_EXP_VALUE;
         }
     }
-
-    private async UniTaskVoid _ClearWave()
-    {
-        await UniTask.Delay(TimeSpan.FromSeconds(1.2f));
-
-        // 경험치 회수 및 레벨업시 UI 호출
-
-        ProgressTimeAttack = false;
-        Utils.SetTimeScale(PAUSE_INGAME);
-        CurrentWaveIndex += NEXT_WAVE_INDEX;
-        if (CurrentWaveIndex < TotalWaveIndex)
-            Manager.Instance.UI.ShowPopupUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE, (clearWaveUI) =>
-            {
-                clearWaveUI.SetClearWaveText();
-                clearWaveUI.UpdateWavePanel();
-            });
-        else
-            Manager.Instance.UI.ShowPopupUI<UI_ClearChapter>(Define.RESOURCE_UI_CLEAR_CHAPTER);
-    }
+    #endregion
 }

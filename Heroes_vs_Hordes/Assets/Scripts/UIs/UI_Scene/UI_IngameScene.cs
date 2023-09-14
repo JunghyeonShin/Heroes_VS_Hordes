@@ -54,7 +54,6 @@ public class UI_IngameScene : UI_Scene
     private const float DELAY_ENHANCE_HERO_ABILITY = 1.2f;
     private const float SIXTY_SECONDS = 60f;
     private const int ZERO_SECOND = 0;
-    private const int INIT_LEVEL = 1;
     private const int ADJUST_WAVE_INDEX = 1;
     private const int NON_REMAINING_MONSTER_COUNT = 0;
     private const string ANIMATOR_TRIGGER_MOVE_WAVE_PANEL = "MoveWavePanel";
@@ -89,12 +88,16 @@ public class UI_IngameScene : UI_Scene
         ingame.TimePassHandler += _SetTimeText;
         ingame.ChangeModeHandler -= _ChangeMode;
         ingame.ChangeModeHandler += _ChangeMode;
-        ingame.RemainingMonsterHandler -= _SetMonsterText;
-        ingame.RemainingMonsterHandler += _SetMonsterText;
+
         ingame.ChangeHeroExpHandler -= _SetExpSlider;
         ingame.ChangeHeroExpHandler += _SetExpSlider;
         ingame.ChangeHeroLevelHandler -= _SetLevel;
         ingame.ChangeHeroLevelHandler += _SetLevel;
+        ingame.EnhanceHeroAbilityHandler -= _EnhanceHeroAbility;
+        ingame.EnhanceHeroAbilityHandler += _EnhanceHeroAbility;
+
+        ingame.RemainingMonsterHandler -= _SetMonsterText;
+        ingame.RemainingMonsterHandler += _SetMonsterText;
     }
 
     #region Event
@@ -127,7 +130,7 @@ public class UI_IngameScene : UI_Scene
         await UniTask.Delay(TimeSpan.FromSeconds(DELAY_FINISHED_WAVE_PANEL));
 
         if (isTimeAttackMode)
-            Manager.Instance.Ingame.ProgressTimeAttack = true;
+            Manager.Instance.Ingame.ProgressIngame = true;
         await UniTask.Delay(TimeSpan.FromSeconds(DELAY_SPAWN_MONSTER));
 
         Manager.Instance.Ingame.StartSpawnMonster();
@@ -154,6 +157,24 @@ public class UI_IngameScene : UI_Scene
         }
     }
 
+    private void _SetExpSlider(float value)
+    {
+        _expSlider.value = value;
+    }
+
+    private void _SetLevel(int level)
+    {
+        _levelText.text = level.ToString();
+    }
+
+    private void _EnhanceHeroAbility()
+    {
+        Manager.Instance.UI.ShowPopupUI<UI_EnhanceHeroAbility>(Define.RESOURCE_UI_ENHANCE_HERO_ABILITY, (enhanceHeroAbilityUI) =>
+        {
+            Manager.Instance.Ingame.ControlIngame(false);
+        });
+    }
+
     private void _SetMonsterText()
     {
         if (false == _monsterCheckPanel.activeSelf)
@@ -171,27 +192,5 @@ public class UI_IngameScene : UI_Scene
         await UniTask.Delay(TimeSpan.FromSeconds(DELAY_FINISHED_WAVE_PANEL));
 
         Manager.Instance.Ingame.ClearIngame();
-    }
-
-    private void _SetExpSlider(float value)
-    {
-        _expSlider.value = value;
-    }
-
-    private void _SetLevel(int level)
-    {
-        _levelText.text = level.ToString();
-        if (level > INIT_LEVEL)
-            _EnhanceHeroAbility().Forget();
-    }
-
-    private async UniTaskVoid _EnhanceHeroAbility()
-    {
-        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_ENHANCE_HERO_ABILITY));
-
-        Manager.Instance.UI.ShowPopupUI<UI_EnhanceHeroAbility>(Define.RESOURCE_UI_ENHANCE_HERO_ABILITY, (enhanceHeroAbilityUI) =>
-        {
-            Manager.Instance.Ingame.ControlIngame(false);
-        });
     }
 }

@@ -14,7 +14,6 @@ public class ExperienceGem : MonoBehaviour
     private const float PROGRESS_TIME = 0.02f;
     private const float EXPERIENCE_DISTANCE = 0.3f;
     private const float LINEAR_CURVE_DISTANCE = 1f;
-    private const float INCREASE_EXP_VALUE = 1;
 
     private void Awake()
     {
@@ -29,18 +28,22 @@ public class ExperienceGem : MonoBehaviour
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag(Define.TAG_HERO))
-        {
-            _collider.enabled = false;
-            _GiveExperience(collision.GetComponent<Hero>()).Forget();
-        }
+            GiveExperience(collision.GetComponent<Hero>(), true);
     }
 
     public void Init(Vector3 initPos)
     {
         transform.position = initPos;
+        Manager.Instance.Ingame.EnqueueUsedExperienceGem(this);
     }
 
-    private async UniTaskVoid _GiveExperience(Hero targetHero)
+    public void GiveExperience(Hero targetHero, bool getExp)
+    {
+        _collider.enabled = false;
+        _GiveExperience(targetHero, getExp).Forget();
+    }
+
+    private async UniTaskVoid _GiveExperience(Hero targetHero, bool getExp)
     {
         var tempPos = Vector3.zero;
         var startPos = transform.position;
@@ -67,7 +70,8 @@ public class ExperienceGem : MonoBehaviour
             await UniTask.Delay(TimeSpan.FromSeconds(PROGRESS_TIME), ignoreTimeScale: true);
         }
 
-        targetHero.GetExp(INCREASE_EXP_VALUE);
+        if (getExp)
+            targetHero.GetExp(Define.INCREASE_HERO_EXP_VALUE);
         Manager.Instance.Object.ReturnExperienceGem(gameObject);
     }
 }
