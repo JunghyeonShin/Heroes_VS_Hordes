@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,7 +19,8 @@ public class UI_IngameScene : UI_Scene
         TimeCheckPanel,
         MonsterCheckPanel,
         WavePanel,
-        WaveImage
+        AnnihilationModePanel,
+        FinishWavePanel
     }
 
     private enum ESliders
@@ -36,16 +38,17 @@ public class UI_IngameScene : UI_Scene
 
     private GameObject _timeCheckPanel;
     private GameObject _monsterCheckPanel;
-    private GameObject _waveImage;
 
     private Animator _wavePanelAnimator;
+    private Animator _annihilationModePanelAnimator;
+    private Animator _finishWavePanelAnimator;
     private Slider _expSlider;
     private TextMeshProUGUI _levelText;
     private TextMeshProUGUI _timeText;
     private TextMeshProUGUI _monsterText;
     private TextMeshProUGUI _waveText;
 
-    private const float DELAY_SHOWING_WAVE_PANEL = 1f;
+    private const float DELAY_SHOWING_WAVE_PANEL = 0.2f;
     private const float DELAY_FINISHED_WAVE_PANEL = 1.2f;
     private const float DELAY_SPAWN_MONSTER = 0.2f;
     private const float DELAY_ENHANCE_HERO_ABILITY = 1.2f;
@@ -65,9 +68,11 @@ public class UI_IngameScene : UI_Scene
 
         _timeCheckPanel = _GetGameObject((int)EGameObjects.TimeCheckPanel);
         _monsterCheckPanel = _GetGameObject((int)EGameObjects.MonsterCheckPanel);
-        _waveImage = _GetGameObject((int)EGameObjects.WaveImage);
 
         _wavePanelAnimator = _GetGameObject((int)EGameObjects.WavePanel).GetComponent<Animator>();
+        _annihilationModePanelAnimator = _GetGameObject((int)EGameObjects.AnnihilationModePanel).GetComponent<Animator>();
+        _finishWavePanelAnimator = _GetGameObject((int)EGameObjects.FinishWavePanel).GetComponent<Animator>();
+
         _BindEvent(_GetButton((int)EButtons.PauseButton).gameObject, _PauseIngame);
 
         _expSlider = _GetSlider((int)ESliders.ExpSlider);
@@ -143,7 +148,10 @@ public class UI_IngameScene : UI_Scene
         Utils.SetActive(_timeCheckPanel, isTimeAttack);
         Utils.SetActive(_monsterCheckPanel, false == isTimeAttack);
         if (_monsterCheckPanel.activeSelf)
+        {
+            _annihilationModePanelAnimator.SetTrigger(ANIMATOR_TRIGGER_MOVE_WAVE_PANEL);
             Manager.Instance.Ingame.StopSpawnMonster();
+        }
     }
 
     private void _SetMonsterText()
@@ -154,7 +162,15 @@ public class UI_IngameScene : UI_Scene
         var ingame = Manager.Instance.Ingame;
         _monsterText.text = ingame.RemainingMonsterCount.ToString();
         if (ingame.RemainingMonsterCount <= NON_REMAINING_MONSTER_COUNT)
-            ingame.ClearIngame();
+            _ShowFinishWavePanel().Forget();
+    }
+
+    private async UniTaskVoid _ShowFinishWavePanel()
+    {
+        _finishWavePanelAnimator.SetTrigger(ANIMATOR_TRIGGER_MOVE_WAVE_PANEL);
+        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_FINISHED_WAVE_PANEL));
+
+        Manager.Instance.Ingame.ClearIngame();
     }
 
     private void _SetExpSlider(float value)

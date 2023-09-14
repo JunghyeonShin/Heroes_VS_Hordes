@@ -132,20 +132,7 @@ public class IngameManager : MonoBehaviour
     /// </summary>
     public void ClearIngame()
     {
-        // 클리어 문구 추가
-        // 경험치 회수 및 레벨업시 UI 호출
-
-        ProgressTimeAttack = false;
-        Utils.SetTimeScale(PAUSE_INGAME);
-        CurrentWaveIndex += NEXT_WAVE_INDEX;
-        if (CurrentWaveIndex < TotalWaveIndex)
-            Manager.Instance.UI.ShowPopupUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE, (clearWaveUI) =>
-            {
-                clearWaveUI.SetClearWaveText();
-                clearWaveUI.UpdateWavePanel();
-            });
-        else
-            Manager.Instance.UI.ShowPopupUI<UI_ClearChapter>(Define.RESOURCE_UI_CLEAR_CHAPTER);
+        _ClearWave().Forget();
     }
 
     /// <summary>
@@ -233,5 +220,24 @@ public class IngameManager : MonoBehaviour
             if (ZERO_SECOND == _totalWaveProgressTime)
                 ChangeModeHandler?.Invoke(false);
         }
+    }
+
+    private async UniTaskVoid _ClearWave()
+    {
+        await UniTask.Delay(TimeSpan.FromSeconds(1.2f));
+
+        // 경험치 회수 및 레벨업시 UI 호출
+
+        ProgressTimeAttack = false;
+        Utils.SetTimeScale(PAUSE_INGAME);
+        CurrentWaveIndex += NEXT_WAVE_INDEX;
+        if (CurrentWaveIndex < TotalWaveIndex)
+            Manager.Instance.UI.ShowPopupUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE, (clearWaveUI) =>
+            {
+                clearWaveUI.SetClearWaveText();
+                clearWaveUI.UpdateWavePanel();
+            });
+        else
+            Manager.Instance.UI.ShowPopupUI<UI_ClearChapter>(Define.RESOURCE_UI_CLEAR_CHAPTER);
     }
 }
