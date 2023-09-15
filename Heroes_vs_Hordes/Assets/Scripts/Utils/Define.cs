@@ -67,6 +67,5 @@ public class Define
 
     #region TEST
     public const int CURRENT_CHAPTER_INDEX = 0;
-    public const int MAX_WAVE_INDEX = 4;
     #endregion
 }
