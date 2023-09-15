@@ -1,63 +1,114 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class IngameManager : MonoBehaviour
 {
-    public event Action WavePanelHandler;
-    public event Action ChangeHeroLevelPostProcessingHandler;
-    public event Action<float> TimePassHandler;
-    public event Action<float> ChangeHeroExpHandler;
-    public event Action<int> ChangeHeroLevelHandler;
+    private void Awake()
+    {
+        _InitWaves();
+    }
+
+    #region Ingame
+    public event Action<float> ChangeProgressTimeHandler;
     public event Action<int> ChangeModeHandler;
-    public event Action<int> RemainingMonsterHandler;
+    public event Action<string> ShowWavePanelHandler;
 
-    private float _totalWaveProgressTime;
-    private float _waveProgressTime;
+    private List<Wave> _waveList = new List<Wave>();
 
-    public bool ProgressWave { get; set; }
+    public Wave CurrentWave { get; private set; }
     public int CurrentWaveIndex { get; private set; }
+    public int TotalWaveIndex { get; private set; }
+    public bool ExitIngameForce { get; set; }
 
-    private const float INIT_WAVE_PROGRESS_TIME = 0f;
-    private const float ZERO_SECOND = 0f;
-    private const float ONE_SECOND = 1f;
     private const float PAUSE_INGAME = 0f;
     private const float RESTART_INGAME = 1f;
     private const float RESTORE_TIMESCALE = 1f;
+    private const int INIT_WAVE_INDEX = 0;
     private const int NEXT_WAVE_INDEX = 1;
-    #region TEST
-    private const int ANNIHILATION_MODE = 1;
-    #endregion
+    private const string NAME_WAVE = "[WAVE]";
 
-    private void Update()
+    /// <summary>
+    /// 인게임을 처음 진입하여 초기 세팅할 때 호출
+    /// </summary>
+    public void InitIngame(UI_Loading loadingUI)
     {
-        _CheckIngameProgressTime();
-        #region TEST
-        if (Input.GetKeyDown(KeyCode.S))
+        _spawnMonster = false;
+        HeroLevelUpCount = Define.INIT_HERO_LEVEL_UP_COUNT;
+
+        CurrentWaveIndex = INIT_WAVE_INDEX;
+        TotalWaveIndex = Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].TotalWaveIndex;
+
+        ExitIngameForce = false;
+
+        _remainingMonsterCount = INIT_REMAINIG_MONSTER_COUNT;
+        _remainingExp = INIT_REMAINING_EXP;
+
+        AcquiredGold = INIT_REMAINING_GOLD;
+        _remainingGold = INIT_REMAINING_GOLD;
+
+        // UI_PauseIngame의 웨이브 진행도 초기 세팅
+        var pauseIngameUI = Manager.Instance.UI.FindUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME);
+        pauseIngameUI.InitWavePanel();
+
+        // UI_ClearWave의 웨이브 진행도 초기 세팅
+        var clearWaveUI = Manager.Instance.UI.FindUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE);
+        clearWaveUI.InitWavePanel();
+
+        // 맵 생성
+        Manager.Instance.Object.GetMap(Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].MapType, (mapGO) =>
         {
-            var spawnMonster = Utils.GetOrAddComponent<SpawnMonster>(Manager.Instance.Object.MonsterSpawner);
-            spawnMonster.Spawn(Define.RESOURCE_MONSTER_NORMAL_BAT, 10);
-        }
-        else if (Input.GetKeyDown(KeyCode.C))
-            RemainingMonsterHandler?.Invoke(0);
-        #endregion
+            Utils.SetActive(mapGO, true);
+
+            // 영웅 생성
+            Manager.Instance.Object.GetHero(Define.RESOURCE_HERO_ARCANE_MAGE, (heroGO) =>
+            {
+                var hero = heroGO.GetComponent<Hero>();
+                UsedHero = hero;
+                UsedHero.SetHeroAbilities();
+
+                var heroController = Utils.GetOrAddComponent<HeroController>(heroGO);
+
+                var mapController = Utils.GetOrAddComponent<MapController>(mapGO);
+                mapController.SetHeroController(heroController);
+
+                {
+                    var mapCollisionArea = Manager.Instance.Object.RepositionArea;
+                    var chaseHero = Utils.GetOrAddComponent<ChaseHero>(mapCollisionArea);
+                    chaseHero.HeroTransform = heroGO.transform;
+                    Utils.SetActive(mapCollisionArea, true);
+                }
+
+                {
+                    var monsterSpawner = Manager.Instance.Object.MonsterSpawner;
+                    var chaseHero = Utils.GetOrAddComponent<ChaseHero>(monsterSpawner);
+                    chaseHero.HeroTransform = heroGO.transform;
+                    var spawnMonster = Utils.GetOrAddComponent<SpawnMonster>(monsterSpawner);
+                    spawnMonster.HeroController = heroController;
+                    Utils.SetActive(monsterSpawner, true);
+                }
+
+                // 카메라 팔로워 세팅
+                Manager.Instance.CameraController.SetFollower(heroGO.transform);
+
+                Utils.SetActive(heroGO, true);
+
+                loadingUI.CompleteLoading();
+            });
+        });
     }
 
     /// <summary>
     /// 인게임을 처음 실행하거나 웨이브를 클리어하고 다음 웨이브를 실행할 때 호출
     /// </summary>
-    /// <param name="waveIndex">실행할 웨이브 목차</param>
-    public void StartIngame(int waveIndex)
+    public void StartIngame()
     {
         Utils.SetTimeScale(RESTORE_TIMESCALE);
-        CurrentWaveIndex = waveIndex;
-        WavePanelHandler?.Invoke();
-        #region TEST
-        _totalWaveProgressTime = 10f;
-        #endregion
-        TimePassHandler?.Invoke(_totalWaveProgressTime);
-        ChangeModeHandler?.Invoke(Define.TIME_ATTACK_MODE);
+        CurrentWave = _waveList[Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[CurrentWaveIndex]];
+        CurrentWave.StartWave();
     }
 
     /// <summary>
@@ -66,7 +117,7 @@ public class IngameManager : MonoBehaviour
     /// <param name="control">인게임 조절로 false면 멈춤, true면 재시작</param>
     public void ControlIngame(bool control)
     {
-        ProgressWave = control;
+        CurrentWave.ControlWave(control);
         if (control)
             Utils.SetTimeScale(RESTART_INGAME);
         else
@@ -78,17 +129,16 @@ public class IngameManager : MonoBehaviour
     /// </summary>
     public void ClearIngame()
     {
-        ProgressWave = false;
+        CurrentWave.ClearWave();
+    }
+
+    /// <summary>
+    /// 현재 웨이브의 클리어 후처리를 할 때 호출
+    /// </summary>
+    public void ClearIngamePostProcessing()
+    {
         Utils.SetTimeScale(PAUSE_INGAME);
         CurrentWaveIndex += NEXT_WAVE_INDEX;
-        if (CurrentWaveIndex < Define.MAX_WAVE_INDEX)
-            Manager.Instance.UI.ShowPopupUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE, (clearWaveUI) =>
-            {
-                clearWaveUI.SetClearWaveText();
-                clearWaveUI.UpdateWavePanel();
-            });
-        else
-            Manager.Instance.UI.ShowPopupUI<UI_ClearChapter>(Define.RESOURCE_UI_CLEAR_CHAPTER);
     }
 
     /// <summary>
@@ -96,12 +146,56 @@ public class IngameManager : MonoBehaviour
     /// </summary>
     public void ExitIngame()
     {
-        ProgressWave = false;
         Utils.SetTimeScale(RESTORE_TIMESCALE);
-        _waveProgressTime = INIT_WAVE_PROGRESS_TIME;
+        CurrentWave.ExitWave();
+        ReturnUsedMonster();
+        ReturnUsedExpGem();
+        ReturnUsedGold();
+        Manager.Instance.CameraController.SetFollower();
+        Utils.SetActive(Manager.Instance.Object.MonsterSpawner, false);
+        Utils.SetActive(Manager.Instance.Object.RepositionArea, false);
+        Manager.Instance.Object.ReturnHero(Define.RESOURCE_HERO_ARCANE_MAGE);
+        Manager.Instance.Object.ReturnMap(Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].MapType);
+        Manager.Instance.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE);
     }
 
+    public void ShowWavePanel(string wavePanelText)
+    {
+        ShowWavePanelHandler?.Invoke(wavePanelText);
+    }
+
+    public void ChangeProgressWaveTime(float time)
+    {
+        ChangeProgressTimeHandler?.Invoke(time);
+    }
+
+    public void ChangeMode(int mode)
+    {
+        ChangeModeHandler?.Invoke(mode);
+    }
+
+    private void _InitWaves()
+    {
+        var wave = new GameObject(NAME_WAVE);
+        wave.transform.SetParent(transform);
+        var normalBattleWave = Utils.GetOrAddComponent<NormalBattleWave>(wave);
+        _waveList.Add(normalBattleWave);
+        var goldRushWave = Utils.GetOrAddComponent<GoldRushWave>(wave);
+        _waveList.Add(goldRushWave);
+    }
+    #endregion
+
     #region Hero
+    public event Action<float> ChangeHeroExpHandler;
+    public event Action<int> ChangeHeroLevelHandler;
+    public event Action ChangeHeroLevelUpPostProcessingHandler;
+    public event Action EnhanceHeroAbilityHandler;
+
+    public Hero UsedHero { get; private set; }
+    public int HeroLevelUpCount { get; set; }
+
+    private const int INIT_HERO_LEVEL = 1;
+
     public void ChangeHeroExp(float value)
     {
         ChangeHeroExpHandler?.Invoke(value);
@@ -109,32 +203,172 @@ public class IngameManager : MonoBehaviour
 
     public void ChangeHeroLevel(int level)
     {
+        if (level > INIT_HERO_LEVEL)
+            ++HeroLevelUpCount;
         ChangeHeroLevelHandler?.Invoke(level);
     }
 
-    public void ChangeHeroLevelPostProcessing()
+    public void EnhanceHeroAbility()
     {
-        ChangeHeroLevelPostProcessingHandler?.Invoke();
+        if (HeroLevelUpCount > Define.INIT_HERO_LEVEL_UP_COUNT)
+            EnhanceHeroAbilityHandler?.Invoke();
+        else
+            ChangeHeroLevelUpPostProcessingHandler?.Invoke();
     }
     #endregion
 
-    private void _CheckIngameProgressTime()
+    #region Monster
+    public event Action RemainingMonsterHandler;
+
+    private Queue<Monster> _usedMonsterQueue = new Queue<Monster>();
+
+    private bool _spawnMonster;
+    private int _remainingMonsterCount;
+
+    public int RemainingMonsterCount { get { return _remainingMonsterCount; } }
+
+    private const int INIT_REMAINIG_MONSTER_COUNT = 0;
+    private const int EMPTY_USED_MONSTER = 0;
+
+    public void StartSpawnMonster()
     {
-        if (false == ProgressWave)
-            return;
+        _spawnMonster = true;
+        _SpawnMonster().Forget();
+    }
 
-        if (_totalWaveProgressTime > ZERO_SECOND)
+    public void StopSpawnMonster()
+    {
+        _spawnMonster = false;
+        var waveIndex = Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[CurrentWaveIndex];
+        if (Define.INDEX_GOLD_RUSH_WAVE != waveIndex)
+            RemainingMonsterHandler?.Invoke();
+    }
+
+    public void OnDeadMonster()
+    {
+        --_remainingMonsterCount;
+        RemainingMonsterHandler?.Invoke();
+    }
+
+    public void EnqueueUsedMonster(Monster monster)
+    {
+        _usedMonsterQueue.Enqueue(monster);
+    }
+
+    public void ReturnUsedMonster()
+    {
+        while (_usedMonsterQueue.Count > EMPTY_USED_MONSTER)
         {
-            _waveProgressTime += Time.deltaTime;
-            if (_waveProgressTime >= ONE_SECOND)
-            {
-                _waveProgressTime -= ONE_SECOND;
-                _totalWaveProgressTime -= ONE_SECOND;
-                TimePassHandler?.Invoke(_totalWaveProgressTime);
-            }
+            var monster = _usedMonsterQueue.Dequeue();
+            if (false == monster.gameObject.activeSelf)
+                continue;
 
-            if (ZERO_SECOND == _totalWaveProgressTime)
-                ChangeModeHandler?.Invoke(ANNIHILATION_MODE);
+            monster.ReturnMonster();
         }
     }
+
+    private async UniTaskVoid _SpawnMonster()
+    {
+        while (_spawnMonster)
+        {
+            #region TEST
+            var spawnMonster = Utils.GetOrAddComponent<SpawnMonster>(Manager.Instance.Object.MonsterSpawner);
+            spawnMonster.Spawn(Define.RESOURCE_MONSTER_NORMAL_BAT, 10);
+            _remainingMonsterCount += 10;
+            await UniTask.Delay(TimeSpan.FromSeconds(10));
+            #endregion
+        }
+    }
+    #endregion
+
+    #region ExpGem
+    private Queue<ExpGem> _usedExpGemQueue = new Queue<ExpGem>();
+
+    private float _remainingExp;
+
+    private const float INIT_REMAINING_EXP = 0f;
+    private const int EMPTY_USED_EXP_GEM = 0;
+
+    public void EnqueueUsedExpGem(ExpGem expGem)
+    {
+        _usedExpGemQueue.Enqueue(expGem);
+    }
+
+    public void ReturnUsedExpGem()
+    {
+        while (_usedExpGemQueue.Count > EMPTY_USED_EXP_GEM)
+        {
+            var expGem = _usedExpGemQueue.Dequeue();
+            if (false == expGem.gameObject.activeSelf)
+                continue;
+
+            if (ExitIngameForce)
+                expGem.ReturnDropItem();
+            else
+            {
+                expGem.GiveEffect(UsedHero, false);
+                _remainingExp += Define.INCREASE_HERO_EXP_VALUE;
+            }
+        }
+    }
+
+    public void GetExpAtOnce()
+    {
+        UsedHero.GetExp(_remainingExp);
+        _remainingExp = INIT_REMAINING_EXP;
+    }
+    #endregion
+
+    #region Gold
+    public event Action ChangeGoldHandler;
+
+    private Queue<Gold> _usedGoldQueue = new Queue<Gold>();
+
+    private float _remainingGold;
+
+    public float AcquiredGold { get; private set; }
+
+    private const int INIT_REMAINING_GOLD = 0;
+
+    public void EnqueueUsedGold(Gold gold)
+    {
+        _usedGoldQueue.Enqueue(gold);
+    }
+
+    public void ReturnUsedGold()
+    {
+        while (_usedGoldQueue.Count > INIT_REMAINING_GOLD)
+        {
+            var gold = _usedGoldQueue.Dequeue();
+            if (false == gold.gameObject.activeSelf)
+                continue;
+
+            if (ExitIngameForce)
+                gold.ReturnDropItem();
+            else
+            {
+                gold.GiveEffect(UsedHero, false);
+                _remainingGold += Define.INCREASE_GOLD_VALUE;
+            }
+        }
+    }
+
+    public void ChangeGold()
+    {
+        ChangeGoldHandler?.Invoke();
+    }
+
+    public void GetGold(float gold)
+    {
+        AcquiredGold += gold;
+        ChangeGold();
+    }
+
+    public void GetGoldAtOnce()
+    {
+        AcquiredGold += _remainingGold;
+        _remainingGold = INIT_REMAINING_GOLD;
+        ChangeGold();
+    }
+    #endregion
 }

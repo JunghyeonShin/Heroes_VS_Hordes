@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,10 +16,14 @@ public class UI_IngameScene : UI_Scene
 
     private enum EGameObjects
     {
+        ExpPanel,
+        ChapterCheckPanel,
         TimeCheckPanel,
         MonsterCheckPanel,
+        GoldPanel,
         WavePanel,
-        WaveImage
+        AnnihilationModePanel,
+        FinishWavePanel
     }
 
     private enum ESliders
@@ -31,25 +36,31 @@ public class UI_IngameScene : UI_Scene
         LevelText,
         TimeText,
         MonsterText,
-        WaveText
+        GoldText,
+        WaveText,
     }
 
+    private GameObject _expPanel;
+    private GameObject _chapterCheckPanel;
     private GameObject _timeCheckPanel;
     private GameObject _monsterCheckPanel;
-    private GameObject _waveImage;
+    private GameObject _goldPanel;
 
     private Animator _wavePanelAnimator;
+    private Animator _annihilationModePanelAnimator;
+    private Animator _finishWavePanelAnimator;
     private Slider _expSlider;
     private TextMeshProUGUI _levelText;
     private TextMeshProUGUI _timeText;
     private TextMeshProUGUI _monsterText;
+    private TextMeshProUGUI _goldText;
     private TextMeshProUGUI _waveText;
 
-    private const float DELAY_TIME_SHOWING_WAVE_PANEL = 1f;
-    private const float FINISHED_TIME_SHOWING_WAVE_PANEL = 1f;
+    private const float DELAY_SHOWING_WAVE_PANEL = 0.2f;
+    private const float DELAY_FINISHED_WAVE_PANEL = 1.2f;
+    private const float DELAY_SPAWN_MONSTER = 0.2f;
     private const float SIXTY_SECONDS = 60f;
-    private const int INIT_LEVEL = 1;
-    private const int ADJUST_WAVE_INDEX = 1;
+    private const int ZERO_SECOND = 0;
     private const int NON_REMAINING_MONSTER_COUNT = 0;
     private const string ANIMATOR_TRIGGER_MOVE_WAVE_PANEL = "MoveWavePanel";
 
@@ -60,11 +71,16 @@ public class UI_IngameScene : UI_Scene
         _BindSlider(typeof(ESliders));
         _BindText(typeof(ETexts));
 
+        _expPanel = _GetGameObject((int)EGameObjects.ExpPanel);
+        _chapterCheckPanel = _GetGameObject((int)EGameObjects.ChapterCheckPanel);
         _timeCheckPanel = _GetGameObject((int)EGameObjects.TimeCheckPanel);
         _monsterCheckPanel = _GetGameObject((int)EGameObjects.MonsterCheckPanel);
-        _waveImage = _GetGameObject((int)EGameObjects.WaveImage);
+        _goldPanel = _GetGameObject((int)EGameObjects.GoldPanel);
 
         _wavePanelAnimator = _GetGameObject((int)EGameObjects.WavePanel).GetComponent<Animator>();
+        _annihilationModePanelAnimator = _GetGameObject((int)EGameObjects.AnnihilationModePanel).GetComponent<Animator>();
+        _finishWavePanelAnimator = _GetGameObject((int)EGameObjects.FinishWavePanel).GetComponent<Animator>();
+
         _BindEvent(_GetButton((int)EButtons.PauseButton).gameObject, _PauseIngame);
 
         _expSlider = _GetSlider((int)ESliders.ExpSlider);
@@ -72,21 +88,29 @@ public class UI_IngameScene : UI_Scene
         _levelText = _GetText((int)ETexts.LevelText);
         _timeText = _GetText((int)ETexts.TimeText);
         _monsterText = _GetText((int)ETexts.MonsterText);
+        _goldText = _GetText((int)ETexts.GoldText);
         _waveText = _GetText((int)ETexts.WaveText);
 
         var ingame = Manager.Instance.Ingame;
-        ingame.WavePanelHandler -= _SetWaveIndex;
-        ingame.WavePanelHandler += _SetWaveIndex;
-        ingame.TimePassHandler -= _SetTimeText;
-        ingame.TimePassHandler += _SetTimeText;
+        ingame.ShowWavePanelHandler -= _SetWaveIndex;
+        ingame.ShowWavePanelHandler += _SetWaveIndex;
+        ingame.ChangeProgressTimeHandler -= _SetTimeText;
+        ingame.ChangeProgressTimeHandler += _SetTimeText;
+        ingame.ChangeModeHandler -= _ChangeMode;
+        ingame.ChangeModeHandler += _ChangeMode;
+
         ingame.ChangeHeroExpHandler -= _SetExpSlider;
         ingame.ChangeHeroExpHandler += _SetExpSlider;
         ingame.ChangeHeroLevelHandler -= _SetLevel;
         ingame.ChangeHeroLevelHandler += _SetLevel;
-        ingame.ChangeModeHandler -= _ChangeMode;
-        ingame.ChangeModeHandler += _ChangeMode;
+        ingame.EnhanceHeroAbilityHandler -= _EnhanceHeroAbility;
+        ingame.EnhanceHeroAbilityHandler += _EnhanceHeroAbility;
+
         ingame.RemainingMonsterHandler -= _SetMonsterText;
         ingame.RemainingMonsterHandler += _SetMonsterText;
+
+        ingame.ChangeGoldHandler -= _SetGoldText;
+        ingame.ChangeGoldHandler += _SetGoldText;
     }
 
     #region Event
@@ -98,29 +122,60 @@ public class UI_IngameScene : UI_Scene
         });
         Manager.Instance.Ingame.ControlIngame(false);
     }
-    #endregion 
+    #endregion
 
-    private void _SetWaveIndex()
+    private void _SetWaveIndex(string wavePanelText)
     {
-        _waveText.text = $"¿þÀÌºê {Manager.Instance.Ingame.CurrentWaveIndex + ADJUST_WAVE_INDEX}";
+        var waveIndex = Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[Manager.Instance.Ingame.CurrentWaveIndex];
+        if (Define.INDEX_NORMAL_BATTLE_WAVE == waveIndex)
+        {
+            Utils.SetActive(_expPanel, true);
+            Utils.SetActive(_chapterCheckPanel, true);
+            Utils.SetActive(_goldPanel, false);
+        }
+        else if (Define.INDEX_GOLD_RUSH_WAVE == waveIndex)
+        {
+            Utils.SetActive(_expPanel, false);
+            Utils.SetActive(_chapterCheckPanel, false);
+            Utils.SetActive(_goldPanel, true);
+        }
+
+        _waveText.text = wavePanelText;
         _ShowWavePanel().Forget();
     }
 
     private async UniTaskVoid _ShowWavePanel()
     {
-        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_TIME_SHOWING_WAVE_PANEL));
+        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_SHOWING_WAVE_PANEL));
 
         _wavePanelAnimator.SetTrigger(ANIMATOR_TRIGGER_MOVE_WAVE_PANEL);
-        await UniTask.Delay(TimeSpan.FromSeconds(FINISHED_TIME_SHOWING_WAVE_PANEL));
+        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_FINISHED_WAVE_PANEL));
 
-        Manager.Instance.Ingame.ProgressWave = true;
+        Manager.Instance.Ingame.CurrentWave.ProgressWave = true;
+        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_SPAWN_MONSTER));
+
+        Manager.Instance.Ingame.StartSpawnMonster();
     }
 
     private void _SetTimeText(float time)
     {
         var minute = Mathf.FloorToInt(time / SIXTY_SECONDS);
         var second = Mathf.FloorToInt(time % SIXTY_SECONDS);
-        _timeText.text = $"{minute}:{second}";
+        if (ZERO_SECOND == second)
+            _timeText.text = $"{minute}:00";
+        else
+            _timeText.text = $"{minute}:{second}";
+    }
+
+    private void _ChangeMode(int mode)
+    {
+        Utils.SetActive(_timeCheckPanel, Define.INDEX_TIME_ATTACK_MODE == mode);
+        Utils.SetActive(_monsterCheckPanel, Define.INDEX_ANNIHILATION_MODE == mode);
+        if (_monsterCheckPanel.activeSelf)
+        {
+            _annihilationModePanelAnimator.SetTrigger(ANIMATOR_TRIGGER_MOVE_WAVE_PANEL);
+            Manager.Instance.Ingame.StopSpawnMonster();
+        }
     }
 
     private void _SetExpSlider(float value)
@@ -131,32 +186,40 @@ public class UI_IngameScene : UI_Scene
     private void _SetLevel(int level)
     {
         _levelText.text = level.ToString();
-        if (level > INIT_LEVEL)
-            _EnhanceHeroAbility().Forget();
     }
 
-    private async UniTaskVoid _EnhanceHeroAbility()
+    private void _EnhanceHeroAbility()
     {
-        await UniTask.Delay(TimeSpan.FromSeconds(0.6f));
-
         Manager.Instance.UI.ShowPopupUI<UI_EnhanceHeroAbility>(Define.RESOURCE_UI_ENHANCE_HERO_ABILITY, (enhanceHeroAbilityUI) =>
         {
             Manager.Instance.Ingame.ControlIngame(false);
         });
     }
 
-    private void _ChangeMode(int mode)
+    private void _SetMonsterText()
     {
-        Utils.SetActive(_timeCheckPanel, Define.TIME_ATTACK_MODE == mode);
-        Utils.SetActive(_monsterCheckPanel, Define.TIME_ATTACK_MODE != mode);
-        if (_monsterCheckPanel.activeSelf)
-            _monsterText.text = mode.ToString();
+        if (false == _monsterCheckPanel.activeSelf)
+            return;
+
+        var ingame = Manager.Instance.Ingame;
+        _monsterText.text = ingame.RemainingMonsterCount.ToString();
+        if (ingame.RemainingMonsterCount <= NON_REMAINING_MONSTER_COUNT)
+            _ShowFinishWavePanel().Forget();
     }
 
-    private void _SetMonsterText(int remainingCount)
+    private async UniTaskVoid _ShowFinishWavePanel()
     {
-        _monsterText.text = remainingCount.ToString();
-        if (remainingCount <= NON_REMAINING_MONSTER_COUNT)
-            Manager.Instance.Ingame.ClearIngame();
+        _finishWavePanelAnimator.SetTrigger(ANIMATOR_TRIGGER_MOVE_WAVE_PANEL);
+        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_FINISHED_WAVE_PANEL));
+
+        Manager.Instance.Ingame.ClearIngame();
+    }
+
+    private void _SetGoldText()
+    {
+        if (false == _goldPanel.activeSelf)
+            return;
+
+        _goldText.text = Manager.Instance.Ingame.AcquiredGold.ToString();
     }
 }

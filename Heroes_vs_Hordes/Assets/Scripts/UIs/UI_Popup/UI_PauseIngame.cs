@@ -47,13 +47,8 @@ public class UI_PauseIngame : UI_Popup
     private void _GiveUpIngame()
     {
         var manager = Manager.Instance;
+        manager.Ingame.ExitIngameForce = true;
         manager.Ingame.ExitIngame();
-        manager.Object.ReturnMap(Define.RESOURCE_MAP_00);
-        manager.Object.ReturnHero(Define.RESOURCE_HERO_ARCANE_MAGE);
-        Utils.SetActive(manager.Object.RepositionArea, false);
-        Utils.SetActive(manager.Object.MonsterSpawner, false);
-        manager.CameraController.SetFollower();
-        manager.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE);
     }
     #endregion
 
@@ -65,9 +60,9 @@ public class UI_PauseIngame : UI_Popup
         _wavePanelList.Clear();
 
         // 사용할 WaveUI를 가져옴
-        for (int ii = 0; ii < Define.MAX_WAVE_INDEX - 1; ++ii)
+        for (int ii = 0; ii < Manager.Instance.Ingame.TotalWaveIndex - 1; ++ii)
             _InitWavePanel<UI_NormalBattleWave>(Define.RESOURCE_UI_NORMAL_BATTLE_WAVE, ii);
-        _InitWavePanel<UI_CoinRushWave>(Define.RESOURCE_UI_COIN_RUSH_WAVE, Define.MAX_WAVE_INDEX - 1);
+        _InitWavePanel<UI_CoinRushWave>(Define.RESOURCE_UI_COIN_RUSH_WAVE, Manager.Instance.Ingame.TotalWaveIndex - 1);
     }
 
     public void UpdateWavePanel()

@@ -103,7 +103,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 28e0dd930f97b6948b2ad02f8af25bdf
-    m_Address: ExperienceGem
+    m_Address: ExpGem
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -114,6 +114,16 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b93872ae4cad4b0409e2bb2771bef866
     m_Address: UI_EnhanceHeroAbility
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e7b1ee2626f27d4bb7facc91438bd67
+    m_Address: UI_Loading
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aa72d3b7541fb6f4c8fbf0f7cde00344
+    m_Address: Gold
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

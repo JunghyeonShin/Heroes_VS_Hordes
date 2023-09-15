@@ -17,10 +17,33 @@ public class ResourceManager
     }
 
     #region InitResource
+    private bool[] _loadCompletes;
+
+    private const int INDEX_TOTAL_VALUE = 2;
+    private const int INDEX_SPRITE_SLIDER_YELLOW = 0;
+    private const int INDEX_SPRITE_SLIDER_RED = 1;
+
+    public bool LoadComplete()
+    {
+        for (int ii = 0; ii < _loadCompletes.Length; ++ii)
+        {
+            if (false == _loadCompletes[ii])
+                return false;
+        }
+        return true;
+    }
+
     private void _LoadEssentialResource()
     {
-        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_SLIDER_YELLOW, null);
-        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_SLIDER_RED, null);
+        _loadCompletes = new bool[2];
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_SLIDER_YELLOW, (sprite) =>
+        {
+            _loadCompletes[INDEX_SPRITE_SLIDER_YELLOW] = true;
+        });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_SLIDER_RED, (sprite) =>
+        {
+            _loadCompletes[INDEX_SPRITE_SLIDER_RED] = true;
+        });
     }
     #endregion
 

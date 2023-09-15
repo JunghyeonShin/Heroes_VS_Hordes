@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AnnihilationModePanel
+  m_Controller: {fileID: 9100000, guid: 27e6a3b53dc89774a856c9f04d34513b, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: cb74b6782c38f2e45a7c5561b52f2762, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 3900708fde9b44942b8b53ce4790648b, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: deafe1b4cfbb9174aabe113f5edff73c, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 6efe1f8d91ef1e049a72f997d71d3c90, type: 2}

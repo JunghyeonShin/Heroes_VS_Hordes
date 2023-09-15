@@ -21,9 +21,10 @@ public class UI_EnhanceHeroAbility : UI_Popup
     private void _RestartIngame()
     {
         var ingame = Manager.Instance.Ingame;
-        ingame.ChangeHeroLevelPostProcessing();
-        ingame.ControlIngame(true);
         _ClosePopupUI();
+        ingame.ControlIngame(true);
+        --ingame.HeroLevelUpCount;
+        ingame.EnhanceHeroAbility();
     }
     #endregion
 }

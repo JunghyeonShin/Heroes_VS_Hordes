@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1349014190925798166}
   - component: {fileID: 6098330644238203224}
   - component: {fileID: 2515509655081237077}
+  - component: {fileID: 2101289933060207988}
   m_Layer: 0
   m_Name: LevelUpText
   m_TagString: Untagged
@@ -172,3 +173,15 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 6098330644238203224}
   m_maskType: 0
+--- !u!114 &2101289933060207988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3302048584984393952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e89dc8f1f419781458f27d34a0806e67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

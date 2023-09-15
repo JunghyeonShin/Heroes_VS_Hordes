@@ -21,8 +21,6 @@ public class UI_MainScene : UI_Scene
     private GameObject _prevButton;
     private TextMeshProUGUI _chapterText;
 
-    private const int FIRST_WAVE_INDEX = 0;
-
     protected override void _Init()
     {
         _BindButton(typeof(EButtons));
@@ -41,57 +39,14 @@ public class UI_MainScene : UI_Scene
     #region Event
     private void _PlayChapter()
     {
-        Manager.Instance.UI.ShowSceneUI<UI_IngameScene>(Define.RESOURCE_UI_INGAME_SCENE, (ingameSceneUI) =>
+        Manager.Instance.UI.ShowSceneUI<UI_IngameScene>(Define.RESOURCE_UI_INGAME_SCENE);
+        Manager.Instance.UI.ShowPopupUI<UI_Loading>(Define.RESOURCE_UI_LOADING, (loadingUI) =>
         {
-            // UI_PauseIngame의 웨이브 진행도 초기 세팅
-            var pauseIngameUI = Manager.Instance.UI.FindUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME);
-            pauseIngameUI.InitWavePanel();
+            loadingUI.OnLoadCompleteHandler -= Manager.Instance.Ingame.StartIngame;
+            loadingUI.OnLoadCompleteHandler += Manager.Instance.Ingame.StartIngame;
+            loadingUI.StartLoading();
 
-            // UI_ClearWave의 웨이브 진행도 초기 세팅
-            var clearWaveUI = Manager.Instance.UI.FindUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE);
-            clearWaveUI.InitWavePanel();
-
-            // 맵 생성
-            Manager.Instance.Object.GetMap(Define.RESOURCE_MAP_00, (mapGO) =>
-            {
-                var mapController = Utils.GetOrAddComponent<MapController>(mapGO);
-                Utils.SetActive(mapGO, true);
-
-                // 영웅 생성
-                Manager.Instance.Object.GetHero(Define.RESOURCE_HERO_ARCANE_MAGE, (heroGO) =>
-                {
-                    var hero = heroGO.GetComponent<Hero>();
-                    hero.SetHeroAbilities();
-
-                    var heroController = Utils.GetOrAddComponent<HeroController>(heroGO);
-
-                    mapController.SetHeroController(heroController);
-
-                    {
-                        var mapCollisionArea = Manager.Instance.Object.RepositionArea;
-                        var chaseHero = Utils.GetOrAddComponent<ChaseHero>(mapCollisionArea);
-                        chaseHero.HeroTransform = heroGO.transform;
-                        Utils.SetActive(mapCollisionArea, true);
-                    }
-
-                    {
-                        var monsterSpawner = Manager.Instance.Object.MonsterSpawner;
-                        var chaseHero = Utils.GetOrAddComponent<ChaseHero>(monsterSpawner);
-                        chaseHero.HeroTransform = heroGO.transform;
-                        var spawnMonster = Utils.GetOrAddComponent<SpawnMonster>(monsterSpawner);
-                        spawnMonster.HeroController = heroController;
-                        Utils.SetActive(monsterSpawner, true);
-                    }
-
-                    // 카메라 팔로워 세팅
-                    Manager.Instance.CameraController.SetFollower(heroGO.transform);
-
-                    Utils.SetActive(heroGO, true);
-                });
-            });
-
-            // 인게임 시작
-            Manager.Instance.Ingame.StartIngame(FIRST_WAVE_INDEX);
+            Manager.Instance.Ingame.InitIngame(loadingUI);
         });
     }
 

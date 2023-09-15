@@ -23,6 +23,8 @@ public class SpawnMonster : MonoBehaviour
 
                 var repositionMonster = Utils.GetOrAddComponent<RepositionMonster>(monsterGO);
                 repositionMonster.HeroController = HeroController;
+
+                Manager.Instance.Ingame.EnqueueUsedMonster(monster);
             });
         }
     }

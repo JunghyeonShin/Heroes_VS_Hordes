@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,7 @@ public class Monster : MonoBehaviour
     [SerializeField] private float _moveSpeed = 3f;
 
     private Rigidbody2D _rigid;
+    private Action _dieHandler;
 
     public Transform Target { get; set; }
 
@@ -16,6 +18,17 @@ public class Monster : MonoBehaviour
     private void Awake()
     {
         _rigid = GetComponent<Rigidbody2D>();
+    }
+
+    private void OnEnable()
+    {
+        _dieHandler -= Manager.Instance.Ingame.OnDeadMonster;
+        _dieHandler += Manager.Instance.Ingame.OnDeadMonster;
+    }
+
+    private void OnDisable()
+    {
+        _dieHandler -= Manager.Instance.Ingame.OnDeadMonster;
     }
 
     private void FixedUpdate()
@@ -33,12 +46,29 @@ public class Monster : MonoBehaviour
 
     public void OnDamaged(float damage)
     {
-        var experienceGemGO = Manager.Instance.Object.GetExperienceGem();
-        var experienceGem = Utils.GetOrAddComponent<ExperienceGem>(experienceGemGO);
-        experienceGem.Init(transform.position);
-        Utils.SetActive(experienceGemGO, true);
+        var waveIndex = Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[Manager.Instance.Ingame.CurrentWaveIndex];
+        if (Define.INDEX_GOLD_RUSH_WAVE == waveIndex)
+            ShowDropItem<Gold>(Define.RESOURCE_GOLD);
+        else
+            ShowDropItem<ExpGem>(Define.RESOURCE_EXP_GEM);
+    }
 
-        Utils.SetActive(gameObject, false);
+    public void ReturnMonster()
+    {
+        Manager.Instance.Object.ReturnMonster(Define.RESOURCE_MONSTER_NORMAL_BAT, gameObject);
+    }
+
+    private void ShowDropItem<T>(string dropItemKey) where T : DropItem
+    {
+        Manager.Instance.Object.GetDropItem(dropItemKey, (dropItemGO) =>
+        {
+            var dropItem = Utils.GetOrAddComponent<T>(dropItemGO);
+            dropItem.InitTransform(transform.position);
+            Utils.SetActive(dropItemGO, true);
+
+            _dieHandler?.Invoke();
+            ReturnMonster();
+        });
     }
 
     private bool _IsLocatedTargetRightSide(float value)

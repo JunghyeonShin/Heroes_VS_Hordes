@@ -53,8 +53,7 @@ public class UI_ClearWave : UI_Popup
     #region Event
     private void _StartNextWave()
     {
-        var ingame = Manager.Instance.Ingame;
-        ingame.StartIngame(ingame.CurrentWaveIndex);
+        Manager.Instance.Ingame.StartIngame();
         _ClosePopupUI();
     }
     #endregion
@@ -72,9 +71,9 @@ public class UI_ClearWave : UI_Popup
         _wavePanelList.Clear();
 
         // 사용할 WaveUI를 가져옴
-        for (int ii = 0; ii < Define.MAX_WAVE_INDEX - 1; ++ii)
+        for (int ii = 0; ii < Manager.Instance.Ingame.TotalWaveIndex - 1; ++ii)
             _InitWavePanel<UI_NormalBattleWave>(Define.RESOURCE_UI_NORMAL_BATTLE_WAVE, ii);
-        _InitWavePanel<UI_CoinRushWave>(Define.RESOURCE_UI_COIN_RUSH_WAVE, Define.MAX_WAVE_INDEX - 1);
+        _InitWavePanel<UI_CoinRushWave>(Define.RESOURCE_UI_COIN_RUSH_WAVE, Manager.Instance.Ingame.TotalWaveIndex - 1);
     }
 
     public void UpdateWavePanel()

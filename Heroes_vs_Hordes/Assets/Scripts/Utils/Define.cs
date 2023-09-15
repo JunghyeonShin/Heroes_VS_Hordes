@@ -8,7 +8,6 @@ public class Define
     #region Prefab
     // Map
     public const string RESOURCE_REPOSITION_AREA = "RepositionArea";
-    public const string RESOURCE_MAP_00 = "Map_00";
     // Hero
     public const string RESOURCE_HERO_ARCANE_MAGE = "ArcaneMage";
     // Weapon
@@ -19,12 +18,14 @@ public class Define
     // Text
     public const string RESROUCE_DAMAGE_TEXT = "DamageText";
     public const string RESROUCE_LEVEL_UP_TEXT = "LevelUpText";
-    // ExperienceGem
-    public const string RESOURCE_EXPERIENCE_GEM = "ExperienceGem";
+    // Item
+    public const string RESOURCE_EXP_GEM = "ExpGem";
+    public const string RESOURCE_GOLD = "Gold";
     // UI_Scene
     public const string RESOURCE_UI_INGAME_SCENE = "UI_IngameScene";
     public const string RESOURCE_UI_MAIN_SCENE = "UI_MainScene";
     // UI_Popup
+    public const string RESOURCE_UI_LOADING = "UI_Loading";
     public const string RESOURCE_UI_CLEAR_CHAPTER = "UI_ClearChapter";
     public const string RESOURCE_UI_CLEAR_WAVE = "UI_ClearWave";
     public const string RESOURCE_UI_PAUSE_INGAME = "UI_PauseIngame";
@@ -50,25 +51,21 @@ public class Define
     public const string LAYER_MONSTER = "Monster";
     #endregion
 
-    #region Ability
-    // Hero
-    public const int HERO_ABILITY_HEALTH = 1;
-    public const int HERO_ABILITY_DEFENCE = 2;
-    public const int HERO_ABILITY_ATTACK = 3;
-    public const int HERO_ABILITY_ATTACK_COOLDOWN = 4;
-    public const int HERO_ABILITY_CRITICAL = 5;
-    public const int HERO_ABILITY_MOVE_SPEED = 6;
-    public const int HERO_ABILITY_PROJECTILE_SPEED = 7;
-    #endregion
-
     #region Animator
     public const string ANIMATOR_TRIGGER_ATTACK = "Attack";
     #endregion
 
-    // IngameManager
-    public const int TIME_ATTACK_MODE = 0;
+    #region IngameManager
+    public const float INCREASE_HERO_EXP_VALUE = 1;
+    public const float INCREASE_GOLD_VALUE = 1;
+    public const int INDEX_NORMAL_BATTLE_WAVE = 0;
+    public const int INDEX_GOLD_RUSH_WAVE = 1;
+    public const int INDEX_TIME_ATTACK_MODE = 0;
+    public const int INDEX_ANNIHILATION_MODE = 1;
+    public const int INIT_HERO_LEVEL_UP_COUNT = 0;
+    #endregion
 
     #region TEST
-    public const int MAX_WAVE_INDEX = 4;
+    public const int CURRENT_CHAPTER_INDEX = 0;
     #endregion
 }

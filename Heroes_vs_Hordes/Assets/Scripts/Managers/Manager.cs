@@ -54,4 +54,17 @@ public class Manager : MonoBehaviour
         _object.Init();
         _uI.Init();
     }
+
+    public bool LoadComplete()
+    {
+        if (false == _resource.LoadComplete())
+            return false;
+        if (false == _data.LoadComplete())
+            return false;
+        if (false == _object.LoadComplete())
+            return false;
+        if (false == _uI.LoadComplete())
+            return false;
+        return true;
+    }
 }

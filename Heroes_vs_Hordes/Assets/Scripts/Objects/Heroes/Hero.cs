@@ -17,20 +17,24 @@ public abstract class Hero : MonoBehaviour
     protected bool _detectMonster;
     protected bool _attackMonster;
 
+    private event Action _enhanceAbilityHandler;
     private event Action<float> _changeExpHandler;
     private event Action<int> _changeLevelHandler;
     private float _exp;
     private int _level;
     private bool _levelUp;
-    private bool _levelUpPostProcessing;
 
+    public bool IsDead { get { return _health <= HP_ZERO; } }
     public float MoveSpeed { get; private set; }
     public float ProjectileSpeed { get; private set; }
 
+    private const float DELAY_LEVEL_UP = 0.2f;
+    private const float DELAY_ENHANCE_ABILITY = 1f;
     private const float DEFAULT_ABILITY_VALUE = 1f;
     private const float MIN_CRITICAL_VALUE = 0f;
     private const float MAX_CRITICAL_VALUE = 1f;
     private const float INIT_EXP = 0;
+    private const float HP_ZERO = 0f;
     private const int INIT_LEVEL = 1;
     private const int ADJUST_LEVEL = 1;
     private const int INCREASE_LEVEL_VALUE = 1;
@@ -44,8 +48,10 @@ public abstract class Hero : MonoBehaviour
         _changeExpHandler += ingame.ChangeHeroExp;
         _changeLevelHandler -= ingame.ChangeHeroLevel;
         _changeLevelHandler += ingame.ChangeHeroLevel;
-        ingame.ChangeHeroLevelPostProcessingHandler -= _LevelUpPostProcessing;
-        ingame.ChangeHeroLevelPostProcessingHandler += _LevelUpPostProcessing;
+        _enhanceAbilityHandler -= ingame.EnhanceHeroAbility;
+        _enhanceAbilityHandler += ingame.EnhanceHeroAbility;
+        ingame.ChangeHeroLevelUpPostProcessingHandler -= _LevelUpPostProcessing;
+        ingame.ChangeHeroLevelUpPostProcessingHandler += _LevelUpPostProcessing;
     }
 
     private void OnEnable()
@@ -68,7 +74,7 @@ public abstract class Hero : MonoBehaviour
     public void SetHeroAbilities()
     {
         var heroCommonAbility = Manager.Instance.Data.HeroCommonAbility;
-        var heroIndividualAbility = Manager.Instance.Data.HeroIndividualAbility[Define.RESOURCE_HERO_ARCANE_MAGE];
+        var heroIndividualAbility = Manager.Instance.Data.HeroIndividualAbilityDic[Define.RESOURCE_HERO_ARCANE_MAGE];
 
         _health = heroCommonAbility.Health + heroIndividualAbility.Health;
         _defense = heroCommonAbility.Defense + heroIndividualAbility.Defense;
@@ -82,48 +88,72 @@ public abstract class Hero : MonoBehaviour
     public void GetExp(float exp)
     {
         _exp += exp;
-        Debug.Log(_exp);
         if (_levelUp)
             return;
 
         _GetExp();
     }
 
+    #region TEST
+    public void SetDead()
+    {
+        _health = HP_ZERO;
+        Manager.Instance.Ingame.ClearIngame();
+    }
+    #endregion
+
     protected bool _IsCritical()
     {
         var randomValue = UnityEngine.Random.Range(MIN_CRITICAL_VALUE, MAX_CRITICAL_VALUE);
-        if (randomValue <= _critical)
+        if (_critical >= randomValue)
             return true;
         return false;
     }
 
     private void _GetExp()
     {
-        var expToNextLevel = Manager.Instance.Data.RequiredExp[_level - ADJUST_LEVEL];
-        var value = _exp / expToNextLevel;
+        var needExpToLevelUp = Manager.Instance.Data.RequiredExpList[_level - ADJUST_LEVEL];
+        var value = _exp / needExpToLevelUp;
         _changeExpHandler?.Invoke(value);
-        if (_exp >= expToNextLevel)
-            _LevelUp(expToNextLevel).Forget();
+        if (_exp >= needExpToLevelUp)
+        {
+            _FloatLevelUpText();
+            _LevelUp().Forget();
+        }
     }
 
-    private async UniTaskVoid _LevelUp(float expToNextLevel)
+    private void _FloatLevelUpText()
     {
+        var levelUpTextGO = Manager.Instance.Object.LevelUpText;
+        var levelUpText = Utils.GetOrAddComponent<LevelUpText>(levelUpTextGO);
+        levelUpText.FloatLevelUpText(transform);
+        Utils.SetActive(levelUpTextGO, true);
+    }
+
+    private async UniTaskVoid _LevelUp()
+    {
+        if (_levelUp)
+            await UniTask.Delay(TimeSpan.FromSeconds(DELAY_LEVEL_UP), ignoreTimeScale: true);
         _levelUp = true;
 
+        var needExpToLevelUp = Manager.Instance.Data.RequiredExpList[_level - ADJUST_LEVEL];
         _level += INCREASE_LEVEL_VALUE;
         _changeLevelHandler?.Invoke(_level);
-        await UniTask.WaitUntil(() => _levelUpPostProcessing);
 
-        _levelUp = false;
-        _levelUpPostProcessing = false;
-
-        _exp -= expToNextLevel;
-        Debug.Log(_exp);
-        _GetExp();
+        _exp -= needExpToLevelUp;
+        needExpToLevelUp = Manager.Instance.Data.RequiredExpList[_level - ADJUST_LEVEL];
+        if (_exp >= needExpToLevelUp)
+            _LevelUp().Forget();
+        else
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(DELAY_ENHANCE_ABILITY), ignoreTimeScale: true);
+            _enhanceAbilityHandler?.Invoke();
+        }
     }
 
     private void _LevelUpPostProcessing()
     {
-        _levelUpPostProcessing = true;
+        _levelUp = false;
+        _GetExp();
     }
 }

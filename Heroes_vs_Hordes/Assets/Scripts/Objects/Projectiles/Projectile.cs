@@ -44,7 +44,7 @@ public class Projectile : MonoBehaviour
             var initDamageTextPos = collision.transform.position + randomPos;
             var damageTextGO = Manager.Instance.Object.GetDamageText();
             var damageText = Utils.GetOrAddComponent<DamageText>(damageTextGO);
-            damageText.Init(initDamageTextPos, _attack, _isCritical);
+            damageText.FloatDamageText(initDamageTextPos, _attack, _isCritical);
             Utils.SetActive(damageTextGO, true);
 
             var monster = Utils.GetOrAddComponent<Monster>(collision.gameObject);
