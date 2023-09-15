@@ -22,6 +22,7 @@ public class IngameManager : MonoBehaviour
     public Wave CurrentWave { get; private set; }
     public int CurrentWaveIndex { get; private set; }
     public int TotalWaveIndex { get; private set; }
+    public bool ExitIngameForce { get; set; }
 
     private const float PAUSE_INGAME = 0f;
     private const float RESTART_INGAME = 1f;
@@ -40,6 +41,11 @@ public class IngameManager : MonoBehaviour
 
         CurrentWaveIndex = INIT_WAVE_INDEX;
         TotalWaveIndex = Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].TotalWaveIndex;
+
+        ExitIngameForce = false;
+
+        _remainingMonsterCount = INIT_REMAINIG_MONSTER_COUNT;
+        _remainingExp = INIT_REMAINING_EXP;
 
         // UI_PauseIngame의 웨이브 진행도 초기 세팅
         var pauseIngameUI = Manager.Instance.UI.FindUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME);
@@ -139,6 +145,8 @@ public class IngameManager : MonoBehaviour
     {
         Utils.SetTimeScale(RESTORE_TIMESCALE);
         CurrentWave.ExitWave();
+        ReturnUsedMonster();
+        ReturnUsedExpGem();
         Manager.Instance.CameraController.SetFollower();
         Utils.SetActive(Manager.Instance.Object.MonsterSpawner, false);
         Utils.SetActive(Manager.Instance.Object.RepositionArea, false);
@@ -214,10 +222,15 @@ public class IngameManager : MonoBehaviour
     #region Monster
     public event Action RemainingMonsterHandler;
 
+    private Queue<Monster> _usedMonsterQueue = new Queue<Monster>();
+
     private bool _spawnMonster;
-    private int _remainingMonsterCount = 0;
+    private int _remainingMonsterCount;
 
     public int RemainingMonsterCount { get { return _remainingMonsterCount; } }
+
+    private const int INIT_REMAINIG_MONSTER_COUNT = 0;
+    private const int EMPTY_USED_MONSTER = 0;
 
     public void StartSpawnMonster()
     {
@@ -228,13 +241,32 @@ public class IngameManager : MonoBehaviour
     public void StopSpawnMonster()
     {
         _spawnMonster = false;
-        RemainingMonsterHandler?.Invoke();
+        var waveIndex = Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[CurrentWaveIndex];
+        if (Define.INDEX_GOLD_RUSH_WAVE != waveIndex)
+            RemainingMonsterHandler?.Invoke();
     }
 
     public void OnDeadMonster()
     {
         --_remainingMonsterCount;
         RemainingMonsterHandler?.Invoke();
+    }
+
+    public void EnqueueUsedMonster(Monster monster)
+    {
+        _usedMonsterQueue.Enqueue(monster);
+    }
+
+    public void ReturnUsedMonster()
+    {
+        while (_usedMonsterQueue.Count > EMPTY_USED_MONSTER)
+        {
+            var monster = _usedMonsterQueue.Dequeue();
+            if (false == monster.gameObject.activeSelf)
+                continue;
+
+            monster.ReturnMonster();
+        }
     }
 
     private async UniTaskVoid _SpawnMonster()
@@ -252,28 +284,33 @@ public class IngameManager : MonoBehaviour
     #endregion
 
     #region ExpGem
-    private Queue<ExpGem> _usedExpGem = new Queue<ExpGem>();
+    private Queue<ExpGem> _usedExpGemQueue = new Queue<ExpGem>();
 
-    private float _remainingExp = 0;
+    private float _remainingExp;
 
     private const float INIT_REMAINING_EXP = 0f;
     private const int EMPTY_USED_EXP_GEM = 0;
 
     public void EnqueueUsedExpGem(ExpGem expGem)
     {
-        _usedExpGem.Enqueue(expGem);
+        _usedExpGemQueue.Enqueue(expGem);
     }
 
     public void ReturnUsedExpGem()
     {
-        while (_usedExpGem.Count > EMPTY_USED_EXP_GEM)
+        while (_usedExpGemQueue.Count > EMPTY_USED_EXP_GEM)
         {
-            var expGem = _usedExpGem.Dequeue();
+            var expGem = _usedExpGemQueue.Dequeue();
             if (false == expGem.gameObject.activeSelf)
                 continue;
 
-            expGem.GiveEffect(_usedHero, false);
-            _remainingExp += Define.INCREASE_HERO_EXP_VALUE;
+            if (ExitIngameForce)
+                expGem.ReturnExpGem();
+            else
+            {
+                expGem.GiveEffect(_usedHero, false);
+                _remainingExp += Define.INCREASE_HERO_EXP_VALUE;
+            }
         }
     }
     #endregion

@@ -54,9 +54,14 @@ public class Monster : MonoBehaviour
 
             _dieHandler?.Invoke();
             #region TEST
-            Manager.Instance.Object.ReturnMonster(Define.RESOURCE_MONSTER_NORMAL_BAT, gameObject);
+            ReturnMonster();
             #endregion
         });
+    }
+
+    public void ReturnMonster()
+    {
+        Manager.Instance.Object.ReturnMonster(Define.RESOURCE_MONSTER_NORMAL_BAT, gameObject);
     }
 
     private bool _IsLocatedTargetRightSide(float value)

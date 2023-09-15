@@ -53,8 +53,7 @@ public class UI_ClearWave : UI_Popup
     #region Event
     private void _StartNextWave()
     {
-        var ingame = Manager.Instance.Ingame;
-        ingame.StartIngame();
+        Manager.Instance.Ingame.StartIngame();
         _ClosePopupUI();
     }
     #endregion

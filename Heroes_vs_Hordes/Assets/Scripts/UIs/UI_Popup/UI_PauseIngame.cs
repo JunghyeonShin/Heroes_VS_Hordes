@@ -47,6 +47,7 @@ public class UI_PauseIngame : UI_Popup
     private void _GiveUpIngame()
     {
         var manager = Manager.Instance;
+        manager.Ingame.ExitIngameForce = true;
         manager.Ingame.ExitIngame();
     }
     #endregion

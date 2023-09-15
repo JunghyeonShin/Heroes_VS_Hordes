@@ -10,7 +10,6 @@ public class NormalBattleWave : Wave
 
     private const float ZERO_SECOND = 0f;
     private const float ONE_SECOND = 1f;
-    private const float DELAY_CLEAR_INGAME = 1.2f;
     private const float DELAY_GET_EXP = 1.2f;
     private const int ADJUST_WAVE_INDEX = 1;
 
@@ -18,6 +17,7 @@ public class NormalBattleWave : Wave
     {
         Manager.Instance.Ingame.ShowWavePanel($"¿þÀÌºê {Manager.Instance.Ingame.CurrentWaveIndex + ADJUST_WAVE_INDEX}");
         _totalProgressTime = Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].Time;
+        _totalProgressTime = 10;
         _progressTime = INIT_PROGRESS_TIME;
         Manager.Instance.Ingame.ChangeProgressWaveTime(_totalProgressTime);
         Manager.Instance.Ingame.ChangeMode(Define.INDEX_TIME_ATTACK_MODE);
@@ -65,6 +65,7 @@ public class NormalBattleWave : Wave
         {
             clearWaveUI.SetClearWaveText();
             clearWaveUI.UpdateWavePanel();
+            Manager.Instance.Ingame.ReturnUsedMonster();
         });
     }
 }

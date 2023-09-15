@@ -60,6 +60,8 @@ public class Define
     #endregion
 
     #region IngameManager
+    public const int INDEX_NORMAL_BATTLE_WAVE = 0;
+    public const int INDEX_GOLD_RUSH_WAVE = 1;
     public const int INDEX_TIME_ATTACK_MODE = 0;
     public const int INDEX_ANNIHILATION_MODE = 1;
     public const int INIT_HERO_LEVEL_UP_COUNT = 0;

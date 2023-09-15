@@ -10,6 +10,7 @@ public abstract class Wave : MonoBehaviour
     public bool ProgressWave { get; set; }
 
     protected const float INIT_PROGRESS_TIME = 0f;
+    protected const float DELAY_CLEAR_INGAME = 1.2f;
 
     private void Update()
     {

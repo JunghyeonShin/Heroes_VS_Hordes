@@ -16,8 +16,11 @@ public class UI_IngameScene : UI_Scene
 
     private enum EGameObjects
     {
+        ExpPanel,
+        ChapterCheckPanel,
         TimeCheckPanel,
         MonsterCheckPanel,
+        GoldPanel,
         WavePanel,
         AnnihilationModePanel,
         FinishWavePanel
@@ -36,8 +39,11 @@ public class UI_IngameScene : UI_Scene
         WaveText
     }
 
+    private GameObject _expPanel;
+    private GameObject _chapterCheckPanel;
     private GameObject _timeCheckPanel;
     private GameObject _monsterCheckPanel;
+    private GameObject _goldPanel;
 
     private Animator _wavePanelAnimator;
     private Animator _annihilationModePanelAnimator;
@@ -63,8 +69,11 @@ public class UI_IngameScene : UI_Scene
         _BindSlider(typeof(ESliders));
         _BindText(typeof(ETexts));
 
+        _expPanel = _GetGameObject((int)EGameObjects.ExpPanel);
+        _chapterCheckPanel = _GetGameObject((int)EGameObjects.ChapterCheckPanel);
         _timeCheckPanel = _GetGameObject((int)EGameObjects.TimeCheckPanel);
         _monsterCheckPanel = _GetGameObject((int)EGameObjects.MonsterCheckPanel);
+        _goldPanel = _GetGameObject((int)EGameObjects.GoldPanel);
 
         _wavePanelAnimator = _GetGameObject((int)EGameObjects.WavePanel).GetComponent<Animator>();
         _annihilationModePanelAnimator = _GetGameObject((int)EGameObjects.AnnihilationModePanel).GetComponent<Animator>();
@@ -111,6 +120,20 @@ public class UI_IngameScene : UI_Scene
 
     private void _SetWaveIndex(string wavePanelText)
     {
+        var waveIndex = Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[Manager.Instance.Ingame.CurrentWaveIndex];
+        if (Define.INDEX_NORMAL_BATTLE_WAVE == waveIndex)
+        {
+            Utils.SetActive(_expPanel, true);
+            Utils.SetActive(_chapterCheckPanel, true);
+            Utils.SetActive(_goldPanel, false);
+        }
+        else if (Define.INDEX_GOLD_RUSH_WAVE == waveIndex)
+        {
+            Utils.SetActive(_expPanel, false);
+            Utils.SetActive(_chapterCheckPanel, false);
+            Utils.SetActive(_goldPanel, true);
+        }
+
         _waveText.text = wavePanelText;
         _ShowWavePanel().Forget();
     }
