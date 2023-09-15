@@ -46,22 +46,29 @@ public class Monster : MonoBehaviour
 
     public void OnDamaged(float damage)
     {
-        Manager.Instance.Object.GetDropItem(Define.RESOURCE_EXP_GEM, (expGemGO) =>
-        {
-            var expGem = Utils.GetOrAddComponent<ExpGem>(expGemGO);
-            expGem.InitTransform(transform.position);
-            Utils.SetActive(expGemGO, true);
-
-            _dieHandler?.Invoke();
-            #region TEST
-            ReturnMonster();
-            #endregion
-        });
+        var waveIndex = Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[Manager.Instance.Ingame.CurrentWaveIndex];
+        if (Define.INDEX_GOLD_RUSH_WAVE == waveIndex)
+            ShowDropItem<Gold>(Define.RESOURCE_GOLD);
+        else
+            ShowDropItem<ExpGem>(Define.RESOURCE_EXP_GEM);
     }
 
     public void ReturnMonster()
     {
         Manager.Instance.Object.ReturnMonster(Define.RESOURCE_MONSTER_NORMAL_BAT, gameObject);
+    }
+
+    private void ShowDropItem<T>(string dropItemKey) where T : DropItem
+    {
+        Manager.Instance.Object.GetDropItem(dropItemKey, (dropItemGO) =>
+        {
+            var dropItem = Utils.GetOrAddComponent<T>(dropItemGO);
+            dropItem.InitTransform(transform.position);
+            Utils.SetActive(dropItemGO, true);
+
+            _dieHandler?.Invoke();
+            ReturnMonster();
+        });
     }
 
     private bool _IsLocatedTargetRightSide(float value)

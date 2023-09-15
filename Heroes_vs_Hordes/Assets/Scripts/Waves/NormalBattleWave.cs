@@ -10,14 +10,12 @@ public class NormalBattleWave : Wave
 
     private const float ZERO_SECOND = 0f;
     private const float ONE_SECOND = 1f;
-    private const float DELAY_GET_EXP = 1.2f;
     private const int ADJUST_WAVE_INDEX = 1;
 
     public override void StartWave()
     {
         Manager.Instance.Ingame.ShowWavePanel($"¿þÀÌºê {Manager.Instance.Ingame.CurrentWaveIndex + ADJUST_WAVE_INDEX}");
         _totalProgressTime = Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].Time;
-        _totalProgressTime = 10;
         _progressTime = INIT_PROGRESS_TIME;
         Manager.Instance.Ingame.ChangeProgressWaveTime(_totalProgressTime);
         Manager.Instance.Ingame.ChangeMode(Define.INDEX_TIME_ATTACK_MODE);
@@ -54,7 +52,7 @@ public class NormalBattleWave : Wave
         await UniTask.Delay(TimeSpan.FromSeconds(DELAY_CLEAR_INGAME));
 
         Manager.Instance.Ingame.ReturnUsedExpGem();
-        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_GET_EXP));
+        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_GET_DROP_ITEM));
 
         Manager.Instance.Ingame.GetExpAtOnce();
         while (Manager.Instance.Ingame.HeroLevelUpCount > Define.INIT_HERO_LEVEL_UP_COUNT)

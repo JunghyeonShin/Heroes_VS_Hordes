@@ -47,6 +47,9 @@ public class IngameManager : MonoBehaviour
         _remainingMonsterCount = INIT_REMAINIG_MONSTER_COUNT;
         _remainingExp = INIT_REMAINING_EXP;
 
+        AcquiredGold = INIT_REMAINING_GOLD;
+        _remainingGold = INIT_REMAINING_GOLD;
+
         // UI_PauseIngame의 웨이브 진행도 초기 세팅
         var pauseIngameUI = Manager.Instance.UI.FindUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME);
         pauseIngameUI.InitWavePanel();
@@ -64,8 +67,8 @@ public class IngameManager : MonoBehaviour
             Manager.Instance.Object.GetHero(Define.RESOURCE_HERO_ARCANE_MAGE, (heroGO) =>
             {
                 var hero = heroGO.GetComponent<Hero>();
-                _usedHero = hero;
-                _usedHero.SetHeroAbilities();
+                UsedHero = hero;
+                UsedHero.SetHeroAbilities();
 
                 var heroController = Utils.GetOrAddComponent<HeroController>(heroGO);
 
@@ -147,6 +150,7 @@ public class IngameManager : MonoBehaviour
         CurrentWave.ExitWave();
         ReturnUsedMonster();
         ReturnUsedExpGem();
+        ReturnUsedGold();
         Manager.Instance.CameraController.SetFollower();
         Utils.SetActive(Manager.Instance.Object.MonsterSpawner, false);
         Utils.SetActive(Manager.Instance.Object.RepositionArea, false);
@@ -187,8 +191,8 @@ public class IngameManager : MonoBehaviour
     public event Action ChangeHeroLevelUpPostProcessingHandler;
     public event Action EnhanceHeroAbilityHandler;
 
+    public Hero UsedHero { get; private set; }
     public int HeroLevelUpCount { get; set; }
-    private Hero _usedHero;
 
     private const int INIT_HERO_LEVEL = 1;
 
@@ -210,12 +214,6 @@ public class IngameManager : MonoBehaviour
             EnhanceHeroAbilityHandler?.Invoke();
         else
             ChangeHeroLevelUpPostProcessingHandler?.Invoke();
-    }
-
-    public void GetExpAtOnce()
-    {
-        _usedHero.GetExp(_remainingExp);
-        _remainingExp = INIT_REMAINING_EXP;
     }
     #endregion
 
@@ -305,13 +303,72 @@ public class IngameManager : MonoBehaviour
                 continue;
 
             if (ExitIngameForce)
-                expGem.ReturnExpGem();
+                expGem.ReturnDropItem();
             else
             {
-                expGem.GiveEffect(_usedHero, false);
+                expGem.GiveEffect(UsedHero, false);
                 _remainingExp += Define.INCREASE_HERO_EXP_VALUE;
             }
         }
+    }
+
+    public void GetExpAtOnce()
+    {
+        UsedHero.GetExp(_remainingExp);
+        _remainingExp = INIT_REMAINING_EXP;
+    }
+    #endregion
+
+    #region Gold
+    public event Action ChangeGoldHandler;
+
+    private Queue<Gold> _usedGoldQueue = new Queue<Gold>();
+
+    private float _remainingGold;
+
+    public float AcquiredGold { get; private set; }
+
+    private const int INIT_REMAINING_GOLD = 0;
+
+    public void EnqueueUsedGold(Gold gold)
+    {
+        _usedGoldQueue.Enqueue(gold);
+    }
+
+    public void ReturnUsedGold()
+    {
+        while (_usedGoldQueue.Count > INIT_REMAINING_GOLD)
+        {
+            var gold = _usedGoldQueue.Dequeue();
+            if (false == gold.gameObject.activeSelf)
+                continue;
+
+            if (ExitIngameForce)
+                gold.ReturnDropItem();
+            else
+            {
+                gold.GiveEffect(UsedHero, false);
+                _remainingGold += Define.INCREASE_GOLD_VALUE;
+            }
+        }
+    }
+
+    public void ChangeGold()
+    {
+        ChangeGoldHandler?.Invoke();
+    }
+
+    public void GetGold(float gold)
+    {
+        AcquiredGold += gold;
+        ChangeGold();
+    }
+
+    public void GetGoldAtOnce()
+    {
+        AcquiredGold += _remainingGold;
+        _remainingGold = INIT_REMAINING_GOLD;
+        ChangeGold();
     }
     #endregion
 }

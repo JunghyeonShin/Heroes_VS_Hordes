@@ -11,6 +11,7 @@ public abstract class Wave : MonoBehaviour
 
     protected const float INIT_PROGRESS_TIME = 0f;
     protected const float DELAY_CLEAR_INGAME = 1.2f;
+    protected const float DELAY_GET_DROP_ITEM = 1.2f;
 
     private void Update()
     {

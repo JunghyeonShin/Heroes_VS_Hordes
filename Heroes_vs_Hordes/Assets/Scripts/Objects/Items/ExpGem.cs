@@ -17,15 +17,15 @@ public class ExpGem : DropItem
         base.GiveEffect(targetHero, getEffect);
     }
 
+    public override void ReturnDropItem()
+    {
+        Manager.Instance.Object.ReturnDropItem(Define.RESOURCE_EXP_GEM, gameObject);
+    }
+
     protected override void _DeliverEffect(Hero targetHero, bool getEffect)
     {
         if (getEffect)
             targetHero.GetExp(Define.INCREASE_HERO_EXP_VALUE);
-        ReturnExpGem();
-    }
-
-    public void ReturnExpGem()
-    {
-        Manager.Instance.Object.ReturnDropItem(Define.RESOURCE_EXP_GEM, gameObject);
+        ReturnDropItem();
     }
 }

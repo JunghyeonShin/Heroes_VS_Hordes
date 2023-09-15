@@ -12,7 +12,7 @@ public abstract class DropItem : MonoBehaviour
     private const float ONE_SECOND = 1f;
     private const float DIVIDE_HALF_VALUE = 0.5f;
     private const float PROGRESS_TIME = 0.02f;
-    private const float EXP_DISTANCE = 0.3f;
+    private const float GET_DROP_ITME_DISTANCE = 0.3f;
     private const float LINEAR_CURVE_DISTANCE = 1f;
 
     private void Awake()
@@ -42,6 +42,8 @@ public abstract class DropItem : MonoBehaviour
         _GiveEffect(targetHero, getEffect).Forget();
     }
 
+    public abstract void ReturnDropItem();
+
     protected abstract void _DeliverEffect(Hero targetHero, bool getEffect);
 
     protected async UniTaskVoid _GiveEffect(Hero targetHero, bool getEffect)
@@ -49,7 +51,12 @@ public abstract class DropItem : MonoBehaviour
         var tempPos = Vector3.zero;
         var startPos = transform.position;
         var distance = Vector3.Distance(startPos, targetHero.transform.position);
-        if (distance <= LINEAR_CURVE_DISTANCE)
+        if (distance <= GET_DROP_ITME_DISTANCE)
+        {
+            _DeliverEffect(targetHero, getEffect);
+            return;
+        }
+        else if (GET_DROP_ITME_DISTANCE < distance && distance <= LINEAR_CURVE_DISTANCE)
             tempPos = (startPos + targetHero.transform.position) * DIVIDE_HALF_VALUE;
         else
             tempPos = startPos + Vector3.Slerp(transform.up, (targetHero.transform.position - startPos).normalized, 0.3f);
@@ -62,9 +69,9 @@ public abstract class DropItem : MonoBehaviour
                 time = ONE_SECOND;
 
             distance = Vector3.Distance(transform.position, targetHero.transform.position);
-            if (distance <= EXP_DISTANCE)
+            if (distance <= GET_DROP_ITME_DISTANCE)
                 break;
-            else if (EXP_DISTANCE < distance && distance <= LINEAR_CURVE_DISTANCE)
+            else if (GET_DROP_ITME_DISTANCE < distance && distance <= LINEAR_CURVE_DISTANCE)
                 transform.position = BezierCurve.LinearCurve(startPos, targetHero.transform.position, time);
             else
                 transform.position = BezierCurve.QuadraticCurve(startPos, tempPos, targetHero.transform.position, time);

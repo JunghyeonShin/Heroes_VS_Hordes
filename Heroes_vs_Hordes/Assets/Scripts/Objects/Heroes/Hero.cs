@@ -24,6 +24,7 @@ public abstract class Hero : MonoBehaviour
     private int _level;
     private bool _levelUp;
 
+    public bool IsDead { get { return _health <= HP_ZERO; } }
     public float MoveSpeed { get; private set; }
     public float ProjectileSpeed { get; private set; }
 
@@ -33,6 +34,7 @@ public abstract class Hero : MonoBehaviour
     private const float MIN_CRITICAL_VALUE = 0f;
     private const float MAX_CRITICAL_VALUE = 1f;
     private const float INIT_EXP = 0;
+    private const float HP_ZERO = 0f;
     private const int INIT_LEVEL = 1;
     private const int ADJUST_LEVEL = 1;
     private const int INCREASE_LEVEL_VALUE = 1;
@@ -91,6 +93,14 @@ public abstract class Hero : MonoBehaviour
 
         _GetExp();
     }
+
+    #region TEST
+    public void SetDead()
+    {
+        _health = HP_ZERO;
+        Manager.Instance.Ingame.ClearIngame();
+    }
+    #endregion
 
     protected bool _IsCritical()
     {

@@ -36,7 +36,8 @@ public class UI_IngameScene : UI_Scene
         LevelText,
         TimeText,
         MonsterText,
-        WaveText
+        GoldText,
+        WaveText,
     }
 
     private GameObject _expPanel;
@@ -52,6 +53,7 @@ public class UI_IngameScene : UI_Scene
     private TextMeshProUGUI _levelText;
     private TextMeshProUGUI _timeText;
     private TextMeshProUGUI _monsterText;
+    private TextMeshProUGUI _goldText;
     private TextMeshProUGUI _waveText;
 
     private const float DELAY_SHOWING_WAVE_PANEL = 0.2f;
@@ -86,6 +88,7 @@ public class UI_IngameScene : UI_Scene
         _levelText = _GetText((int)ETexts.LevelText);
         _timeText = _GetText((int)ETexts.TimeText);
         _monsterText = _GetText((int)ETexts.MonsterText);
+        _goldText = _GetText((int)ETexts.GoldText);
         _waveText = _GetText((int)ETexts.WaveText);
 
         var ingame = Manager.Instance.Ingame;
@@ -105,6 +108,9 @@ public class UI_IngameScene : UI_Scene
 
         ingame.RemainingMonsterHandler -= _SetMonsterText;
         ingame.RemainingMonsterHandler += _SetMonsterText;
+
+        ingame.ChangeGoldHandler -= _SetGoldText;
+        ingame.ChangeGoldHandler += _SetGoldText;
     }
 
     #region Event
@@ -207,5 +213,13 @@ public class UI_IngameScene : UI_Scene
         await UniTask.Delay(TimeSpan.FromSeconds(DELAY_FINISHED_WAVE_PANEL));
 
         Manager.Instance.Ingame.ClearIngame();
+    }
+
+    private void _SetGoldText()
+    {
+        if (false == _goldPanel.activeSelf)
+            return;
+
+        _goldText.text = Manager.Instance.Ingame.AcquiredGold.ToString();
     }
 }
