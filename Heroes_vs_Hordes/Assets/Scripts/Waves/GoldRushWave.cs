@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoinRushWave : Wave
+public class GoldRushWave : Wave
 {
     public override void StartWave()
     {

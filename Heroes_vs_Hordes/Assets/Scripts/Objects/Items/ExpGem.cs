@@ -21,6 +21,6 @@ public class ExpGem : DropItem
     {
         if (getEffect)
             targetHero.GetExp(Define.INCREASE_HERO_EXP_VALUE);
-        Manager.Instance.Object.ReturnExpGem(gameObject);
+        Manager.Instance.Object.ReturnDropItem(Define.RESOURCE_EXP_GEM, gameObject);
     }
 }

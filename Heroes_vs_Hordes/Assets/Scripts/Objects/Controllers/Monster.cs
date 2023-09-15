@@ -46,13 +46,17 @@ public class Monster : MonoBehaviour
 
     public void OnDamaged(float damage)
     {
-        var expGemGO = Manager.Instance.Object.GetExpGem();
-        var expGem = Utils.GetOrAddComponent<ExpGem>(expGemGO);
-        expGem.InitTransform(transform.position);
-        Utils.SetActive(expGemGO, true);
+        Manager.Instance.Object.GetDropItem(Define.RESOURCE_EXP_GEM, (expGemGO) =>
+        {
+            var expGem = Utils.GetOrAddComponent<ExpGem>(expGemGO);
+            expGem.InitTransform(transform.position);
+            Utils.SetActive(expGemGO, true);
 
-        _dieHandler?.Invoke();
-        Utils.SetActive(gameObject, false);
+            _dieHandler?.Invoke();
+            #region TEST
+            Manager.Instance.Object.ReturnMonster(Define.RESOURCE_MONSTER_NORMAL_BAT, gameObject);
+            #endregion
+        });
     }
 
     private bool _IsLocatedTargetRightSide(float value)

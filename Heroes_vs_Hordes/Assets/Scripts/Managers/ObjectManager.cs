@@ -6,15 +6,14 @@ using UnityEngine;
 
 public class ObjectManager
 {
-    private Dictionary<string, GameObject> _mapDic = new Dictionary<string, GameObject>();
-    private Dictionary<string, GameObject> _heroDic = new Dictionary<string, GameObject>();
-    private Dictionary<string, ObjectPool> _monsterPoolDic = new Dictionary<string, ObjectPool>();
-    private ObjectPool _damageTextPool = new ObjectPool();
-    private ObjectPool _expGemPool = new ObjectPool();
-
+    private GameObject _rootObject;
     private bool[] _loadCompletes;
 
-    private GameObject _rootObject;
+    private Dictionary<string, GameObject> _mapDic = new Dictionary<string, GameObject>();
+    private Dictionary<string, GameObject> _heroDic = new Dictionary<string, GameObject>();
+    private Dictionary<string, ObjectPool> _dropItemDic = new Dictionary<string, ObjectPool>();
+    private Dictionary<string, ObjectPool> _monsterPoolDic = new Dictionary<string, ObjectPool>();
+    private ObjectPool _damageTextPool = new ObjectPool();
 
     public GameObject RepositionArea { get; private set; }
     public GameObject MonsterSpawner { get; private set; }
@@ -22,14 +21,15 @@ public class ObjectManager
 
     private const int DEFAULT_INSTANTIATE_MONSTER_COUNT = 50;
     private const int DEFAULT_INSTANTIATE_DAMAGE_TEXT_COUNT = 50;
-    private const int DEFAULT_INSTANTIATE_EXP_GEM_COUNT = 50;
-    private const int INDEX_TOTAL_VALUE = 6;
+    private const int DEFAULT_INSTANTIATE_DROP_ITEM_COUNT = 50;
+    private const int INDEX_TOTAL_VALUE = 7;
     private const int INDEX_REPOSITION_AREA = 0;
     private const int INDEX_MONSTER_SPAWNER = 1;
     private const int INDEX_LEVEL_UP_TEXT = 2;
     private const int INDEX_DAMAGE_TEXT = 3;
     private const int INDEX_EXP_GEM = 4;
-    private const int INDEX_MONSTER_NORMAL_BAT = 5;
+    private const int INDEX_GOLD = 5;
+    private const int INDEX_MONSTER_NORMAL_BAT = 6;
     private const string NAME_ROOT_OBJECT = "[ROOT_OBJECT]";
 
     public void Init()
@@ -64,16 +64,8 @@ public class ObjectManager
             _loadCompletes[INDEX_DAMAGE_TEXT] = true;
         });
 
-        Manager.Instance.Resource.LoadAsync<GameObject>(Define.RESOURCE_EXP_GEM, (damageText) =>
-        {
-            _expGemPool.InitPool(damageText, _rootObject, DEFAULT_INSTANTIATE_EXP_GEM_COUNT);
-            _loadCompletes[INDEX_EXP_GEM] = true;
-        });
-
-        _InitMonster(Define.RESOURCE_MONSTER_NORMAL_BAT, DEFAULT_INSTANTIATE_MONSTER_COUNT, (monster) =>
-        {
-            _loadCompletes[INDEX_MONSTER_NORMAL_BAT] = true;
-        });
+        _InitDropItem();
+        _InitMonster();
     }
 
     public bool LoadComplete()
@@ -153,6 +145,14 @@ public class ObjectManager
         _monsterPoolDic[key].ReturnObject(monster);
     }
 
+    private void _InitMonster()
+    {
+        _InitMonster(Define.RESOURCE_MONSTER_NORMAL_BAT, DEFAULT_INSTANTIATE_MONSTER_COUNT, (monster) =>
+        {
+            _loadCompletes[INDEX_MONSTER_NORMAL_BAT] = true;
+        });
+    }
+
     private void _InitMonster(string key, int count, Action<GameObject> callback = null)
     {
         var objectPool = new ObjectPool();
@@ -178,15 +178,48 @@ public class ObjectManager
     }
     #endregion
 
-    #region ExpGem
-    public GameObject GetExpGem()
+    #region DropItem
+    public void GetDropItem(string key, Action<GameObject> callback)
     {
-        return _expGemPool.GetObject();
+        // 캐시 확인
+        if (_dropItemDic.TryGetValue(key, out var dropItemPool))
+        {
+            callback?.Invoke(dropItemPool.GetObject());
+            return;
+        }
+
+        // 드랍 아이템 오브젝트 생성 후 캐싱
+        _InitDropItem(key, DEFAULT_INSTANTIATE_DROP_ITEM_COUNT, callback);
     }
 
-    public void ReturnExpGem(GameObject expGem)
+    public void ReturnDropItem(string key, GameObject monster)
     {
-        _expGemPool.ReturnObject(expGem);
+        _dropItemDic[key].ReturnObject(monster);
+    }
+
+    private void _InitDropItem()
+    {
+        _InitDropItem(Define.RESOURCE_EXP_GEM, DEFAULT_INSTANTIATE_DROP_ITEM_COUNT, (expGem) =>
+        {
+            _loadCompletes[INDEX_EXP_GEM] = true;
+        });
+
+        _InitDropItem(Define.RESOURCE_GOLD, DEFAULT_INSTANTIATE_DROP_ITEM_COUNT, (expGem) =>
+        {
+            _loadCompletes[INDEX_GOLD] = true;
+        });
+    }
+
+    private void _InitDropItem(string key, int count, Action<GameObject> callback = null)
+    {
+        var objectPool = new ObjectPool();
+
+        Manager.Instance.Resource.LoadAsync<GameObject>(key, (dropItem) =>
+        {
+            objectPool.InitPool(dropItem, _rootObject, count);
+            _dropItemDic.Add(key, objectPool);
+            callback?.Invoke(objectPool.GetObject());
+        });
     }
     #endregion
 }

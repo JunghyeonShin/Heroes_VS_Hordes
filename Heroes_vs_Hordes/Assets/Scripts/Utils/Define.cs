@@ -20,6 +20,7 @@ public class Define
     public const string RESROUCE_LEVEL_UP_TEXT = "LevelUpText";
     // Item
     public const string RESOURCE_EXP_GEM = "ExpGem";
+    public const string RESOURCE_GOLD = "Gold";
     // UI_Scene
     public const string RESOURCE_UI_INGAME_SCENE = "UI_IngameScene";
     public const string RESOURCE_UI_MAIN_SCENE = "UI_MainScene";

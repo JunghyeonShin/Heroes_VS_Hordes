@@ -168,8 +168,8 @@ public class IngameManager : MonoBehaviour
         wave.transform.SetParent(transform);
         var normalBattleWave = Utils.GetOrAddComponent<NormalBattleWave>(wave);
         _waveList.Add(normalBattleWave);
-        var coinRushWave = Utils.GetOrAddComponent<CoinRushWave>(wave);
-        _waveList.Add(coinRushWave);
+        var goldRushWave = Utils.GetOrAddComponent<GoldRushWave>(wave);
+        _waveList.Add(goldRushWave);
     }
     #endregion
 
