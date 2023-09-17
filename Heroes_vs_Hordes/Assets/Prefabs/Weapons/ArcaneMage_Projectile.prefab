@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 5202694375102706343}
   - component: {fileID: 2639998701044172577}
   - component: {fileID: 6535952885080016024}
+  - component: {fileID: 6831542400030286647}
   m_Layer: 0
   m_Name: ArcaneMage_Projectile
   m_TagString: Weapon
@@ -231,3 +232,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &6831542400030286647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8955924499114224453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9ba4ee7d2eafc14e92e33db114418ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

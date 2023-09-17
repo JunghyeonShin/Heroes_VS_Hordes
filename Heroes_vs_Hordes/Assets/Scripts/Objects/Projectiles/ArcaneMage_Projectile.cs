@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class ArcaneMage_Projectile : MonoBehaviour
 {
     private Rigidbody2D _rigid;
     private Vector2 _moveVec;
@@ -51,7 +51,6 @@ public class Projectile : MonoBehaviour
             monster.OnDamaged(_attack);
 
             _returnObjectHandler?.Invoke(gameObject);
-            Utils.SetActive(gameObject, false);
         }
     }
 

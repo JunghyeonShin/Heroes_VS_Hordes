@@ -1,25 +1,28 @@
 namespace ProtoType
 {
+    using Cysharp.Threading.Tasks;
+    using System;
     using System.Collections;
     using System.Collections.Generic;
+    using Unity.VisualScripting;
     using UnityEngine;
 
     public class TestScene : MonoBehaviour
     {
-        [SerializeField] private TestRepositionBackground[] _testRepositionBackgrounds;
-        [SerializeField] private TestHeroController _testHeroController;
+        [SerializeField] TestHeroController _testHeroController;
+        [SerializeField] GameObject _rootTestMonster;
+        [SerializeField] GameObject _testMonster;
 
+        private Action _completeLoadingHandler;
         private ObjectPool _testMonsterPool = new ObjectPool();
-        private Queue<GameObject> _useTestMonsterQueue = new Queue<GameObject>();
 
+        private const float DELAY_LOADING_TIME = 3f;
+        private const float MIN_RANDOM_POS_X = 4f;
         private const float MAX_RANDOM_POS_X = 12.5f;
+        private const float MIN_RANDOM_POS_Y = 5f;
         private const float MAX_RANDOM_POS_Y = 20f;
-        private const int CREATE_MONSTER_COUNT = 50;
-        private const int EMPTY_VALUE = 0;
-        private const int MIN_CREATE_MONSTER_COUNT = 2;
-        private const int MAX_CREATE_MONSTER_COUNT = 5;
-        private const string NAME_ROOT_POOL = "[ROOT_POOL]";
-        private const string RESOURCE_TEST_MONSTER = "Normal_Bat";
+        private const int CREATE_TEST_MONSTER_COUNT = 50;
+        private const int SPAWN_TEST_MONSTER_COUNT = 5;
         private const string RESOURCE_UI_TEST_SCENE = "UI_TestScene";
 
         private void Awake()
@@ -29,60 +32,62 @@ namespace ProtoType
             // Test UI 积己
             Manager.Instance.UI.ShowSceneUI<UI_TestScene>(RESOURCE_UI_TEST_SCENE, (testSceneUI) =>
             {
-                testSceneUI.OnClickSpawnButton -= _SpawnMonster;
-                testSceneUI.OnClickSpawnButton += _SpawnMonster;
-                testSceneUI.OnClickReturnButton -= _ReturnAllMonster;
-                testSceneUI.OnClickReturnButton += _ReturnAllMonster;
+                testSceneUI.SpawnMonsterHandler -= _SpawnMonster;
+                testSceneUI.SpawnMonsterHandler += _SpawnMonster;
+                testSceneUI.NormalAttackHandler -= _testHeroController.StartNormalAttack;
+                testSceneUI.NormalAttackHandler += _testHeroController.StartNormalAttack;
             });
 
-            // Reposition Background 窍扁 困茄 技泼
-            for (int ii = 0; ii < _testRepositionBackgrounds.Length; ++ii)
-                _testRepositionBackgrounds[ii].HeroController = _testHeroController;
-
-            // Test Monster 积己
-            var poolGO = new GameObject(NAME_ROOT_POOL);
-
-            Manager.Instance.Resource.LoadAsync<GameObject>(RESOURCE_TEST_MONSTER, (normalBat) =>
+            // Loading UI 积己
+            Manager.Instance.UI.ShowPopupUI<UI_Loading>(Define.RESOURCE_UI_LOADING, (loadingUI) =>
             {
-                _testMonsterPool.InitPool(normalBat, poolGO, CREATE_MONSTER_COUNT);
+                _completeLoadingHandler -= loadingUI.CompleteLoading;
+                _completeLoadingHandler += loadingUI.CompleteLoading;
+                loadingUI.StartLoading();
+
+                _CheckLoadComplete().Forget();
             });
+
+            _testMonsterPool.InitPool(_testMonster, _rootTestMonster, CREATE_TEST_MONSTER_COUNT);
         }
 
         private void _SpawnMonster()
         {
-            var randomCreateCount = Random.Range(MIN_CREATE_MONSTER_COUNT, MAX_CREATE_MONSTER_COUNT);
-
-            for (int ii = 0; ii < randomCreateCount; ++ii)
+            for (int ii = 0; ii < SPAWN_TEST_MONSTER_COUNT; ++ii)
             {
-                var randomPosX = Random.Range(-MAX_RANDOM_POS_X, MAX_RANDOM_POS_X);
-                var randomPosY = Random.Range(-MAX_RANDOM_POS_Y, MAX_RANDOM_POS_Y);
+                var randomPosX = _GetRandomPos(MIN_RANDOM_POS_X, MAX_RANDOM_POS_X);
+                var randomPosY = _GetRandomPos(MIN_RANDOM_POS_Y, MAX_RANDOM_POS_Y);
 
-                var monster = _testMonsterPool.GetObject();
-                monster.transform.localPosition = new Vector3(randomPosX, randomPosY, 0f);
-                _useTestMonsterQueue.Enqueue(monster);
-
-                var monsterController = Utils.GetOrAddComponent<TestMonsterController>(monster);
-                monsterController.Target = _testHeroController.transform;
-                monsterController.ReturnMonsterHandler -= _ReturnMonster;
-                monsterController.ReturnMonsterHandler += _ReturnMonster;
-
-                Utils.SetActive(monster, true);
+                var testMonsterGO = _testMonsterPool.GetObject();
+                testMonsterGO.transform.position = new Vector3(randomPosX, randomPosY, 0f);
+                var testMonster = Utils.GetOrAddComponent<TestMonster>(testMonsterGO);
+                testMonster.OnDieHandler -= _ReturnMonster;
+                testMonster.OnDieHandler += _ReturnMonster;
+                Utils.SetActive(testMonsterGO, true);
+                ++ii;
             }
         }
 
-        private void _ReturnAllMonster()
+        private void _ReturnMonster(GameObject testMonster)
         {
-            while (_useTestMonsterQueue.Count > EMPTY_VALUE)
-            {
-                var monster = _useTestMonsterQueue.Dequeue();
-                if (monster.activeSelf)
-                    _ReturnMonster(monster);
-            }
+            _testMonsterPool.ReturnObject(testMonster);
         }
 
-        private void _ReturnMonster(GameObject monster)
+        private float _GetRandomPos(float minRange, float maxRange)
         {
-            _testMonsterPool.ReturnObject(monster);
+            var random = UnityEngine.Random.Range(-maxRange, maxRange);
+            if (MathF.Abs(random) < minRange)
+                _GetRandomPos(maxRange, minRange);
+            return random;
+        }
+
+        private async UniTaskVoid _CheckLoadComplete()
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(DELAY_LOADING_TIME));
+            while (false == Manager.Instance.LoadComplete())
+                await UniTask.Yield();
+
+            _completeLoadingHandler?.Invoke();
         }
     }
 }
