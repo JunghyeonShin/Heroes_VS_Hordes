@@ -26,11 +26,10 @@ public abstract class Hero : MonoBehaviour
 
     public bool IsDead { get { return _health <= HP_ZERO; } }
     public float MoveSpeed { get; private set; }
-    public float ProjectileSpeed { get; private set; }
 
+    protected const float DEFAULT_ABILITY_VALUE = 1f;
     private const float DELAY_LEVEL_UP = 0.2f;
     private const float DELAY_ENHANCE_ABILITY = 1f;
-    private const float DEFAULT_ABILITY_VALUE = 1f;
     private const float MIN_CRITICAL_VALUE = 0f;
     private const float MAX_CRITICAL_VALUE = 1f;
     private const float INIT_EXP = 0;
@@ -67,11 +66,7 @@ public abstract class Hero : MonoBehaviour
         _DetectMonster();
     }
 
-    protected abstract void _DetectMonster();
-
-    protected abstract void _AttackMonster(Vector3 targetPos);
-
-    public void SetHeroAbilities()
+    public virtual void SetHeroAbilities()
     {
         var heroCommonAbility = Manager.Instance.Data.HeroCommonAbility;
         var heroIndividualAbility = Manager.Instance.Data.HeroIndividualAbilityDic[Define.RESOURCE_HERO_ARCANE_MAGE];
@@ -82,8 +77,11 @@ public abstract class Hero : MonoBehaviour
         _attackCooldown = heroCommonAbility.AttackCooldown + heroIndividualAbility.AttackCooldown;
         _critical = heroCommonAbility.Critical + heroIndividualAbility.Critical;
         MoveSpeed = heroCommonAbility.MoveSpeed * (DEFAULT_ABILITY_VALUE + heroIndividualAbility.MoveSpeed);
-        ProjectileSpeed = heroCommonAbility.ProjectileSpeed * (DEFAULT_ABILITY_VALUE + heroIndividualAbility.ProjectileSpeed);
     }
+
+    protected abstract void _DetectMonster();
+
+    protected abstract void _AttackMonster();
 
     public void GetExp(float exp)
     {

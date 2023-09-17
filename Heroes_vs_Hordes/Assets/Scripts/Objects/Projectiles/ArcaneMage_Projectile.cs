@@ -9,15 +9,17 @@ public class ArcaneMage_Projectile : MonoBehaviour
     private Vector2 _moveVec;
 
     private Vector3 _targetPos;
-    private float _moveSpeed;
-    private float _attack;
     private bool _isCritical;
+    private float _attack;
+    private float _moveSpeed;
+    private float _penetraitCount;
     private Action<GameObject> _returnObjectHandler;
 
     private const float MIN_DAMAGE_TEXT_POSITION_X = -1f;
     private const float MAX_DAMAGE_TEXT_POSITION_X = 1f;
     private const float DAMAGE_TEXT_POSITION_Y = 1f;
     private const float TWO_MULTIPLES_VALUE = 2f;
+    private const float END_LIFE = 0f;
 
     private void Awake()
     {
@@ -50,20 +52,23 @@ public class ArcaneMage_Projectile : MonoBehaviour
             var monster = Utils.GetOrAddComponent<Monster>(collision.gameObject);
             monster.OnDamaged(_attack);
 
-            _returnObjectHandler?.Invoke(gameObject);
+            --_penetraitCount;
+            if (_penetraitCount <= END_LIFE)
+                _returnObjectHandler?.Invoke(gameObject);
         }
     }
 
-    public void Init(Vector3 initPos, Vector3 targetPos, float moveSpeed, bool isCritical, float attack, Action<GameObject> returnObjectCallback)
+    public void Init(Vector3 initPos, Vector3 targetPos, bool isCritical, float attack, float moveSpeed, float penetraitCount, Action<GameObject> returnObjectCallback)
     {
         transform.position = initPos;
         _targetPos = targetPos;
-        _moveSpeed = moveSpeed;
         _isCritical = isCritical;
         if (_isCritical)
             _attack = attack * TWO_MULTIPLES_VALUE;
         else
             _attack = attack;
+        _moveSpeed = moveSpeed;
+        _penetraitCount = penetraitCount;
 
         _returnObjectHandler -= returnObjectCallback;
         _returnObjectHandler += returnObjectCallback;

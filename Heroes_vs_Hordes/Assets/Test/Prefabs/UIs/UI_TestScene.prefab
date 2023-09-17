@@ -819,7 +819,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Weapon : '
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 34539a23fd0bab04fa9036274dfd3545, type: 2}
   m_sharedMaterial: {fileID: 1840181936687892793, guid: 34539a23fd0bab04fa9036274dfd3545, type: 2}

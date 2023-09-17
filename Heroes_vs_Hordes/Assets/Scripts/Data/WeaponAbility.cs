@@ -17,7 +17,7 @@ public class WeaponAbility
     public float Speed { get { return _speed; } }
     public float EffectRange { get { return _effectRange; } }
     public float EffectTime { get { return _effectTime; } }
-    public float ProhjectileCount { get { return _projectileCount; } }
+    public float ProjectileCount { get { return _projectileCount; } }
     public float PenetrateCount { get { return _penetrateCount; } }
 
     private const int INDEX_WEAPON_ABILITY_ATTACK = 1;

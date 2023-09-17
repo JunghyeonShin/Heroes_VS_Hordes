@@ -17,12 +17,11 @@ namespace ProtoType
         private ObjectPool _testMonsterPool = new ObjectPool();
 
         private const float DELAY_LOADING_TIME = 3f;
-        private const float MIN_RANDOM_POS_X = 4f;
         private const float MAX_RANDOM_POS_X = 12.5f;
-        private const float MIN_RANDOM_POS_Y = 5f;
         private const float MAX_RANDOM_POS_Y = 20f;
+        private const float MIN_DISTANCE_RANGE = 3f;
         private const int CREATE_TEST_MONSTER_COUNT = 50;
-        private const int SPAWN_TEST_MONSTER_COUNT = 5;
+        private const int SPAWN_TEST_MONSTER_COUNT = 20;
         private const string RESOURCE_UI_TEST_SCENE = "UI_TestScene";
 
         private void Awake()
@@ -36,6 +35,10 @@ namespace ProtoType
                 testSceneUI.SpawnMonsterHandler += _SpawnMonster;
                 testSceneUI.NormalAttackHandler -= _testHeroController.StartNormalAttack;
                 testSceneUI.NormalAttackHandler += _testHeroController.StartNormalAttack;
+                testSceneUI.LevelUpHandler -= _testHeroController.SetLevelUp;
+                testSceneUI.LevelUpHandler += _testHeroController.SetLevelUp;
+                testSceneUI.LevelDownHandler -= _testHeroController.SetLevelDown;
+                testSceneUI.LevelDownHandler += _testHeroController.SetLevelDown;
             });
 
             // Loading UI »ý¼º
@@ -48,6 +51,9 @@ namespace ProtoType
                 _CheckLoadComplete().Forget();
             });
 
+            _completeLoadingHandler -= _testHeroController.SetAbility;
+            _completeLoadingHandler += _testHeroController.SetAbility;
+
             _testMonsterPool.InitPool(_testMonster, _rootTestMonster, CREATE_TEST_MONSTER_COUNT);
         }
 
@@ -55,11 +61,8 @@ namespace ProtoType
         {
             for (int ii = 0; ii < SPAWN_TEST_MONSTER_COUNT; ++ii)
             {
-                var randomPosX = _GetRandomPos(MIN_RANDOM_POS_X, MAX_RANDOM_POS_X);
-                var randomPosY = _GetRandomPos(MIN_RANDOM_POS_Y, MAX_RANDOM_POS_Y);
-
                 var testMonsterGO = _testMonsterPool.GetObject();
-                testMonsterGO.transform.position = new Vector3(randomPosX, randomPosY, 0f);
+                testMonsterGO.transform.position = _GetRandomPos();
                 var testMonster = Utils.GetOrAddComponent<TestMonster>(testMonsterGO);
                 testMonster.OnDieHandler -= _ReturnMonster;
                 testMonster.OnDieHandler += _ReturnMonster;
@@ -73,12 +76,15 @@ namespace ProtoType
             _testMonsterPool.ReturnObject(testMonster);
         }
 
-        private float _GetRandomPos(float minRange, float maxRange)
+        private Vector3 _GetRandomPos()
         {
-            var random = UnityEngine.Random.Range(-maxRange, maxRange);
-            if (MathF.Abs(random) < minRange)
-                _GetRandomPos(maxRange, minRange);
-            return random;
+            var randomPosX = UnityEngine.Random.Range(-MAX_RANDOM_POS_X, MAX_RANDOM_POS_X);
+            var randomPosY = UnityEngine.Random.Range(-MAX_RANDOM_POS_Y, MAX_RANDOM_POS_Y);
+            var randomPos = new Vector3(randomPosX, randomPosY, 0f);
+            var distance = Vector3.Distance(_testHeroController.transform.position, randomPos);
+            if (distance <= MIN_DISTANCE_RANGE)
+                return _GetRandomPos();
+            return randomPos;
         }
 
         private async UniTaskVoid _CheckLoadComplete()

@@ -51,6 +51,15 @@ namespace ProtoType
             _BindEvent(_GetButton((int)EButtons.LevelUp).gameObject, _LevelUp);
             _BindEvent(_GetButton((int)EButtons.LevelDown).gameObject, _LevelDown);
             _BindEvent(_GetButton((int)EButtons.NormalAttack).gameObject, _StartNormalAttack);
+
+            _weaponName = _GetText((int)ETexts.WeaponName);
+            _attack = _GetText((int)ETexts.Attack);
+            _attackCooldown = _GetText((int)ETexts.AttackCooldown);
+            _speed = _GetText((int)ETexts.Speed);
+            _effectRange = _GetText((int)ETexts.EffectRange);
+            _effectTime = _GetText((int)ETexts.EffectTime);
+            _projectileCount = _GetText((int)ETexts.ProjectileCount);
+            _penetraitCount = _GetText((int)ETexts.PenetraitCount);
         }
 
         #region Event
@@ -77,7 +86,7 @@ namespace ProtoType
 
         public void SetWeaponName(string weaponName)
         {
-            _weaponName.text = $"Weapon : {weaponName}";
+            _weaponName.text = weaponName;
         }
 
         public void SetAttack(float attack)
