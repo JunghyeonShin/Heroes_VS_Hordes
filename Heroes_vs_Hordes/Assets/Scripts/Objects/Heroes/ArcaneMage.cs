@@ -81,7 +81,7 @@ public class ArcaneMage : Hero
         var rootProjectile = new GameObject(NAME_ROOT_PROJECTILE);
         rootProjectile.transform.SetParent(transform);
 
-        Manager.Instance.Resource.LoadAsync<GameObject>(Define.RESOURCE_ARCANE_MAGE_PROJECTILE, (projectile) =>
+        Manager.Instance.Resource.LoadAsync<GameObject>(Define.RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE, (projectile) =>
         {
             _projectilePool.InitPool(projectile, rootProjectile, CREATE_PROJECTILE_COUNT);
         });

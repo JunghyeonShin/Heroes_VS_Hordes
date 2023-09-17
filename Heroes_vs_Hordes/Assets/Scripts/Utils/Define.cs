@@ -4,14 +4,25 @@ using UnityEngine;
 
 public class Define
 {
-    #region Resource
-    #region Prefab
     // Map
     public const string RESOURCE_REPOSITION_AREA = "RepositionArea";
     // Hero
     public const string RESOURCE_HERO_ARCANE_MAGE = "ArcaneMage";
     // Weapon
-    public const string RESOURCE_ARCANE_MAGE_PROJECTILE = "ArcaneMage_Projectile";
+    public const string RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE = "ArcaneMage_Projectile";
+    public const string WEAPON_KNIGHT_SWORD = "Knight_Sword";
+    public const string RESOURCE_WEAPON_CROSSBOW = "Crossbow";
+    public const string RESOURCE_WEAPON_FIREBALL = "Fireball";
+    public const string RESOURCE_WEAPON_BOMB = "Bomb";
+    public const string RESOURCE_WEAPON_DIVINE_AURA = "DivineAura";
+    public const string RESOURCE_WEAPON_BOOMERANG = "Boomerang";
+    // Book
+    public const string RESOURCE_BOOK_PROJECTILE_SPEED = "ProjectileSpeedBook";
+    public const string RESOURCE_BOOK_PROJECTILE_COPY = "ProjectileCopyBook";
+    public const string RESOURCE_BOOK_COOLDOWN = "CooldownBook";
+    public const string RESOURCE_BOOK_RANGE = "RangeBook";
+    public const string RESOURCE_BOOK_HERO_RECOVERY = "HeroRecoveryBook";
+    public const string RESOURCE_BOOK_HERO_MOVE_SPEED = "HeroMoveSpeedBook";
     // Monster
     public const string RESOURCE_MONSTER_SPAWNER = "MonsterSpawner";
     public const string RESOURCE_MONSTER_NORMAL_BAT = "Normal_Bat";
@@ -33,13 +44,9 @@ public class Define
     // UI_Element
     public const string RESOURCE_UI_NORMAL_BATTLE_WAVE = "UI_NormalBattleWave";
     public const string RESOURCE_UI_COIN_RUSH_WAVE = "UI_CoinRushWave";
-    #endregion
-
-    #region Sprite
+    // Sprite
     public const string RESOURCE_SPRITES_SLIDER_YELLOW = "Slider_Yellow";
     public const string RESOURCE_SPRITES_SLIDER_RED = "Slider_Red";
-    #endregion
-    #endregion
 
     #region TAG
     public const string TAG_REPOSITION_AREA = "RepositionArea";
