@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using ProtoType;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,8 +6,7 @@ using UnityEngine;
 
 public class TestCrossbowController : MonoBehaviour
 {
-    [SerializeField] TestHeroController _testHero;
-    [SerializeField] GameObject _rootTestWeapon;
+    [SerializeField] TestHeroController _testHeroController;
     [SerializeField] GameObject _testCrossbow;
 
     private ObjectPool _testCrossbowPool = new ObjectPool();
@@ -25,6 +23,7 @@ public class TestCrossbowController : MonoBehaviour
     private int _crossbowAttackCount;
 
     private const float DEFAULT_ABILITY_VALUE = 1f;
+    private const float RANDON_POS_VALUE = 1f;
     private const int CREATE_TEST_WEAPON_COUNT = 10;
     private const int ADJUST_WEAPON_LEVEL = 2;
     private const int INIT_WEAPON_LEVEL = 1;
@@ -40,7 +39,7 @@ public class TestCrossbowController : MonoBehaviour
 
     public void Init()
     {
-        _testCrossbowPool.InitPool(_testCrossbow, _rootTestWeapon, CREATE_TEST_WEAPON_COUNT);
+        _testCrossbowPool.InitPool(_testCrossbow, gameObject, CREATE_TEST_WEAPON_COUNT);
     }
 
     public void SetAbility()
@@ -53,7 +52,7 @@ public class TestCrossbowController : MonoBehaviour
             for (int ii = 0; ii <= _weaponLevel - ADJUST_WEAPON_LEVEL; ++ii)
                 weaponAttack += weaponLevelAbilityList[ii].Attack;
         }
-        _attack = (weaponAbility.Attack + _testHero.Attack) * (DEFAULT_ABILITY_VALUE + weaponAttack);
+        _attack = (weaponAbility.Attack + _testHeroController.Attack) * (DEFAULT_ABILITY_VALUE + weaponAttack);
         _attackCooldown = weaponAbility.AttackCooldown;
         _speed = weaponAbility.Speed;
 
@@ -112,7 +111,7 @@ public class TestCrossbowController : MonoBehaviour
             var testCrossbowGO = _GetCrossbow();
             _usedCrossbowQueue.Enqueue(testCrossbowGO);
             var testCrossbow = Utils.GetOrAddComponent<TestCrossbow>(testCrossbowGO);
-
+            testCrossbow.Init(_testHeroController.transform.position, _GetRandomPos(), _speed, _attack);
             Utils.SetActive(testCrossbowGO, true);
         }
         _ReturnCrossbowAsync().Forget();
@@ -132,6 +131,13 @@ public class TestCrossbowController : MonoBehaviour
         }
     }
 
+    private Vector3 _GetRandomPos()
+    {
+        var posX = UnityEngine.Random.Range(-RANDON_POS_VALUE, RANDON_POS_VALUE);
+        var posY = UnityEngine.Random.Range(-RANDON_POS_VALUE, RANDON_POS_VALUE);
+        return new Vector3(posX, posY).normalized;
+    }
+
     private async UniTaskVoid _ReturnCrossbowAsync()
     {
         await UniTask.Delay(TimeSpan.FromSeconds(_effectTime));
@@ -140,7 +146,7 @@ public class TestCrossbowController : MonoBehaviour
         await UniTask.Delay(TimeSpan.FromSeconds(_attackCooldown));
 
         ++_crossbowAttackCount;
-        if (_crossbowAttackCount <= MAX_CROSSBOW_ATTACK_COUNT)
+        if (_crossbowAttackCount < MAX_CROSSBOW_ATTACK_COUNT)
             _isAttack = true;
     }
 }

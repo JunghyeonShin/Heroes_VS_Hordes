@@ -1,4 +1,3 @@
-using ProtoType;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,11 +5,12 @@ using UnityEngine;
 
 public class TestProjectile : MonoBehaviour
 {
+    [SerializeField] private TestHeroController _testHeroController;
+
     private Rigidbody2D _rigid;
     private Vector2 _moveVec;
 
     private Vector3 _targetPos;
-    private bool _isCritical;
     private float _moveSpeed;
     private float _attack;
     private float _penetraitCount;
@@ -42,11 +42,15 @@ public class TestProjectile : MonoBehaviour
             var initDamageTextPos = collision.transform.position + randomPos;
             var damageTextGO = Manager.Instance.Object.GetDamageText();
             var damageText = Utils.GetOrAddComponent<DamageText>(damageTextGO);
-            damageText.FloatDamageText(initDamageTextPos, _attack, _isCritical);
+            var attack = _attack;
+            var isCritical = _testHeroController.IsCritical();
+            if (isCritical)
+                attack = _attack * TWO_MULTIPLES_VALUE;
+            damageText.FloatDamageText(initDamageTextPos, attack, isCritical);
             Utils.SetActive(damageTextGO, true);
 
             var testMonster = Utils.GetOrAddComponent<TestMonster>(collision.gameObject);
-            testMonster.OnDamaged(_attack);
+            testMonster.OnDamaged(attack);
 
             --_penetraitCount;
             if (_penetraitCount <= END_LIFE)
@@ -59,15 +63,11 @@ public class TestProjectile : MonoBehaviour
         _rigid.MovePosition(_rigid.position + _moveVec);
     }
 
-    public void Init(Vector3 initPos, Vector3 targetPos, bool isCritical, float attack, float moveSpeed, float penetraitCount, Action<GameObject> returnObjectCallback)
+    public void Init(Vector3 initPos, Vector3 targetPos, float attack, float moveSpeed, float penetraitCount, Action<GameObject> returnObjectCallback)
     {
         transform.position = initPos;
         _targetPos = targetPos;
-        _isCritical = isCritical;
-        if (_isCritical)
-            _attack = attack * TWO_MULTIPLES_VALUE;
-        else
-            _attack = attack;
+        _attack = attack;
         _moveSpeed = moveSpeed;
         _penetraitCount = penetraitCount;
 
