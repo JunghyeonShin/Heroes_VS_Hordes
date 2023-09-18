@@ -127,6 +127,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4f2c174bb0acf914394fd69357d22b57
+    m_Address: Crossbow
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 517234b9da778344482246fd1d937838, type: 2}
   m_SchemaSet:

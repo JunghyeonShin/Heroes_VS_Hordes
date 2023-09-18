@@ -19,7 +19,6 @@ namespace ProtoType
 
         private float _health;
         private float _defense;
-        private float _attack;
         private float _attackCooldown;
         private float _critical;
         private float _moveSpeed;
@@ -33,6 +32,7 @@ namespace ProtoType
         private bool _detectMonster;
         private bool _attackMonster;
 
+        public float Attack { get; private set; }
         public Vector2 InputVec { get; set; }
 
         private const float ANGLE_180 = 180f;
@@ -46,6 +46,7 @@ namespace ProtoType
         private const int INIT_WEAPON_LEVEL = 1;
         private const int MAX_WEAPON_LEVEL = 5;
         private const int CREATE_PROJECTILE_COUNT = 50;
+        private const int INIT_NORMAL_ATTACK_COUNT = 0;
         private const int MAX_NORMAL_ATTACK_COUNT = 2;
         private const int ADJUST_WEAPON_LEVEL = 2;
 
@@ -108,7 +109,7 @@ namespace ProtoType
                 for (int ii = 0; ii <= _weaponLevel - ADJUST_WEAPON_LEVEL; ++ii)
                     weaponAttack += weaponLevelAbilityList[ii].Attack;
             }
-            _attack = heroCommonAbility.Attack * (DEFAULT_ABILITY_VALUE + heroIndividualAbility.Attack + weaponAttack);
+            Attack = heroCommonAbility.Attack * (DEFAULT_ABILITY_VALUE + heroIndividualAbility.Attack + weaponAttack);
 
             var weaponAttackCooldown = 0f;
             if (_weaponLevel >= ADJUST_WEAPON_LEVEL)
@@ -156,11 +157,12 @@ namespace ProtoType
 
         public void StartNormalAttack()
         {
-            _normalAttackCount = 0;
+            _normalAttackCount = INIT_NORMAL_ATTACK_COUNT;
             _startNormalAttack = true;
+
             var testSceneUI = Manager.Instance.UI.CurrentSceneUI as UI_TestScene;
             testSceneUI.SetWeaponName(Define.RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE);
-            testSceneUI.SetAttack(_attack);
+            testSceneUI.SetAttack(Attack);
             testSceneUI.SetAttackCooldown(_attackCooldown);
             testSceneUI.SetSpeed(_projectileSpeed);
             testSceneUI.SetProjectileCount(_projectileCount);
@@ -238,7 +240,7 @@ namespace ProtoType
                 var initProjectilePos = transform.TransformPoint(INIT_PROJECTILE_POSITIONS[ii]);
                 var testProjectileGO = _GetProjectile();
                 var testProjectile = Utils.GetOrAddComponent<TestProjectile>(testProjectileGO);
-                testProjectile.Init(initProjectilePos, targetPositions[ii], _IsCritical(), _attack, _projectileSpeed, _penetraitCount, _ReturnProjectile);
+                testProjectile.Init(initProjectilePos, targetPositions[ii], _IsCritical(), Attack, _projectileSpeed, _penetraitCount, _ReturnProjectile);
                 Utils.SetActive(testProjectileGO, true);
             }
         }

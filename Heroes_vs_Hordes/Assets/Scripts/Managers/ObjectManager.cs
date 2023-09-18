@@ -13,23 +13,22 @@ public class ObjectManager
     private Dictionary<string, GameObject> _heroDic = new Dictionary<string, GameObject>();
     private Dictionary<string, ObjectPool> _dropItemDic = new Dictionary<string, ObjectPool>();
     private Dictionary<string, ObjectPool> _monsterPoolDic = new Dictionary<string, ObjectPool>();
+    private Dictionary<string, ObjectPool> _weaponPoolDic = new Dictionary<string, ObjectPool>();
     private ObjectPool _damageTextPool = new ObjectPool();
 
     public GameObject RepositionArea { get; private set; }
     public GameObject MonsterSpawner { get; private set; }
     public GameObject LevelUpText { get; private set; }
 
-    private const int DEFAULT_INSTANTIATE_MONSTER_COUNT = 50;
-    private const int DEFAULT_INSTANTIATE_DAMAGE_TEXT_COUNT = 50;
-    private const int DEFAULT_INSTANTIATE_DROP_ITEM_COUNT = 50;
-    private const int INDEX_TOTAL_VALUE = 7;
+    private const int INDEX_TOTAL_VALUE = 8;
     private const int INDEX_REPOSITION_AREA = 0;
     private const int INDEX_MONSTER_SPAWNER = 1;
     private const int INDEX_LEVEL_UP_TEXT = 2;
     private const int INDEX_DAMAGE_TEXT = 3;
     private const int INDEX_EXP_GEM = 4;
     private const int INDEX_GOLD = 5;
-    private const int INDEX_MONSTER_NORMAL_BAT = 6;
+    private const int INDEX_WEAPON_CROSSBOW = 6;
+    private const int INDEX_MONSTER_NORMAL_BAT = 7;
     private const string NAME_ROOT_OBJECT = "[ROOT_OBJECT]";
 
     public void Init()
@@ -66,6 +65,7 @@ public class ObjectManager
 
         _InitDropItem();
         _InitMonster();
+        _InitWeapon();
     }
 
     public bool LoadComplete()
@@ -127,6 +127,8 @@ public class ObjectManager
     #endregion
 
     #region Monster
+    private const int DEFAULT_INSTANTIATE_MONSTER_COUNT = 50;
+
     public void GetMonster(string key, Action<GameObject> callback)
     {
         // 캐시 확인
@@ -167,6 +169,8 @@ public class ObjectManager
     #endregion
 
     #region DamageText
+    private const int DEFAULT_INSTANTIATE_DAMAGE_TEXT_COUNT = 50;
+
     public GameObject GetDamageText()
     {
         return _damageTextPool.GetObject();
@@ -179,6 +183,8 @@ public class ObjectManager
     #endregion
 
     #region DropItem
+    private const int DEFAULT_INSTANTIATE_DROP_ITEM_COUNT = 50;
+
     public void GetDropItem(string key, Action<GameObject> callback)
     {
         // 캐시 확인
@@ -218,6 +224,48 @@ public class ObjectManager
         {
             objectPool.InitPool(dropItem, _rootObject, count);
             _dropItemDic.Add(key, objectPool);
+            callback?.Invoke(objectPool.GetObject());
+        });
+    }
+    #endregion
+
+    #region Weapon
+    private const int DEFAULT_INSTANTIATE_WEAPON_COUNT = 10;
+
+    public void GetWeapon(string key, Action<GameObject> callback)
+    {
+        // 캐시 확인
+        if (_weaponPoolDic.TryGetValue(key, out var weaponPool))
+        {
+            callback?.Invoke(weaponPool.GetObject());
+            return;
+        }
+
+        // 무기 오브젝트 생성 후 캐싱
+        _InitWeapon(key, DEFAULT_INSTANTIATE_WEAPON_COUNT, callback);
+    }
+
+    public void ReturnWeapon(string key, GameObject weapon)
+    {
+        _weaponPoolDic[key].ReturnObject(weapon);
+    }
+
+    private void _InitWeapon()
+    {
+        _InitWeapon(Define.RESOURCE_WEAPON_CROSSBOW, DEFAULT_INSTANTIATE_WEAPON_COUNT, (weapon) =>
+        {
+            _loadCompletes[INDEX_WEAPON_CROSSBOW] = true;
+        });
+    }
+
+    private void _InitWeapon(string key, int count, Action<GameObject> callback = null)
+    {
+        var objectPool = new ObjectPool();
+
+        Manager.Instance.Resource.LoadAsync<GameObject>(key, (weapon) =>
+        {
+            objectPool.InitPool(weapon, _rootObject, count);
+            _weaponPoolDic.Add(key, objectPool);
             callback?.Invoke(objectPool.GetObject());
         });
     }

@@ -12,6 +12,7 @@ namespace ProtoType
         [SerializeField] TestHeroController _testHeroController;
         [SerializeField] GameObject _rootTestMonster;
         [SerializeField] GameObject _testMonster;
+        [SerializeField] TestCrossbowController _testCrossbowController;
 
         private Action _completeLoadingHandler;
         private ObjectPool _testMonsterPool = new ObjectPool();
@@ -37,8 +38,14 @@ namespace ProtoType
                 testSceneUI.NormalAttackHandler += _testHeroController.StartNormalAttack;
                 testSceneUI.LevelUpHandler -= _testHeroController.SetLevelUp;
                 testSceneUI.LevelUpHandler += _testHeroController.SetLevelUp;
+                testSceneUI.LevelUpHandler -= _testCrossbowController.SetLevelUp;
+                testSceneUI.LevelUpHandler += _testCrossbowController.SetLevelUp;
                 testSceneUI.LevelDownHandler -= _testHeroController.SetLevelDown;
                 testSceneUI.LevelDownHandler += _testHeroController.SetLevelDown;
+                testSceneUI.LevelDownHandler -= _testCrossbowController.SetLevelDown;
+                testSceneUI.LevelDownHandler += _testCrossbowController.SetLevelDown;
+                testSceneUI.CrossbowAttackHandler -= _testCrossbowController.StartCrossbowAttack;
+                testSceneUI.CrossbowAttackHandler += _testCrossbowController.StartCrossbowAttack;
             });
 
             // Loading UI »ý¼º
@@ -55,6 +62,10 @@ namespace ProtoType
             _completeLoadingHandler += _testHeroController.SetAbility;
 
             _testMonsterPool.InitPool(_testMonster, _rootTestMonster, CREATE_TEST_MONSTER_COUNT);
+
+            _testCrossbowController.Init();
+            _completeLoadingHandler -= _testCrossbowController.SetAbility;
+            _completeLoadingHandler += _testCrossbowController.SetAbility;
         }
 
         private void _SpawnMonster()

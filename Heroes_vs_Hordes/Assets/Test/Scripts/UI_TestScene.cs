@@ -13,7 +13,8 @@ namespace ProtoType
             Spawn,
             LevelUp,
             LevelDown,
-            NormalAttack
+            NormalAttack,
+            CrossbowAttack
         }
 
         private enum ETexts
@@ -32,6 +33,7 @@ namespace ProtoType
         public event Action LevelUpHandler;
         public event Action LevelDownHandler;
         public event Action NormalAttackHandler;
+        public event Action CrossbowAttackHandler;
 
         private TextMeshProUGUI _weaponName;
         private TextMeshProUGUI _attack;
@@ -51,6 +53,7 @@ namespace ProtoType
             _BindEvent(_GetButton((int)EButtons.LevelUp).gameObject, _LevelUp);
             _BindEvent(_GetButton((int)EButtons.LevelDown).gameObject, _LevelDown);
             _BindEvent(_GetButton((int)EButtons.NormalAttack).gameObject, _StartNormalAttack);
+            _BindEvent(_GetButton((int)EButtons.CrossbowAttack).gameObject, _StartCrossbowAttack);
 
             _weaponName = _GetText((int)ETexts.WeaponName);
             _attack = _GetText((int)ETexts.Attack);
@@ -81,6 +84,11 @@ namespace ProtoType
         private void _StartNormalAttack()
         {
             NormalAttackHandler?.Invoke();
+        }
+
+        private void _StartCrossbowAttack()
+        {
+            CrossbowAttackHandler?.Invoke();
         }
         #endregion
 
