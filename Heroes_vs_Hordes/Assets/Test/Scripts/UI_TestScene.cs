@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEngine;
 
@@ -12,19 +13,14 @@ public class UI_TestScene : UI_Scene
         LevelUp,
         LevelDown,
         NormalAttack,
-        CrossbowAttack
+        CrossbowAttack,
+        FireballAttack
     }
 
     private enum ETexts
     {
         WeaponName,
-        Attack,
-        AttackCooldown,
-        Speed,
-        EffectRange,
-        EffectTime,
-        ProjectileCount,
-        PenetraitCount
+        AbilityText
     }
 
     public event Action SpawnMonsterHandler;
@@ -32,15 +28,12 @@ public class UI_TestScene : UI_Scene
     public event Action LevelDownHandler;
     public event Action NormalAttackHandler;
     public event Action CrossbowAttackHandler;
+    public event Action FireballAttackHandler;
 
     private TextMeshProUGUI _weaponName;
-    private TextMeshProUGUI _attack;
-    private TextMeshProUGUI _attackCooldown;
-    private TextMeshProUGUI _speed;
-    private TextMeshProUGUI _effectRange;
-    private TextMeshProUGUI _effectTime;
-    private TextMeshProUGUI _projectileCount;
-    private TextMeshProUGUI _penetraitCount;
+    private TextMeshProUGUI _abilityText;
+
+    private const float EMPTY_VALUE = 0f;
 
     protected override void _Init()
     {
@@ -52,15 +45,10 @@ public class UI_TestScene : UI_Scene
         _BindEvent(_GetButton((int)EButtons.LevelDown).gameObject, _LevelDown);
         _BindEvent(_GetButton((int)EButtons.NormalAttack).gameObject, _StartNormalAttack);
         _BindEvent(_GetButton((int)EButtons.CrossbowAttack).gameObject, _StartCrossbowAttack);
+        _BindEvent(_GetButton((int)EButtons.FireballAttack).gameObject, _StartFireballAttack);
 
         _weaponName = _GetText((int)ETexts.WeaponName);
-        _attack = _GetText((int)ETexts.Attack);
-        _attackCooldown = _GetText((int)ETexts.AttackCooldown);
-        _speed = _GetText((int)ETexts.Speed);
-        _effectRange = _GetText((int)ETexts.EffectRange);
-        _effectTime = _GetText((int)ETexts.EffectTime);
-        _projectileCount = _GetText((int)ETexts.ProjectileCount);
-        _penetraitCount = _GetText((int)ETexts.PenetraitCount);
+        _abilityText = _GetText((int)ETexts.AbilityText);
     }
 
     #region Event
@@ -88,6 +76,11 @@ public class UI_TestScene : UI_Scene
     {
         CrossbowAttackHandler?.Invoke();
     }
+
+    private void _StartFireballAttack()
+    {
+        FireballAttackHandler?.Invoke();
+    }
     #endregion
 
     public void SetWeaponName(string weaponName)
@@ -95,38 +88,23 @@ public class UI_TestScene : UI_Scene
         _weaponName.text = weaponName;
     }
 
-    public void SetAttack(float attack)
+    public void SetAbilityText(float attack, float attackCooldown, float speed, float effecRange, float effectTime, float projectileCount, float penetraitCount)
     {
-        _attack.text = $"Attack : {attack}";
-    }
-
-    public void SetAttackCooldown(float attackCooldown)
-    {
-        _attackCooldown.text = $"AttackCooldown : {attackCooldown}";
-    }
-
-    public void SetSpeed(float speed)
-    {
-        _speed.text = $"Speed : {speed}";
-    }
-
-    public void SetEffectRange(float range)
-    {
-        _effectRange.text = $"EffectRange : {range}";
-    }
-
-    public void SeEffectTime(float effectTime)
-    {
-        _effectTime.text = $"EffectTime : {effectTime}";
-    }
-
-    public void SetProjectileCount(float projectileCount)
-    {
-        _projectileCount.text = $"ProjectileCount : {projectileCount}";
-    }
-
-    public void SetPenettraitCount(float penetraitCount)
-    {
-        _penetraitCount.text = $"PenetraitCount : {penetraitCount}";
+        var sb = new StringBuilder();
+        if (attack > EMPTY_VALUE)
+            sb.Append($"Attack : {attack}\n");
+        if (attackCooldown > EMPTY_VALUE)
+            sb.Append($"AttackCooldown : {attackCooldown}\n");
+        if (speed > EMPTY_VALUE)
+            sb.Append($"Speed : {speed}\n");
+        if (effecRange > EMPTY_VALUE)
+            sb.Append($"EffectRange : {effecRange}\n");
+        if (effectTime > EMPTY_VALUE)
+            sb.Append($"EffectTime : {effectTime}\n");
+        if (projectileCount > EMPTY_VALUE)
+            sb.Append($"ProjectileCount : {projectileCount}\n");
+        if (penetraitCount > EMPTY_VALUE)
+            sb.Append($"PenetraitCount : {penetraitCount}");
+        _abilityText.text = sb.ToString();
     }
 }

@@ -7,10 +7,11 @@ using UnityEngine;
 
 public class TestScene : MonoBehaviour
 {
-    [SerializeField] TestHeroController _testHeroController;
-    [SerializeField] GameObject _rootTestMonster;
-    [SerializeField] GameObject _testMonster;
-    [SerializeField] TestCrossbowController _testCrossbowController;
+    [SerializeField] private TestHeroController _testHeroController;
+    [SerializeField] private GameObject _rootTestMonster;
+    [SerializeField] private GameObject _testMonster;
+    [SerializeField] private TestCrossbowController _testCrossbowController;
+    [SerializeField] private TestFireballController _testFireballController;
 
     private Action _completeLoadingHandler;
     private ObjectPool _testMonsterPool = new ObjectPool();
@@ -32,18 +33,27 @@ public class TestScene : MonoBehaviour
         {
             testSceneUI.SpawnMonsterHandler -= _SpawnMonster;
             testSceneUI.SpawnMonsterHandler += _SpawnMonster;
-            testSceneUI.NormalAttackHandler -= _testHeroController.StartNormalAttack;
-            testSceneUI.NormalAttackHandler += _testHeroController.StartNormalAttack;
+
             testSceneUI.LevelUpHandler -= _testHeroController.SetLevelUp;
             testSceneUI.LevelUpHandler += _testHeroController.SetLevelUp;
             testSceneUI.LevelUpHandler -= _testCrossbowController.SetLevelUp;
             testSceneUI.LevelUpHandler += _testCrossbowController.SetLevelUp;
+            testSceneUI.LevelUpHandler -= _testFireballController.SetLevelUp;
+            testSceneUI.LevelUpHandler += _testFireballController.SetLevelUp;
+
             testSceneUI.LevelDownHandler -= _testHeroController.SetLevelDown;
             testSceneUI.LevelDownHandler += _testHeroController.SetLevelDown;
             testSceneUI.LevelDownHandler -= _testCrossbowController.SetLevelDown;
             testSceneUI.LevelDownHandler += _testCrossbowController.SetLevelDown;
+            testSceneUI.LevelDownHandler -= _testFireballController.SetLevelDown;
+            testSceneUI.LevelDownHandler += _testFireballController.SetLevelDown;
+
+            testSceneUI.NormalAttackHandler -= _testHeroController.StartNormalAttack;
+            testSceneUI.NormalAttackHandler += _testHeroController.StartNormalAttack;
             testSceneUI.CrossbowAttackHandler -= _testCrossbowController.StartCrossbowAttack;
             testSceneUI.CrossbowAttackHandler += _testCrossbowController.StartCrossbowAttack;
+            testSceneUI.FireballAttackHandler -= _testFireballController.StartFireballAttack;
+            testSceneUI.FireballAttackHandler += _testFireballController.StartFireballAttack;
         });
 
         // Loading UI »ý¼º
@@ -56,14 +66,16 @@ public class TestScene : MonoBehaviour
             _CheckLoadComplete().Forget();
         });
 
-        _completeLoadingHandler -= _testHeroController.SetAbility;
-        _completeLoadingHandler += _testHeroController.SetAbility;
-
         _testMonsterPool.InitPool(_testMonster, _rootTestMonster, CREATE_TEST_MONSTER_COUNT);
 
         _testCrossbowController.Init();
+        _testFireballController.Init();
+        _completeLoadingHandler -= _testHeroController.SetAbility;
+        _completeLoadingHandler += _testHeroController.SetAbility;
         _completeLoadingHandler -= _testCrossbowController.SetAbility;
         _completeLoadingHandler += _testCrossbowController.SetAbility;
+        _completeLoadingHandler -= _testFireballController.SetAbility;
+        _completeLoadingHandler += _testFireballController.SetAbility;
     }
 
     private void _SpawnMonster()

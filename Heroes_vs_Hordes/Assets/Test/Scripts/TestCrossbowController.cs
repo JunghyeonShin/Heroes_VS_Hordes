@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class TestCrossbowController : MonoBehaviour
 {
-    [SerializeField] TestHeroController _testHeroController;
-    [SerializeField] GameObject _testCrossbow;
+    [SerializeField] private TestHeroController _testHeroController;
+    [SerializeField] private GameObject _testCrossbow;
 
     private ObjectPool _testCrossbowPool = new ObjectPool();
     private Queue<GameObject> _usedCrossbowQueue = new Queue<GameObject>();
@@ -46,6 +46,7 @@ public class TestCrossbowController : MonoBehaviour
     {
         var weaponAbility = Manager.Instance.Data.WeaponAbilityDic[Define.WEAPON_CROSSBOW];
         var weaponLevelAbilityList = Manager.Instance.Data.WeaponLevelAbilityDic[Define.WEAPON_CROSSBOW];
+        
         var weaponAttack = 0f;
         if (_weaponLevel >= ADJUST_WEAPON_LEVEL)
         {
@@ -96,11 +97,7 @@ public class TestCrossbowController : MonoBehaviour
 
         var testSceneUI = Manager.Instance.UI.CurrentSceneUI as UI_TestScene;
         testSceneUI.SetWeaponName(Define.WEAPON_CROSSBOW);
-        testSceneUI.SetAttack(_attack);
-        testSceneUI.SetAttackCooldown(_attackCooldown);
-        testSceneUI.SetSpeed(_speed);
-        testSceneUI.SeEffectTime(_effectTime);
-        testSceneUI.SetProjectileCount(_projectileCount);
+        testSceneUI.SetAbilityText(_attack, _attackCooldown, _speed, 0f, _effectTime, _projectileCount, 0f);
     }
 
     private void _Attack()
@@ -127,7 +124,8 @@ public class TestCrossbowController : MonoBehaviour
         while (_usedCrossbowQueue.Count > 0)
         {
             var crossbow = _usedCrossbowQueue.Dequeue();
-            _testCrossbowPool.ReturnObject(crossbow);
+            if (crossbow.activeSelf)
+                _testCrossbowPool.ReturnObject(crossbow);
         }
     }
 

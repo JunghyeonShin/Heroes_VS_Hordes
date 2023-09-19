@@ -160,11 +160,7 @@ public class TestHeroController : MonoBehaviour
 
         var testSceneUI = Manager.Instance.UI.CurrentSceneUI as UI_TestScene;
         testSceneUI.SetWeaponName(Define.RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE);
-        testSceneUI.SetAttack(Attack);
-        testSceneUI.SetAttackCooldown(_attackCooldown);
-        testSceneUI.SetSpeed(_projectileSpeed);
-        testSceneUI.SetProjectileCount(_projectileCount);
-        testSceneUI.SetPenettraitCount(_penetraitCount);
+        testSceneUI.SetAbilityText(Attack, _attackCooldown, _projectileSpeed, 0f, 0f, _projectileCount, _penetraitCount);
     }
 
     public bool IsCritical()
