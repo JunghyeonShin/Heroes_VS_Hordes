@@ -10,6 +10,8 @@ public class MainScene : MonoBehaviour
 
     private Action _completeLoadingHandler;
 
+    private const float DELAY_LOADING_TIME = 3f;
+
     private void Awake()
     {
         Manager.CreateInstance();
@@ -31,7 +33,8 @@ public class MainScene : MonoBehaviour
 
     private async UniTaskVoid _CheckLoadComplete()
     {
-        while (Manager.Instance.LoadComplete())
+        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_LOADING_TIME));
+        while (false == Manager.Instance.LoadComplete())
             await UniTask.Yield();
 
         _completeLoadingHandler?.Invoke();

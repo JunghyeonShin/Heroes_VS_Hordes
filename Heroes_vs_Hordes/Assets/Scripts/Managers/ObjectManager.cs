@@ -13,15 +13,13 @@ public class ObjectManager
     private Dictionary<string, GameObject> _heroDic = new Dictionary<string, GameObject>();
     private Dictionary<string, ObjectPool> _dropItemDic = new Dictionary<string, ObjectPool>();
     private Dictionary<string, ObjectPool> _monsterPoolDic = new Dictionary<string, ObjectPool>();
+    private Dictionary<string, GameObject> _weaponControllerDic = new Dictionary<string, GameObject>();
     private ObjectPool _damageTextPool = new ObjectPool();
 
     public GameObject RepositionArea { get; private set; }
     public GameObject MonsterSpawner { get; private set; }
     public GameObject LevelUpText { get; private set; }
 
-    private const int DEFAULT_INSTANTIATE_MONSTER_COUNT = 50;
-    private const int DEFAULT_INSTANTIATE_DAMAGE_TEXT_COUNT = 50;
-    private const int DEFAULT_INSTANTIATE_DROP_ITEM_COUNT = 50;
     private const int INDEX_TOTAL_VALUE = 7;
     private const int INDEX_REPOSITION_AREA = 0;
     private const int INDEX_MONSTER_SPAWNER = 1;
@@ -127,6 +125,8 @@ public class ObjectManager
     #endregion
 
     #region Monster
+    private const int DEFAULT_INSTANTIATE_MONSTER_COUNT = 50;
+
     public void GetMonster(string key, Action<GameObject> callback)
     {
         // 캐시 확인
@@ -167,6 +167,8 @@ public class ObjectManager
     #endregion
 
     #region DamageText
+    private const int DEFAULT_INSTANTIATE_DAMAGE_TEXT_COUNT = 50;
+
     public GameObject GetDamageText()
     {
         return _damageTextPool.GetObject();
@@ -179,6 +181,8 @@ public class ObjectManager
     #endregion
 
     #region DropItem
+    private const int DEFAULT_INSTANTIATE_DROP_ITEM_COUNT = 50;
+
     public void GetDropItem(string key, Action<GameObject> callback)
     {
         // 캐시 확인
@@ -220,6 +224,30 @@ public class ObjectManager
             _dropItemDic.Add(key, objectPool);
             callback?.Invoke(objectPool.GetObject());
         });
+    }
+    #endregion
+
+    #region Weapon
+    public void GetWeapon(string key, Action<GameObject> callback)
+    {
+        // 캐시 확인
+        if (_weaponControllerDic.TryGetValue(key, out var weaponController))
+        {
+            callback?.Invoke(weaponController);
+            return;
+        }
+
+        // 무기 컨트롤러 오브젝트 생성 후 캐싱
+        Manager.Instance.Resource.Instantiate(key, _rootObject.transform, (weaponController) =>
+        {
+            _weaponControllerDic.Add(key, weaponController);
+            callback?.Invoke(weaponController);
+        });
+    }
+
+    public void ReturnWeapon(string key)
+    {
+        Utils.SetActive(_weaponControllerDic[key], false);
     }
     #endregion
 }

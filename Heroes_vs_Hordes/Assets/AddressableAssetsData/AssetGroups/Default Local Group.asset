@@ -127,6 +127,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d500c3697ae41df4b98baef13be7b939
+    m_Address: CrossbowController
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ca50057ee9aef25488304bd812f70b5a
+    m_Address: FireballController
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 517234b9da778344482246fd1d937838, type: 2}
   m_SchemaSet:

@@ -8,19 +8,49 @@ public class ArcaneMage : Hero
 {
     private ObjectPool _projectilePool = new ObjectPool();
 
+    private float _projectileSpeed;
+    private float _projectileCount;
+    private float _penetraitCount;
+
     private const float ATTACK_TIME = 0.06f;
     private const float DEFAULT_DETECT_BOX_ANGLE = 0f;
     private const float MIN_DISTANCE = 987654321f;
     private const int CREATE_PROJECTILE_COUNT = 50;
     private const string NAME_ROOT_PROJECTILE = "[ROOT_PROJECTILE]";
 
+    private float[] _minDistancesToMonster = new float[] { MIN_DISTANCE, MIN_DISTANCE, MIN_DISTANCE, MIN_DISTANCE, MIN_DISTANCE, MIN_DISTANCE, MIN_DISTANCE, MIN_DISTANCE };
+    private Vector3[] _targetMonsterPositions = new Vector3[] { Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero };
+
     private readonly Vector2 OVERLAP_SIZE = new Vector2(22.5f, 40f);
-    private readonly Vector3 INIT_PROJECTILE_POSITION = new Vector3(1f, -0.276f, 0f);
+    private readonly Vector3[] INIT_PROJECTILE_POSITIONS = new Vector3[]
+    {
+            new Vector3(1f, -0.276f, 0f),
+            new Vector3(0.8f, -0.75f, 0f),
+            new Vector3(0.388f, -0.408f, 0f),
+            new Vector3(0.233f, -0.872f, 0f),
+            new Vector3(-0.19f, -0.201f, 0f),
+            new Vector3(-0.334f, -0.647f, 0f),
+            new Vector3(-0.714f, -0.342f, 0f),
+            new Vector3(-0.867f, -0.872f, 0f)
+    };
 
     protected override void Awake()
     {
         base.Awake();
         _InitProjectile();
+    }
+
+    public override void SetHeroAbilities()
+    {
+        base.SetHeroAbilities();
+
+        var heroCommonAbility = Manager.Instance.Data.HeroCommonAbility;
+        var heroIndividualAbility = Manager.Instance.Data.HeroIndividualAbilityDic[Define.RESOURCE_HERO_ARCANE_MAGE];
+        var weaponAbility = Manager.Instance.Data.WeaponAbilityDic[Define.RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE];
+
+        _projectileSpeed = heroCommonAbility.ProjectileSpeed * (DEFAULT_ABILITY_VALUE + heroIndividualAbility.ProjectileSpeed);
+        _projectileCount = weaponAbility.ProjectileCount;
+        _penetraitCount = weaponAbility.PenetrateCount;
     }
 
     protected override void _DetectMonster()
@@ -29,9 +59,9 @@ public class ArcaneMage : Hero
             _DetectMonsterAsync().Forget();
     }
 
-    protected override void _AttackMonster(Vector3 targetPos)
+    protected override void _AttackMonster()
     {
-        _AttackMonsterAsync(targetPos).Forget();
+        _AttackMonsterAsync().Forget();
     }
 
     private async UniTaskVoid _DetectMonsterAsync()
@@ -47,33 +77,58 @@ public class ArcaneMage : Hero
         var monsters = Physics2D.OverlapBoxAll(transform.position, OVERLAP_SIZE, DEFAULT_DETECT_BOX_ANGLE, layerMask);
         if (monsters.Length > 0)
         {
-            var minDistance = MIN_DISTANCE;
-            var targetPos = Vector3.zero;
+            _ResetDetectContainer();
             foreach (var monster in monsters)
             {
                 var distance = Vector3.Distance(transform.position, monster.transform.position);
-                if (distance < minDistance)
+                for (int ii = 0; ii < _minDistancesToMonster.Length; ++ii)
                 {
-                    minDistance = distance;
-                    targetPos = monster.transform.position;
+                    if (ii >= _projectileCount)
+                        break;
+
+                    if (MIN_DISTANCE == _minDistancesToMonster[ii])
+                    {
+                        _minDistancesToMonster[ii] = distance;
+                        _targetMonsterPositions[ii] = monster.transform.position;
+                        break;
+                    }
+
+                    if (distance < _minDistancesToMonster[ii])
+                    {
+                        var index = Mathf.FloorToInt(_projectileCount - 1f);
+                        for (int jj = index; jj > 0 && jj >= ii; --jj)
+                        {
+                            _minDistancesToMonster[jj] = _minDistancesToMonster[jj - 1];
+                            _targetMonsterPositions[jj] = _targetMonsterPositions[jj - 1];
+                        }
+                        _minDistancesToMonster[ii] = distance;
+                        _targetMonsterPositions[ii] = monster.transform.position;
+                        break;
+                    }
                 }
             }
-            _AttackMonster(targetPos);
+            _AttackMonster();
         }
         _detectMonster = false;
     }
 
-    private async UniTaskVoid _AttackMonsterAsync(Vector3 targetPos)
+    private async UniTaskVoid _AttackMonsterAsync()
     {
         _attackMonster = true;
         _animator.SetTrigger(Define.ANIMATOR_TRIGGER_ATTACK);
         await UniTask.Delay(TimeSpan.FromSeconds(ATTACK_TIME));
 
-        var initProjectilePos = transform.TransformPoint(INIT_PROJECTILE_POSITION);
-        var projectileGO = _GetProjectile();
-        var projectile = Utils.GetOrAddComponent<Projectile>(projectileGO);
-        projectile.Init(initProjectilePos, targetPos, ProjectileSpeed, _IsCritical(), _attack, _ReturnProjectile);
-        Utils.SetActive(projectileGO, true);
+        for (int ii = 0; ii < _targetMonsterPositions.Length; ++ii)
+        {
+            if (ii >= _projectileCount)
+                break;
+
+            var initProjectilePos = transform.TransformPoint(INIT_PROJECTILE_POSITIONS[ii]);
+            var projectileGO = _GetProjectile();
+            var projectile = Utils.GetOrAddComponent<ArcaneMage_Projectile>(projectileGO);
+            projectile.Init(initProjectilePos, _targetMonsterPositions[ii], _IsCritical(), _attack, _projectileSpeed, _penetraitCount, _ReturnProjectile);
+            Utils.SetActive(projectileGO, true);
+        }
     }
 
     private void _InitProjectile()
@@ -81,7 +136,7 @@ public class ArcaneMage : Hero
         var rootProjectile = new GameObject(NAME_ROOT_PROJECTILE);
         rootProjectile.transform.SetParent(transform);
 
-        Manager.Instance.Resource.LoadAsync<GameObject>(Define.RESOURCE_ARCANE_MAGE_PROJECTILE, (projectile) =>
+        Manager.Instance.Resource.LoadAsync<GameObject>(Define.RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE, (projectile) =>
         {
             _projectilePool.InitPool(projectile, rootProjectile, CREATE_PROJECTILE_COUNT);
         });
@@ -95,5 +150,13 @@ public class ArcaneMage : Hero
     private void _ReturnProjectile(GameObject projectile)
     {
         _projectilePool.ReturnObject(projectile);
+    }
+
+    private void _ResetDetectContainer()
+    {
+        for (int ii = 0; ii < _minDistancesToMonster.Length; ++ii)
+            _minDistancesToMonster[ii] = MIN_DISTANCE;
+        for (int ii = 0; ii < _targetMonsterPositions.Length; ++ii)
+            _targetMonsterPositions[ii] = Vector3.zero;
     }
 }
