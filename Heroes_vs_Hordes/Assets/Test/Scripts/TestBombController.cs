@@ -156,13 +156,7 @@ public class TestBombController : MonoBehaviour
 
     private int _GetRandomTargetMonster(int monsterIndices)
     {
-        var randomIndex = UnityEngine.Random.Range(0, monsterIndices);
-        for (int ii = 0; ii < _targetMonsterIndexList.Count; ++ii)
-        {
-            if (_targetMonsterIndexList[ii] == randomIndex)
-                return _GetRandomTargetMonster(monsterIndices);
-        }
-        return randomIndex;
+        return UnityEngine.Random.Range(0, monsterIndices);
     }
 
     private async UniTaskVoid _ReturnBombAsync()
