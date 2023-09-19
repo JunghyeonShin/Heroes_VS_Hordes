@@ -15,7 +15,8 @@ public class Define
     public const string WEAPON_CROSSBOW = "Crossbow";
     public const string RESOURCE_WEAPON_FIREBALL_CONTROLLER = "FireballController";
     public const string WEAPON_FIREBALL = "Fireball";
-    public const string RESOURCE_WEAPON_BOMB = "Bomb";
+    public const string RESOURCE_WEAPON_BOMB_CONTROLLER = "BombController";
+    public const string WEAPON_BOMB = "Bomb";
     public const string RESOURCE_WEAPON_DIVINE_AURA = "DivineAura";
     public const string RESOURCE_WEAPON_BOOMERANG = "Boomerang";
     // Book
