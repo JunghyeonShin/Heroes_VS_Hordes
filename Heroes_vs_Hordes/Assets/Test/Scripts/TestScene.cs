@@ -13,6 +13,7 @@ public class TestScene : MonoBehaviour
     [SerializeField] private TestCrossbowController _testCrossbowController;
     [SerializeField] private TestFireballController _testFireballController;
     [SerializeField] private TestBombController _testBombController;
+    [SerializeField] private TestDivineAuraController _testDivineAuraController;
 
     private Action _completeLoadingHandler;
     private ObjectPool _testMonsterPool = new ObjectPool();
@@ -41,8 +42,10 @@ public class TestScene : MonoBehaviour
             testSceneUI.LevelUpHandler += _testCrossbowController.SetLevelUp;
             testSceneUI.LevelUpHandler -= _testFireballController.SetLevelUp;
             testSceneUI.LevelUpHandler += _testFireballController.SetLevelUp;
+            testSceneUI.LevelUpHandler -= _testBombController.SetLevelUp;
             testSceneUI.LevelUpHandler += _testBombController.SetLevelUp;
-            testSceneUI.LevelUpHandler += _testBombController.SetLevelUp;
+            testSceneUI.LevelUpHandler -= _testDivineAuraController.SetLevelUp;
+            testSceneUI.LevelUpHandler += _testDivineAuraController.SetLevelUp;
 
             testSceneUI.LevelDownHandler -= _testHeroController.SetLevelDown;
             testSceneUI.LevelDownHandler += _testHeroController.SetLevelDown;
@@ -50,8 +53,10 @@ public class TestScene : MonoBehaviour
             testSceneUI.LevelDownHandler += _testCrossbowController.SetLevelDown;
             testSceneUI.LevelDownHandler -= _testFireballController.SetLevelDown;
             testSceneUI.LevelDownHandler += _testFireballController.SetLevelDown;
+            testSceneUI.LevelDownHandler -= _testBombController.SetLevelDown;
             testSceneUI.LevelDownHandler += _testBombController.SetLevelDown;
-            testSceneUI.LevelDownHandler += _testBombController.SetLevelDown;
+            testSceneUI.LevelDownHandler -= _testDivineAuraController.SetLevelDown;
+            testSceneUI.LevelDownHandler += _testDivineAuraController.SetLevelDown;
 
             testSceneUI.NormalAttackHandler -= _testHeroController.StartNormalAttack;
             testSceneUI.NormalAttackHandler += _testHeroController.StartNormalAttack;
@@ -59,8 +64,10 @@ public class TestScene : MonoBehaviour
             testSceneUI.CrossbowAttackHandler += _testCrossbowController.StartCrossbowAttack;
             testSceneUI.FireballAttackHandler -= _testFireballController.StartFireballAttack;
             testSceneUI.FireballAttackHandler += _testFireballController.StartFireballAttack;
+            testSceneUI.BombAttackHandler -= _testBombController.StartBombAttack;
             testSceneUI.BombAttackHandler += _testBombController.StartBombAttack;
-            testSceneUI.BombAttackHandler += _testBombController.StartBombAttack;
+            testSceneUI.DivineAuraAttackHandler -= _testDivineAuraController.StartDivineAuraAttack;
+            testSceneUI.DivineAuraAttackHandler += _testDivineAuraController.StartDivineAuraAttack;
         });
 
         // Loading UI »ý¼º
@@ -78,6 +85,7 @@ public class TestScene : MonoBehaviour
         _testCrossbowController.Init();
         _testFireballController.Init();
         _testBombController.Init();
+        _testDivineAuraController.Init();
         _completeLoadingHandler -= _testHeroController.SetAbility;
         _completeLoadingHandler += _testHeroController.SetAbility;
         _completeLoadingHandler -= _testCrossbowController.SetAbility;
@@ -86,6 +94,8 @@ public class TestScene : MonoBehaviour
         _completeLoadingHandler += _testFireballController.SetAbility;
         _completeLoadingHandler -= _testBombController.SetAbility;
         _completeLoadingHandler += _testBombController.SetAbility;
+        _completeLoadingHandler -= _testDivineAuraController.SetAbility;
+        _completeLoadingHandler += _testDivineAuraController.SetAbility;
     }
 
     private void _SpawnMonster()
