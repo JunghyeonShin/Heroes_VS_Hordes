@@ -18,19 +18,11 @@ public class TestDivineAuraController : MonoBehaviour
     private float _effectTime;
     private int _weaponLevel;
 
-    private bool _isAttack;
-
     private const float DEFAULT_ABILITY_VALUE = 1f;
     private const int CREATE_TEST_WEAPON_COUNT = 1;
     private const int ADJUST_WEAPON_LEVEL = 2;
     private const int INIT_WEAPON_LEVEL = 1;
     private const int MAX_WEAPON_LEVEL = 5;
-
-    private void Update()
-    {
-        if (_isAttack)
-            _Attack();
-    }
 
     public void Init()
     {
@@ -86,11 +78,11 @@ public class TestDivineAuraController : MonoBehaviour
 
     public void StartDivineAuraAttack()
     {
-        _isAttack = !_isAttack;
-
         var testSceneUI = Manager.Instance.UI.CurrentSceneUI as UI_TestScene;
         testSceneUI.SetWeaponName(Define.WEAPON_DIVINE_AURA);
         testSceneUI.SetAbilityText(_attack, _attackCooldown, 0f, _effectRange, _effectTime, 0f, 0f);
+
+        _Attack();
     }
 
     private void _Attack()
