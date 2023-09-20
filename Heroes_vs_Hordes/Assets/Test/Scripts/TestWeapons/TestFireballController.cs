@@ -148,12 +148,8 @@ public class TestFireballController : MonoBehaviour
 
     private Vector3 _GetTargetPos(int index)
     {
-        var targetPos = Vector3.up;
-        if (0 == index)
-            return targetPos * _effectRange;
-
         var angle = (ANGLE_360 / _projectileCount) * index;
-        targetPos = Quaternion.AngleAxis(angle, Vector3.forward) * Vector3.up;
+        var targetPos = Quaternion.AngleAxis(angle, Vector3.forward) * Vector3.up;
         return targetPos.normalized * _effectRange;
     }
 

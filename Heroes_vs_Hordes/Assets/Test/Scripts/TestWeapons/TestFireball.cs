@@ -96,17 +96,18 @@ public class TestFireball : MonoBehaviour
             transform.position = _testHeroController.transform.position + rotateVec.normalized * _effectRange;
             await UniTask.Delay(TimeSpan.FromSeconds(Time.fixedDeltaTime), delayTiming: PlayerLoopTiming.FixedUpdate);
         }
-
         _collider.enabled = false;
+
         // Fade-Out
         time = ONE_SECOND;
+        var lastPos = transform.position;
         while (time > ZERO_SECOND)
         {
             time -= PROGRESS_TIME;
             if (time <= ZERO_SECOND)
                 time = ZERO_SECOND;
 
-            transform.position = Vector3.Lerp(_testHeroController.transform.position, transform.position, time);
+            transform.position = Vector3.Lerp(_testHeroController.transform.position, lastPos, time);
             transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, time);
             await UniTask.Delay(TimeSpan.FromSeconds(PROGRESS_TIME), delayTiming: PlayerLoopTiming.LastUpdate);
         }

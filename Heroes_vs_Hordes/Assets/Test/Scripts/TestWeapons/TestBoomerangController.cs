@@ -18,13 +18,19 @@ public class TestBoomerangController : MonoBehaviour
     private float _speed;
     private float _effectRange;
     private float _effectTime;
-    private float _projectileCount;
+    [SerializeField] private float _projectileCount;
     private int _weaponLevel;
 
     private bool _isAttack;
     private int _boomerangAttackCount;
 
+    private float _rotateAngle;
+    private float _finishAttackCount;
+
     private const float DEFAULT_ABILITY_VALUE = 1f;
+    private const float ROTATE_ANGLE = 45f;
+    private const float ANGLE_360 = 360f;
+    private const float FINISH_ATTACK_COUNT = 0f;
     private const int CREATE_TEST_WEAPON_COUNT = 10;
     private const int ADJUST_WEAPON_LEVEL = 2;
     private const int INIT_WEAPON_LEVEL = 1;
@@ -119,16 +125,26 @@ public class TestBoomerangController : MonoBehaviour
     private void _Attack()
     {
         _isAttack = false;
-
+        _finishAttackCount = _projectileCount;
         for (int ii = 0; ii < _projectileCount; ++ii)
         {
             var testBoomerangGO = _GetBoomerang();
             _usedBoomerangQueue.Enqueue(testBoomerangGO);
             var testBoomerang = Utils.GetOrAddComponent<TestBoomerang>(testBoomerangGO);
-            testBoomerang.Init(_testHeroController.transform.position, Vector3.zero, _speed, _attack, _effectRange, _effectTime);
+            testBoomerang.Init(_testHeroController.transform.position, _GetTargetPos(ii), _speed, _attack, _effectTime);
+            testBoomerang.FinishAttackHandler -= _FinishAttack;
+            testBoomerang.FinishAttackHandler += _FinishAttack;
             Utils.SetActive(testBoomerangGO, true);
         }
+        _rotateAngle -= ROTATE_ANGLE;
+        if (_rotateAngle <= ANGLE_360)
+            _rotateAngle += ANGLE_360;
         _ReturnBoomerangAsync().Forget();
+    }
+
+    private void _FinishAttack()
+    {
+        --_finishAttackCount;
     }
 
     private GameObject _GetBoomerang()
@@ -146,9 +162,17 @@ public class TestBoomerangController : MonoBehaviour
         }
     }
 
+    private Vector3 _GetTargetPos(int index)
+    {
+        var angle = (ANGLE_360 / _projectileCount) * index + _rotateAngle;
+        var targetPos = Quaternion.AngleAxis(angle, Vector3.forward) * Vector3.up;
+        return targetPos.normalized * _effectRange;
+    }
+
     private async UniTaskVoid _ReturnBoomerangAsync()
     {
-        await UniTask.Delay(TimeSpan.FromSeconds(_effectTime));
+        while (_finishAttackCount > FINISH_ATTACK_COUNT)
+            await UniTask.Yield();
 
         _ReturnBoomerang();
         await UniTask.Delay(TimeSpan.FromSeconds(_attackCooldown));
