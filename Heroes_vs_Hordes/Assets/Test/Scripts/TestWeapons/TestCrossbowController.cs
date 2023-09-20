@@ -55,7 +55,14 @@ public class TestCrossbowController : MonoBehaviour
         }
         _attack = (weaponAbility.Attack + _testHeroController.Attack) * (DEFAULT_ABILITY_VALUE + weaponAttack);
         _attackCooldown = weaponAbility.AttackCooldown;
-        _speed = weaponAbility.Speed;
+
+        var weaponSpeed = 0f;
+        if (_weaponLevel >= ADJUST_WEAPON_LEVEL)
+        {
+            for (int ii = 0; ii <= _weaponLevel - ADJUST_WEAPON_LEVEL; ++ii)
+                weaponSpeed += weaponLevelAbilityList[ii].Speed;
+        }
+        _speed = weaponAbility.Speed * (DEFAULT_ABILITY_VALUE + weaponSpeed);
 
         var weaponEffectTime = 0f;
         if (_weaponLevel >= ADJUST_WEAPON_LEVEL)

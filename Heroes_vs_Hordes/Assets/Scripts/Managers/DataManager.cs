@@ -44,7 +44,7 @@ public class DataManager : MonoBehaviour
         {Define.WEAPON_FIREBALL, "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&gid=1253638460&range=A2:H"},
         {Define.WEAPON_BOMB, "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&gid=1142576319&range=A2:H"},
         {Define.WEAPON_DIVINE_AURA, "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&gid=38680372&range=A2:H"},
-        {Define.RESOURCE_WEAPON_BOOMERANG, "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&gid=690681640&range=A2:H"}
+        {Define.WEAPON_BOOMERANG, "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&gid=690681640&range=A2:H"}
     };
     private readonly Dictionary<string, string> URL_BOOK_ABILITY_DIC = new Dictionary<string, string>()
     {

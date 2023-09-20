@@ -64,7 +64,7 @@ public class TestFireballController : MonoBehaviour
             for (int ii = 0; ii <= _weaponLevel - ADJUST_WEAPON_LEVEL; ++ii)
                 weaponSpeed += weaponLevelAbilityList[ii].Speed;
         }
-        _speed = weaponAbility.Speed + weaponSpeed;
+        _speed = weaponAbility.Speed * (DEFAULT_ABILITY_VALUE + weaponSpeed);
 
         var weaponEffectRange = 0f;
         if (_weaponLevel >= ADJUST_WEAPON_LEVEL)
