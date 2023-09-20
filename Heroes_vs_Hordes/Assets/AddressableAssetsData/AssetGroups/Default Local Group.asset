@@ -137,6 +137,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2d69f338e0f32cb419981110fce6fca4
+    m_Address: BombController
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 517234b9da778344482246fd1d937838, type: 2}
   m_SchemaSet:

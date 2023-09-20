@@ -120,7 +120,6 @@ public class TestFireballController : MonoBehaviour
     private void _Attack()
     {
         _isAttack = false;
-
         for (int ii = 0; ii < _projectileCount; ++ii)
         {
             var testFireballGO = _GetFireball();
