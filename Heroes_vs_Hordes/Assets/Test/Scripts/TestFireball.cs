@@ -54,7 +54,6 @@ public class TestFireball : MonoBehaviour
     {
         transform.position = initPos;
         _targetPos = targetPos;
-        transform.position = targetPos;
         _speed = speed;
         _attack = attack;
         _effectRange = effectRange;
