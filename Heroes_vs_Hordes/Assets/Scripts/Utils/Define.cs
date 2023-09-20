@@ -63,6 +63,7 @@ public class Define
 
     #region Animator
     public const string ANIMATOR_TRIGGER_ATTACK = "Attack";
+    public const string ANIMATOR_TRIGGER_EXPLODE = "Explode";
     #endregion
 
     #region IngameManager

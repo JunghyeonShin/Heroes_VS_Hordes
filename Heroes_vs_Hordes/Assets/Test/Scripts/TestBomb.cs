@@ -11,13 +11,13 @@ public class TestBomb : MonoBehaviour
     [SerializeField] private TestHeroController _testHeroController;
     [SerializeField] private SpriteRenderer _bombSprite;
     [SerializeField] private SpriteRenderer _bombAllertSprite;
+    [SerializeField] private Animator _bombExplosionAnimator;
 
     private Vector3 _targetPos;
     private float _speed;
     private float _attack;
     private float _effectRange;
-
-    [SerializeField] private bool _allertBomb;
+    private bool _allertBomb;
 
     private const float MIN_DAMAGE_TEXT_POSITION_X = -1f;
     private const float MAX_DAMAGE_TEXT_POSITION_X = 1f;
@@ -25,6 +25,7 @@ public class TestBomb : MonoBehaviour
     private const float TWO_MULTIPLES_VALUE = 2f;
     private const float DELAY_FADE_IN_TIME = 0.4f;
     private const float DELAY_FADE_OUT_TIME = 0.1f;
+    private const float DELAY_FINISH_ATTACK_TIME = 1.1f;
     private const float ALPHA_ZERO = 0f;
     private const float ALPHA_ONE = 1f;
     private const float FADE_IN_TIME = 5f;
@@ -44,9 +45,11 @@ public class TestBomb : MonoBehaviour
         _effectRange = effectRange;
 
         Utils.SetActive(_bombSprite.gameObject, true);
+        var size = new Vector3(_effectRange, _effectRange, 1f);
         _bombAllertSprite.transform.position = _targetPos;
-        _bombAllertSprite.transform.localScale = new Vector3(_effectRange, _effectRange, 1f);
+        _bombAllertSprite.transform.localScale = size;
         _bombAllertSprite.color = BOMB_ALLERT_SPRITE_COLOR;
+        _bombExplosionAnimator.transform.localScale = size;
         _allertBomb = true;
         _AllertBombArea().Forget();
         _AttackRange().Forget();
@@ -93,6 +96,9 @@ public class TestBomb : MonoBehaviour
         }
         _allertBomb = false;
 
+        Utils.SetActive(_bombSprite.gameObject, false);
+        _bombExplosionAnimator.SetTrigger(Define.ANIMATOR_TRIGGER_EXPLODE);
+
         var layerMask = 1 << LayerMask.NameToLayer(Define.LAYER_MONSTER);
         var monsters = Physics2D.OverlapCircleAll(_targetPos, _effectRange, layerMask);
         foreach (var monster in monsters)
@@ -111,9 +117,7 @@ public class TestBomb : MonoBehaviour
             var testMonster = Utils.GetOrAddComponent<TestMonster>(monster.gameObject);
             testMonster.OnDamaged(attack);
         }
-        Utils.SetActive(_bombSprite.gameObject, false);
-
-        // Æø¹ß ÀÌÆåÆ® Ãß°¡
+        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_FINISH_ATTACK_TIME));
 
         FinishAttackHandler?.Invoke();
     }
