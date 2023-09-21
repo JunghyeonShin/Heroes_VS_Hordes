@@ -50,6 +50,7 @@ public class IngameManager : MonoBehaviour
         AcquiredGold = INIT_REMAINING_GOLD;
         _remainingGold = INIT_REMAINING_GOLD;
 
+        _ownedWeaponList.Clear();
         _ownedWeaponLevelDic.Clear();
 
         // UI_PauseIngame의 웨이브 진행도 초기 세팅
@@ -379,19 +380,15 @@ public class IngameManager : MonoBehaviour
 
     #region Weapon
     private Dictionary<string, int> _ownedWeaponLevelDic = new Dictionary<string, int>();
+    private List<string> _ownedWeaponList = new List<string>();
+
+    public List<string> OwnedAllWeapon { get { return _ownedWeaponList; } }
+
+    private const int INIT_OWNED_WEAPON_LEVEL = 1;
 
     public int GetOwnedWeaponLevel(string weaponName)
     {
         return _ownedWeaponLevelDic[weaponName];
-    }
-
-    private const int INIT_OWNED_WEAPON_LEVEL = 1;
-
-    private float _GetOwnedWeapon(string weaponName)
-    {
-        if (_ownedWeaponLevelDic.TryGetValue(weaponName, out var level))
-            return level;
-        return 0f;
     }
 
     private void _RegistWeapon(string weaponName)
@@ -401,6 +398,7 @@ public class IngameManager : MonoBehaviour
             ++_ownedWeaponLevelDic[weaponName];
             return;
         }
+        _ownedWeaponList.Add(weaponName);
         _ownedWeaponLevelDic.Add(weaponName, INIT_OWNED_WEAPON_LEVEL);
     }
     #endregion
