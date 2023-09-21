@@ -19,9 +19,10 @@ public class ResourceManager
     #region InitResource
     private bool[] _loadCompletes;
 
-    private const int INDEX_TOTAL_VALUE = 2;
+    private const int INDEX_TOTAL_VALUE = 3;
     private const int INDEX_SPRITE_SLIDER_YELLOW = 0;
     private const int INDEX_SPRITE_SLIDER_RED = 1;
+    private const int INDEX_SPRITE_ICON_WEAPON_HERO_ARCANE_WAND = 2;
 
     public bool LoadComplete()
     {
@@ -35,7 +36,7 @@ public class ResourceManager
 
     private void _LoadEssentialResource()
     {
-        _loadCompletes = new bool[2];
+        _loadCompletes = new bool[INDEX_TOTAL_VALUE];
         LoadAsync<Sprite>(Define.RESOURCE_SPRITES_SLIDER_YELLOW, (sprite) =>
         {
             _loadCompletes[INDEX_SPRITE_SLIDER_YELLOW] = true;
@@ -43,6 +44,10 @@ public class ResourceManager
         LoadAsync<Sprite>(Define.RESOURCE_SPRITES_SLIDER_RED, (sprite) =>
         {
             _loadCompletes[INDEX_SPRITE_SLIDER_RED] = true;
+        });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_WEAPON_HERO_ARCANE_WAND, (sprite) =>
+        {
+            _loadCompletes[INDEX_SPRITE_ICON_WEAPON_HERO_ARCANE_WAND] = true;
         });
     }
     #endregion

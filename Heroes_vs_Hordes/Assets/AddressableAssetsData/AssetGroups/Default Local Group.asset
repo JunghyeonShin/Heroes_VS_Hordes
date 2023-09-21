@@ -68,7 +68,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 726f08ac0c140714e856869880cccee4
-    m_Address: UI_CoinRushWave
+    m_Address: UI_GoldRushWave
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -144,6 +144,21 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c2d367092bdce664c9f7bda42428dd06
     m_Address: DivineAuraController
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b18d1f4de200fcf469ecc56876d1ba64
+    m_Address: UI_Ability
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4216ed0ff85741443b04700dcd080090
+    m_Address: Icon_Weapon_Bomb
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fdbe14652e826ad4c8f6ad7137c198f7
+    m_Address: Assets/Sprites/UIs/Icon_Weapon_Hero_ArcaneWand.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -8,12 +8,10 @@ public class ArcaneMage : Hero
 {
     private ObjectPool _projectilePool = new ObjectPool();
 
-    private float _projectileSpeed;
     private float _projectileCount;
-    private float _penetraitCount;
 
-    private const float ATTACK_TIME = 0.06f;
     private const float DEFAULT_DETECT_BOX_ANGLE = 0f;
+    private const float DELAY_CREATE_PROJECTILE_TIME = 0.06f;
     private const float MIN_DISTANCE = 987654321f;
     private const int CREATE_PROJECTILE_COUNT = 50;
     private const string NAME_ROOT_PROJECTILE = "[ROOT_PROJECTILE]";
@@ -37,20 +35,16 @@ public class ArcaneMage : Hero
     protected override void Awake()
     {
         base.Awake();
+        _heroName = Define.RESOURCE_HERO_ARCANE_MAGE;
+        _heroWeaponName = Define.RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE;
         _InitProjectile();
     }
 
     public override void SetHeroAbilities()
     {
         base.SetHeroAbilities();
-
-        var heroCommonAbility = Manager.Instance.Data.HeroCommonAbility;
-        var heroIndividualAbility = Manager.Instance.Data.HeroIndividualAbilityDic[Define.RESOURCE_HERO_ARCANE_MAGE];
-        var weaponAbility = Manager.Instance.Data.WeaponAbilityDic[Define.RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE];
-
-        _projectileSpeed = heroCommonAbility.ProjectileSpeed * (DEFAULT_ABILITY_VALUE + heroIndividualAbility.ProjectileSpeed);
-        _projectileCount = weaponAbility.ProjectileCount;
-        _penetraitCount = weaponAbility.PenetrateCount;
+        var weaponLevel = Manager.Instance.Ingame.GetOwnedWeaponLevel(_heroWeaponName);
+        _projectileCount = WeaponAbility.GetWeaponProjectileCount(Define.RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE, weaponLevel);
     }
 
     protected override void _DetectMonster()
@@ -116,7 +110,7 @@ public class ArcaneMage : Hero
     {
         _attackMonster = true;
         _animator.SetTrigger(Define.ANIMATOR_TRIGGER_ATTACK);
-        await UniTask.Delay(TimeSpan.FromSeconds(ATTACK_TIME));
+        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_CREATE_PROJECTILE_TIME));
 
         for (int ii = 0; ii < _targetMonsterPositions.Length; ++ii)
         {
@@ -126,7 +120,7 @@ public class ArcaneMage : Hero
             var initProjectilePos = transform.TransformPoint(INIT_PROJECTILE_POSITIONS[ii]);
             var projectileGO = _GetProjectile();
             var projectile = Utils.GetOrAddComponent<ArcaneMage_Projectile>(projectileGO);
-            projectile.Init(initProjectilePos, _targetMonsterPositions[ii], _IsCritical(), _attack, _projectileSpeed, _penetraitCount, _ReturnProjectile);
+            projectile.Init(initProjectilePos, _targetMonsterPositions[ii], _ReturnProjectile);
             Utils.SetActive(projectileGO, true);
         }
     }

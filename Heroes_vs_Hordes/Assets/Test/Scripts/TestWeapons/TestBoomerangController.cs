@@ -51,8 +51,8 @@ public class TestBoomerangController : MonoBehaviour
 
     public void SetAbility()
     {
-        var weaponAbility = Manager.Instance.Data.WeaponAbilityDic[Define.WEAPON_BOOMERANG];
-        var weaponLevelAbilityList = Manager.Instance.Data.WeaponLevelAbilityDic[Define.WEAPON_BOOMERANG];
+        var weaponAbility = Manager.Instance.Data.WeaponAbilityDataDic[Define.WEAPON_BOOMERANG];
+        var weaponLevelAbilityList = Manager.Instance.Data.WeaponLevelAbilityDataDic[Define.WEAPON_BOOMERANG];
 
         var weaponAttack = 0f;
         if (_weaponLevel >= ADJUST_WEAPON_LEVEL)

@@ -40,7 +40,7 @@ public class IngameManager : MonoBehaviour
         HeroLevelUpCount = Define.INIT_HERO_LEVEL_UP_COUNT;
 
         CurrentWaveIndex = INIT_WAVE_INDEX;
-        TotalWaveIndex = Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].TotalWaveIndex;
+        TotalWaveIndex = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].TotalWaveIndex;
 
         ExitIngameForce = false;
 
@@ -50,16 +50,20 @@ public class IngameManager : MonoBehaviour
         AcquiredGold = INIT_REMAINING_GOLD;
         _remainingGold = INIT_REMAINING_GOLD;
 
+        _ownedWeaponList.Clear();
+        _ownedWeaponLevelDic.Clear();
+
         // UI_PauseIngame의 웨이브 진행도 초기 세팅
         var pauseIngameUI = Manager.Instance.UI.FindUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME);
         pauseIngameUI.InitWavePanel();
+        pauseIngameUI.InitAbilityUI();
 
         // UI_ClearWave의 웨이브 진행도 초기 세팅
         var clearWaveUI = Manager.Instance.UI.FindUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE);
         clearWaveUI.InitWavePanel();
 
         // 맵 생성
-        Manager.Instance.Object.GetMap(Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].MapType, (mapGO) =>
+        Manager.Instance.Object.GetMap(Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].MapType, (mapGO) =>
         {
             Utils.SetActive(mapGO, true);
 
@@ -68,6 +72,8 @@ public class IngameManager : MonoBehaviour
             {
                 var hero = heroGO.GetComponent<Hero>();
                 UsedHero = hero;
+                // 보유한 무기 세팅
+                _RegistWeapon(UsedHero.HeroWeaponName);
                 UsedHero.SetHeroAbilities();
 
                 var heroController = Utils.GetOrAddComponent<HeroController>(heroGO);
@@ -107,7 +113,7 @@ public class IngameManager : MonoBehaviour
     public void StartIngame()
     {
         Utils.SetTimeScale(RESTORE_TIMESCALE);
-        CurrentWave = _waveList[Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[CurrentWaveIndex]];
+        CurrentWave = _waveList[Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[CurrentWaveIndex]];
         CurrentWave.StartWave();
     }
 
@@ -155,7 +161,7 @@ public class IngameManager : MonoBehaviour
         Utils.SetActive(Manager.Instance.Object.MonsterSpawner, false);
         Utils.SetActive(Manager.Instance.Object.RepositionArea, false);
         Manager.Instance.Object.ReturnHero(Define.RESOURCE_HERO_ARCANE_MAGE);
-        Manager.Instance.Object.ReturnMap(Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].MapType);
+        Manager.Instance.Object.ReturnMap(Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].MapType);
         Manager.Instance.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE);
     }
 
@@ -239,7 +245,7 @@ public class IngameManager : MonoBehaviour
     public void StopSpawnMonster()
     {
         _spawnMonster = false;
-        var waveIndex = Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[CurrentWaveIndex];
+        var waveIndex = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[CurrentWaveIndex];
         if (Define.INDEX_GOLD_RUSH_WAVE != waveIndex)
             RemainingMonsterHandler?.Invoke();
     }
@@ -369,6 +375,31 @@ public class IngameManager : MonoBehaviour
         AcquiredGold += _remainingGold;
         _remainingGold = INIT_REMAINING_GOLD;
         ChangeGold();
+    }
+    #endregion
+
+    #region Weapon
+    private Dictionary<string, int> _ownedWeaponLevelDic = new Dictionary<string, int>();
+    private List<string> _ownedWeaponList = new List<string>();
+
+    public List<string> OwnedAllWeapon { get { return _ownedWeaponList; } }
+
+    private const int INIT_OWNED_WEAPON_LEVEL = 1;
+
+    public int GetOwnedWeaponLevel(string weaponName)
+    {
+        return _ownedWeaponLevelDic[weaponName];
+    }
+
+    private void _RegistWeapon(string weaponName)
+    {
+        if (_ownedWeaponLevelDic.ContainsKey(weaponName))
+        {
+            ++_ownedWeaponLevelDic[weaponName];
+            return;
+        }
+        _ownedWeaponList.Add(weaponName);
+        _ownedWeaponLevelDic.Add(weaponName, INIT_OWNED_WEAPON_LEVEL);
     }
     #endregion
 }

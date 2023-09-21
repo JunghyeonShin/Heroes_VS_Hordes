@@ -15,7 +15,7 @@ public class NormalBattleWave : Wave
     public override void StartWave()
     {
         Manager.Instance.Ingame.ShowWavePanel($"¿þÀÌºê {Manager.Instance.Ingame.CurrentWaveIndex + ADJUST_WAVE_INDEX}");
-        _totalProgressTime = Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].Time;
+        _totalProgressTime = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].Time;
         _progressTime = INIT_PROGRESS_TIME;
         Manager.Instance.Ingame.ChangeProgressWaveTime(_totalProgressTime);
         Manager.Instance.Ingame.ChangeMode(Define.INDEX_TIME_ATTACK_MODE);

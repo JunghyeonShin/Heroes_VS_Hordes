@@ -11,16 +11,16 @@ public class Define
     // Weapon
     public const string RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE = "ArcaneMage_Projectile";
     public const string WEAPON_KNIGHT_SWORD = "Knight_Sword";
-    public const string RESOURCE_WEAPON_CROSSBOW_CONTROLLER = "CrossbowController";
-    public const string WEAPON_CROSSBOW = "Crossbow";
-    public const string RESOURCE_WEAPON_FIREBALL_CONTROLLER = "FireballController";
-    public const string WEAPON_FIREBALL = "Fireball";
     public const string RESOURCE_WEAPON_BOMB_CONTROLLER = "BombController";
     public const string WEAPON_BOMB = "Bomb";
-    public const string RESOURCE_DIVINE_AURA_CONTROLLER = "DivineAuraController";
-    public const string WEAPON_DIVINE_AURA = "DivineAura";
     public const string RESOURCE_BOOMERANG_CONTROLLER = "BoomerangController";
     public const string WEAPON_BOOMERANG = "Boomerang";
+    public const string RESOURCE_WEAPON_CROSSBOW_CONTROLLER = "CrossbowController";
+    public const string WEAPON_CROSSBOW = "Crossbow";
+    public const string RESOURCE_DIVINE_AURA_CONTROLLER = "DivineAuraController";
+    public const string WEAPON_DIVINE_AURA = "DivineAura";
+    public const string RESOURCE_WEAPON_FIREBALL_CONTROLLER = "FireballController";
+    public const string WEAPON_FIREBALL = "Fireball";
     // Book
     public const string RESOURCE_BOOK_PROJECTILE_SPEED = "ProjectileSpeedBook";
     public const string RESOURCE_BOOK_PROJECTILE_COPY = "ProjectileCopyBook";
@@ -48,10 +48,17 @@ public class Define
     public const string RESOURCE_UI_ENHANCE_HERO_ABILITY = "UI_EnhanceHeroAbility";
     // UI_Element
     public const string RESOURCE_UI_NORMAL_BATTLE_WAVE = "UI_NormalBattleWave";
-    public const string RESOURCE_UI_COIN_RUSH_WAVE = "UI_CoinRushWave";
+    public const string RESOURCE_UI_GOLD_RUSH_WAVE = "UI_GoldRushWave";
+    public const string RESOURCE_UI_ABILITY = "UI_Ability";
     // Sprite
     public const string RESOURCE_SPRITES_SLIDER_YELLOW = "Slider_Yellow";
     public const string RESOURCE_SPRITES_SLIDER_RED = "Slider_Red";
+    public const string RESOURCE_SPRITES_ICON_WEAPON_HERO_ARCANE_WAND = "Icon_Weapon_Hero_ArcaneWand";
+    public const string RESOURCE_SPRITES_ICON_WEAPON_BOMB = "Icon_Weapon_Bomb";
+    public const string RESOURCE_SPRITES_ICON_WEAPON_BOOMERANG = "Icon_Weapon_Boomerang";
+    public const string RESOURCE_SPRITES_ICON_WEAPON_CROSSBOW = "Icon_Weapon_Crossbow";
+    public const string RESOURCE_SPRITES_ICON_WEAPON_DIVINE_AURA = "Icon_Weapon_DivineAura";
+    public const string RESOURCE_SPRITES_ICON_WEAPON_FIREBALL = "Icon_Weapon_Fireball";
 
     #region TAG
     public const string TAG_REPOSITION_AREA = "RepositionArea";

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HeroAbility
+public class HeroAbilityData
 {
     private float _health;
     private float _defense;
@@ -28,7 +28,7 @@ public class HeroAbility
     private const int INDEX_HERO_ABILITY_MOVE_SPEED = 6;
     private const int INDEX_HERO_ABILITY_PROJECTILE_SPEED = 7;
 
-    public HeroAbility(string[] splitData)
+    public HeroAbilityData(string[] splitData)
     {
         float.TryParse(splitData[INDEX_HERO_ABILITY_HEALTH].TrimEnd(), out _health);
         float.TryParse(splitData[INDEX_HERO_ABILITY_DEFENCE].TrimEnd(), out _defense);

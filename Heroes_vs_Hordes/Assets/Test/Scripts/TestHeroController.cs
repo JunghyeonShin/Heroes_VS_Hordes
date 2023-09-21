@@ -93,10 +93,10 @@ public class TestHeroController : MonoBehaviour
 
     public void SetAbility()
     {
-        var heroCommonAbility = Manager.Instance.Data.HeroCommonAbility;
-        var heroIndividualAbility = Manager.Instance.Data.HeroIndividualAbilityDic[Define.RESOURCE_HERO_ARCANE_MAGE];
-        var weaponAbility = Manager.Instance.Data.WeaponAbilityDic[Define.RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE];
-        var weaponLevelAbilityList = Manager.Instance.Data.WeaponLevelAbilityDic[Define.RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE];
+        var heroCommonAbility = Manager.Instance.Data.HeroCommonAbilityData;
+        var heroIndividualAbility = Manager.Instance.Data.HeroIndividualAbilityDataDic[Define.RESOURCE_HERO_ARCANE_MAGE];
+        var weaponAbility = Manager.Instance.Data.WeaponAbilityDataDic[Define.RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE];
+        var weaponLevelAbilityList = Manager.Instance.Data.WeaponLevelAbilityDataDic[Define.RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE];
 
         _health = heroCommonAbility.Health + heroIndividualAbility.Health;
         _defense = heroCommonAbility.Defense + heroIndividualAbility.Defense;

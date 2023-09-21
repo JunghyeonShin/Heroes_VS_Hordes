@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponAbility
+public class WeaponAbilityData
 {
     private float _attack;
     private float _attackCooldown;
@@ -28,7 +28,7 @@ public class WeaponAbility
     private const int INDEX_WEAPON_ABILITY_PROJECTILE_COUNT = 6;
     private const int INDEX_WEAPON_ABILITY_PENETRATE_COUNT = 7;
 
-    public WeaponAbility(string[] splitData)
+    public WeaponAbilityData(string[] splitData)
     {
         float.TryParse(splitData[INDEX_WEAPON_ABILITY_ATTACK].TrimEnd(), out _attack);
         float.TryParse(splitData[INDEX_WEAPON_ABILITY_ATTACK_COOLDOWN].TrimEnd(), out _attackCooldown);

@@ -119,6 +119,8 @@ public class UI_IngameScene : UI_Scene
         Manager.Instance.UI.ShowPopupUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME, (pauseIngameUI) =>
         {
             pauseIngameUI.UpdateWavePanel();
+            pauseIngameUI.UpdateWeaponAbilityUI();
+            pauseIngameUI.UpdateBookAbilityUI();
         });
         Manager.Instance.Ingame.ControlIngame(false);
     }
@@ -126,7 +128,7 @@ public class UI_IngameScene : UI_Scene
 
     private void _SetWaveIndex(string wavePanelText)
     {
-        var waveIndex = Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[Manager.Instance.Ingame.CurrentWaveIndex];
+        var waveIndex = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[Manager.Instance.Ingame.CurrentWaveIndex];
         if (Define.INDEX_NORMAL_BATTLE_WAVE == waveIndex)
         {
             Utils.SetActive(_expPanel, true);

@@ -51,8 +51,8 @@ public class TestBombController : MonoBehaviour
 
     public void SetAbility()
     {
-        var weaponAbility = Manager.Instance.Data.WeaponAbilityDic[Define.WEAPON_BOMB];
-        var weaponLevelAbilityList = Manager.Instance.Data.WeaponLevelAbilityDic[Define.WEAPON_BOMB];
+        var weaponAbility = Manager.Instance.Data.WeaponAbilityDataDic[Define.WEAPON_BOMB];
+        var weaponLevelAbilityList = Manager.Instance.Data.WeaponLevelAbilityDataDic[Define.WEAPON_BOMB];
 
         var weaponAttack = 0f;
         if (_weaponLevel >= ADJUST_WEAPON_LEVEL)

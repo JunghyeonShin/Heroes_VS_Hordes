@@ -46,8 +46,8 @@ public class TestFireballController : MonoBehaviour
 
     public void SetAbility()
     {
-        var weaponAbility = Manager.Instance.Data.WeaponAbilityDic[Define.WEAPON_FIREBALL];
-        var weaponLevelAbilityList = Manager.Instance.Data.WeaponLevelAbilityDic[Define.WEAPON_FIREBALL];
+        var weaponAbility = Manager.Instance.Data.WeaponAbilityDataDic[Define.WEAPON_FIREBALL];
+        var weaponLevelAbilityList = Manager.Instance.Data.WeaponLevelAbilityDataDic[Define.WEAPON_FIREBALL];
 
         var weaponAttack = 0f;
         if (_weaponLevel >= ADJUST_WEAPON_LEVEL)
