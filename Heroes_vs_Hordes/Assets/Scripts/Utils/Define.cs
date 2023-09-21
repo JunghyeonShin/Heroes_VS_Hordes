@@ -19,7 +19,8 @@ public class Define
     public const string WEAPON_BOMB = "Bomb";
     public const string RESOURCE_DIVINE_AURA_CONTROLLER = "DivineAuraController";
     public const string WEAPON_DIVINE_AURA = "DivineAura";
-    public const string RESOURCE_WEAPON_BOOMERANG = "Boomerang";
+    public const string RESOURCE_BOOMERANG_CONTROLLER = "BoomerangController";
+    public const string WEAPON_BOOMERANG = "Boomerang";
     // Book
     public const string RESOURCE_BOOK_PROJECTILE_SPEED = "ProjectileSpeedBook";
     public const string RESOURCE_BOOK_PROJECTILE_COPY = "ProjectileCopyBook";

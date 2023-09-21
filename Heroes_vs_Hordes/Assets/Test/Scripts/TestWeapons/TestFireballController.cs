@@ -64,7 +64,7 @@ public class TestFireballController : MonoBehaviour
             for (int ii = 0; ii <= _weaponLevel - ADJUST_WEAPON_LEVEL; ++ii)
                 weaponSpeed += weaponLevelAbilityList[ii].Speed;
         }
-        _speed = weaponAbility.Speed + weaponSpeed;
+        _speed = weaponAbility.Speed * (DEFAULT_ABILITY_VALUE + weaponSpeed);
 
         var weaponEffectRange = 0f;
         if (_weaponLevel >= ADJUST_WEAPON_LEVEL)
@@ -148,12 +148,8 @@ public class TestFireballController : MonoBehaviour
 
     private Vector3 _GetTargetPos(int index)
     {
-        var targetPos = Vector3.up;
-        if (0 == index)
-            return targetPos * _effectRange;
-
         var angle = (ANGLE_360 / _projectileCount) * index;
-        targetPos = Quaternion.AngleAxis(angle, Vector3.forward) * Vector3.up;
+        var targetPos = Quaternion.AngleAxis(angle, Vector3.forward) * Vector3.up;
         return targetPos.normalized * _effectRange;
     }
 

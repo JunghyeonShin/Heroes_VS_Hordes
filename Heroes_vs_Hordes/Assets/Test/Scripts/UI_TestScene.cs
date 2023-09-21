@@ -16,7 +16,8 @@ public class UI_TestScene : UI_Scene
         CrossbowAttack,
         FireballAttack,
         BombAttack,
-        DivineAuraAttack
+        DivineAuraAttack,
+        BoomerangAttack
     }
 
     private enum ETexts
@@ -33,6 +34,7 @@ public class UI_TestScene : UI_Scene
     public event Action FireballAttackHandler;
     public event Action BombAttackHandler;
     public event Action DivineAuraAttackHandler;
+    public event Action BoomerangAttackHandler;
 
     private TextMeshProUGUI _weaponName;
     private TextMeshProUGUI _abilityText;
@@ -52,6 +54,7 @@ public class UI_TestScene : UI_Scene
         _BindEvent(_GetButton((int)EButtons.FireballAttack).gameObject, _StartFireballAttack);
         _BindEvent(_GetButton((int)EButtons.BombAttack).gameObject, _StartBombAttack);
         _BindEvent(_GetButton((int)EButtons.DivineAuraAttack).gameObject, _StartDivineAuraAttack);
+        _BindEvent(_GetButton((int)EButtons.BoomerangAttack).gameObject, _StartBoomerangAttack);
 
         _weaponName = _GetText((int)ETexts.WeaponName);
         _abilityText = _GetText((int)ETexts.AbilityText);
@@ -96,6 +99,11 @@ public class UI_TestScene : UI_Scene
     private void _StartDivineAuraAttack()
     {
         DivineAuraAttackHandler?.Invoke();
+    }
+
+    private void _StartBoomerangAttack()
+    {
+        BoomerangAttackHandler?.Invoke();
     }
     #endregion
 
