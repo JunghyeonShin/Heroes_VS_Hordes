@@ -73,7 +73,7 @@ public class UI_ClearWave : UI_Popup
         // 사용할 WaveUI를 가져옴
         for (int ii = 0; ii < Manager.Instance.Ingame.TotalWaveIndex - 1; ++ii)
             _InitWavePanel<UI_NormalBattleWave>(Define.RESOURCE_UI_NORMAL_BATTLE_WAVE, ii);
-        _InitWavePanel<UI_CoinRushWave>(Define.RESOURCE_UI_COIN_RUSH_WAVE, Manager.Instance.Ingame.TotalWaveIndex - 1);
+        _InitWavePanel<UI_GoldRushWave>(Define.RESOURCE_UI_GOLD_RUSH_WAVE, Manager.Instance.Ingame.TotalWaveIndex - 1);
     }
 
     public void UpdateWavePanel()

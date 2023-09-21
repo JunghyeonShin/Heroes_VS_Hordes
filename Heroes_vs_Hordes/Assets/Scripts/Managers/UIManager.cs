@@ -27,11 +27,16 @@ public class UIManager
     #region InitUI
     private bool[] _loadCompletes;
 
-    private const int INDEX_TOTAL_VALUE = 4;
+    private const int INDEX_TOTAL_VALUE = 5;
     private const int INDEX_UI_PAUSE_INGAME = 0;
     private const int INDEX_UI_CLEAR_WAVE = 1;
     private const int INDEX_UI_NORMAL_BATTLE_WAVE = 2;
     private const int INDEX_UI_COIN_RUSH_WAVE = 3;
+    private const int INDEX_UI_ABILITY = 4;
+
+    private const int CREATE_NORMAL_BATTLE_WAVE_UI_COUNT = 8;
+    private const int CREATE_GOLD_RUSH_WAVE_UI_COUNT = 2;
+    private const int CREATE_ABILITY_UI_COUNT = 20;
 
     public bool LoadComplete()
     {
@@ -56,13 +61,17 @@ public class UIManager
             _loadCompletes[INDEX_UI_CLEAR_WAVE] = true;
         });
 
-        _InstantiateUIElement(Define.RESOURCE_UI_NORMAL_BATTLE_WAVE, 8, () =>
+        _InstantiateUIElement(Define.RESOURCE_UI_NORMAL_BATTLE_WAVE, CREATE_NORMAL_BATTLE_WAVE_UI_COUNT, () =>
         {
             _loadCompletes[INDEX_UI_NORMAL_BATTLE_WAVE] = true;
         });
-        _InstantiateUIElement(Define.RESOURCE_UI_COIN_RUSH_WAVE, 2, () =>
+        _InstantiateUIElement(Define.RESOURCE_UI_GOLD_RUSH_WAVE, CREATE_GOLD_RUSH_WAVE_UI_COUNT, () =>
         {
             _loadCompletes[INDEX_UI_COIN_RUSH_WAVE] = true;
+        });
+        _InstantiateUIElement(Define.RESOURCE_UI_ABILITY, CREATE_ABILITY_UI_COUNT, () =>
+        {
+            _loadCompletes[INDEX_UI_ABILITY] = true;
         });
     }
 

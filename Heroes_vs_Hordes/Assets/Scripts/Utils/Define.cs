@@ -48,7 +48,8 @@ public class Define
     public const string RESOURCE_UI_ENHANCE_HERO_ABILITY = "UI_EnhanceHeroAbility";
     // UI_Element
     public const string RESOURCE_UI_NORMAL_BATTLE_WAVE = "UI_NormalBattleWave";
-    public const string RESOURCE_UI_COIN_RUSH_WAVE = "UI_CoinRushWave";
+    public const string RESOURCE_UI_GOLD_RUSH_WAVE = "UI_GoldRushWave";
+    public const string RESOURCE_UI_ABILITY = "UI_Ability";
     // Sprite
     public const string RESOURCE_SPRITES_SLIDER_YELLOW = "Slider_Yellow";
     public const string RESOURCE_SPRITES_SLIDER_RED = "Slider_Red";

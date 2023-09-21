@@ -70,10 +70,11 @@ public class ArcaneMage_Projectile : MonoBehaviour
         _targetPos = targetPos;
 
         var usedHero = Manager.Instance.Ingame.UsedHero;
-        _attack = WeaponAbility.GetWeaponAttack(usedHero.HeroName, _weaponName, 1);
+        var weaponLevel = Manager.Instance.Ingame.GetOwnedWeaponLevel(_weaponName);
+        _attack = WeaponAbility.GetWeaponAttack(usedHero.HeroName, _weaponName, weaponLevel);
         _critical = HeroAbility.GetHeroCritical(usedHero.HeroName);
         _moveSpeed = HeroAbility.GetHeroProjectileSpeed(usedHero.HeroName);
-        _penetraitCount = WeaponAbility.GetWeaponPenetraitCount(_weaponName, 1);
+        _penetraitCount = WeaponAbility.GetWeaponPenetraitCount(_weaponName, weaponLevel);
 
         _returnObjectHandler -= returnObjectCallback;
         _returnObjectHandler += returnObjectCallback;

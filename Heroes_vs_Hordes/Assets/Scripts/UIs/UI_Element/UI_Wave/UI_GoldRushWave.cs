@@ -3,33 +3,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UI_CoinRushWave : UI_Wave
+public class UI_GoldRushWave : UI_Wave
 {
     private enum EGameObjects
     {
-        NextCoinIcon,
-        CurrentCoinIcon
+        NextGoldIcon,
+        CurrentGoldIcon
     }
 
-    private GameObject _nextCoinIcon;
-    private GameObject _currentCoinIcon;
+    private GameObject _nextGoldIcon;
+    private GameObject _currentGoldIcon;
 
-    private readonly Vector2 ADJUST_CURRENT_BATTLE_ICON_SIZE = new Vector2(10f, 15f);
+    private readonly Vector2 ADJUST_CURRENT_ICON_SIZE = new Vector2(10f, 15f);
 
     protected override void _Init()
     {
         _BindGameObject(typeof(EGameObjects));
 
-        _nextCoinIcon = _GetGameObject((int)EGameObjects.NextCoinIcon);
-        _currentCoinIcon = _GetGameObject((int)EGameObjects.CurrentCoinIcon);
+        _nextGoldIcon = _GetGameObject((int)EGameObjects.NextGoldIcon);
+        _currentGoldIcon = _GetGameObject((int)EGameObjects.CurrentGoldIcon);
     }
 
     public override void InitWaveUI(int elementIndex, Transform parent, Vector2 elementPosition, Vector2 elementSize, Vector2 iconSize)
     {
         base.InitWaveUI(elementIndex, parent, elementPosition, elementSize, iconSize);
 
-        _InitTransform(_nextCoinIcon, iconSize);
-        _InitTransform(_currentCoinIcon, iconSize + ADJUST_CURRENT_BATTLE_ICON_SIZE);
+        _InitTransform(_nextGoldIcon, iconSize);
+        _InitTransform(_currentGoldIcon, iconSize + ADJUST_CURRENT_ICON_SIZE);
     }
 
     public override void UpdateWaveUI()
@@ -47,7 +47,7 @@ public class UI_CoinRushWave : UI_Wave
     public override void ReturnWaveUI()
     {
         _ActiveWaveIcon(true, false);
-        Manager.Instance.UI.ReturnElementUI(Define.RESOURCE_UI_COIN_RUSH_WAVE, gameObject);
+        Manager.Instance.UI.ReturnElementUI(Define.RESOURCE_UI_GOLD_RUSH_WAVE, gameObject);
     }
 
     private void _InitTransform(GameObject icon, Vector2 size)
@@ -56,9 +56,9 @@ public class UI_CoinRushWave : UI_Wave
         rectTransform.sizeDelta = size;
     }
 
-    private void _ActiveWaveIcon(bool _nextCoinIconActive, bool _currentCoinIconActive)
+    private void _ActiveWaveIcon(bool _nextGoldIconActive, bool _currentGoldIconActive)
     {
-        Utils.SetActive(_nextCoinIcon, _nextCoinIconActive);
-        Utils.SetActive(_currentCoinIcon, _currentCoinIconActive);
+        Utils.SetActive(_nextGoldIcon, _nextGoldIconActive);
+        Utils.SetActive(_currentGoldIcon, _currentGoldIconActive);
     }
 }

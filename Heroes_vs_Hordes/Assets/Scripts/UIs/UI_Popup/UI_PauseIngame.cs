@@ -12,11 +12,20 @@ public class UI_PauseIngame : UI_Popup
 
     private enum EGameObjects
     {
-        TotalWaves
+        TotalWaves,
+        OwnedWeaponContents,
+        OwnedBookContents
     }
 
     private GameObject _totalWaves;
+    private GameObject _ownedWeaponContents;
+    private GameObject _ownedBookContents;
+
     private List<UI_Wave> _wavePanelList = new List<UI_Wave>();
+    private List<UI_Ability> _weaponAbilityList = new List<UI_Ability>();
+    private List<UI_Ability> _bookAbilityList = new List<UI_Ability>();
+
+    private const int CREATE_ABILITY_UI_COUNT = 5;
 
     private readonly WavePanelTransform[] FOUR_WAVE_PANEL_TRANSFORMS = new WavePanelTransform[]
     {
@@ -32,6 +41,8 @@ public class UI_PauseIngame : UI_Popup
         _BindGameObject(typeof(EGameObjects));
 
         _totalWaves = _GetGameObject((int)EGameObjects.TotalWaves);
+        _ownedWeaponContents = _GetGameObject((int)EGameObjects.OwnedWeaponContents);
+        _ownedBookContents = _GetGameObject((int)EGameObjects.OwnedBookContents);
 
         _BindEvent(_GetButton((int)EButtons.RestartButton).gameObject, _RestartIngame);
         _BindEvent(_GetButton((int)EButtons.GiveUpIngameButton).gameObject, _GiveUpIngame);
@@ -62,13 +73,53 @@ public class UI_PauseIngame : UI_Popup
         // 사용할 WaveUI를 가져옴
         for (int ii = 0; ii < Manager.Instance.Ingame.TotalWaveIndex - 1; ++ii)
             _InitWavePanel<UI_NormalBattleWave>(Define.RESOURCE_UI_NORMAL_BATTLE_WAVE, ii);
-        _InitWavePanel<UI_CoinRushWave>(Define.RESOURCE_UI_COIN_RUSH_WAVE, Manager.Instance.Ingame.TotalWaveIndex - 1);
+        _InitWavePanel<UI_GoldRushWave>(Define.RESOURCE_UI_GOLD_RUSH_WAVE, Manager.Instance.Ingame.TotalWaveIndex - 1);
     }
 
     public void UpdateWavePanel()
     {
         for (int ii = 0; ii < _wavePanelList.Count; ++ii)
             _wavePanelList[ii].UpdateWaveUI();
+    }
+
+    public void InitAbilityUI()
+    {
+        for (int ii = 0; ii < _weaponAbilityList.Count; ++ii)
+            _weaponAbilityList[ii].ReturnAbilityUI();
+        _weaponAbilityList.Clear();
+
+        for (int ii = 0; ii < CREATE_ABILITY_UI_COUNT; ++ii)
+        {
+            var abilityGO = Manager.Instance.UI.GetElementUI(Define.RESOURCE_UI_ABILITY);
+            var abilityUI = Utils.GetOrAddComponent<UI_Ability>(abilityGO);
+            abilityUI.InitAbilityUI(_ownedWeaponContents.transform);
+            _weaponAbilityList.Add(abilityUI);
+        }
+
+        for (int ii = 0; ii < _bookAbilityList.Count; ++ii)
+            _bookAbilityList[ii].ReturnAbilityUI();
+        _bookAbilityList.Clear();
+
+        for (int ii = 0; ii < CREATE_ABILITY_UI_COUNT; ++ii)
+        {
+            var abilityGO = Manager.Instance.UI.GetElementUI(Define.RESOURCE_UI_ABILITY);
+            var abilityUI = Utils.GetOrAddComponent<UI_Ability>(abilityGO);
+            abilityUI.InitAbilityUI(_ownedBookContents.transform);
+            _bookAbilityList.Add(abilityUI);
+        }
+    }
+
+    public void UpdateWeaponAbilityUI()
+    {
+        for (int ii = 0; ii < _weaponAbilityList.Count; ++ii)
+        {
+
+        }
+    }
+
+    public void UpdateBookAbilityUI()
+    {
+
     }
 
     private void _InitWavePanel<T>(string wavePanelName, int index) where T : UI_Wave

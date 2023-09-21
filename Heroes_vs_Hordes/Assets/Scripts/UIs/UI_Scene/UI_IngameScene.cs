@@ -119,6 +119,8 @@ public class UI_IngameScene : UI_Scene
         Manager.Instance.UI.ShowPopupUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME, (pauseIngameUI) =>
         {
             pauseIngameUI.UpdateWavePanel();
+            pauseIngameUI.UpdateWeaponAbilityUI();
+            pauseIngameUI.UpdateBookAbilityUI();
         });
         Manager.Instance.Ingame.ControlIngame(false);
     }

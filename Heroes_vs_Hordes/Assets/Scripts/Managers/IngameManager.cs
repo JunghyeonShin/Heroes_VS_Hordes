@@ -50,9 +50,12 @@ public class IngameManager : MonoBehaviour
         AcquiredGold = INIT_REMAINING_GOLD;
         _remainingGold = INIT_REMAINING_GOLD;
 
+        _ownedWeaponLevelDic.Clear();
+
         // UI_PauseIngame의 웨이브 진행도 초기 세팅
         var pauseIngameUI = Manager.Instance.UI.FindUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME);
         pauseIngameUI.InitWavePanel();
+        pauseIngameUI.InitAbilityUI();
 
         // UI_ClearWave의 웨이브 진행도 초기 세팅
         var clearWaveUI = Manager.Instance.UI.FindUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE);
@@ -68,6 +71,8 @@ public class IngameManager : MonoBehaviour
             {
                 var hero = heroGO.GetComponent<Hero>();
                 UsedHero = hero;
+                // 보유한 무기 세팅
+                _RegistWeapon(UsedHero.HeroWeaponName);
                 UsedHero.SetHeroAbilities();
 
                 var heroController = Utils.GetOrAddComponent<HeroController>(heroGO);
@@ -369,6 +374,34 @@ public class IngameManager : MonoBehaviour
         AcquiredGold += _remainingGold;
         _remainingGold = INIT_REMAINING_GOLD;
         ChangeGold();
+    }
+    #endregion
+
+    #region Weapon
+    private Dictionary<string, int> _ownedWeaponLevelDic = new Dictionary<string, int>();
+
+    public int GetOwnedWeaponLevel(string weaponName)
+    {
+        return _ownedWeaponLevelDic[weaponName];
+    }
+
+    private const int INIT_OWNED_WEAPON_LEVEL = 1;
+
+    private float _GetOwnedWeapon(string weaponName)
+    {
+        if (_ownedWeaponLevelDic.TryGetValue(weaponName, out var level))
+            return level;
+        return 0f;
+    }
+
+    private void _RegistWeapon(string weaponName)
+    {
+        if (_ownedWeaponLevelDic.ContainsKey(weaponName))
+        {
+            ++_ownedWeaponLevelDic[weaponName];
+            return;
+        }
+        _ownedWeaponLevelDic.Add(weaponName, INIT_OWNED_WEAPON_LEVEL);
     }
     #endregion
 }

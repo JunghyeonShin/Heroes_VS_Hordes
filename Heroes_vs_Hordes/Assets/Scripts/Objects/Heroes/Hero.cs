@@ -8,6 +8,7 @@ public abstract class Hero : MonoBehaviour
 {
     protected Animator _animator;
     protected string _heroName;
+    protected string _heroWeaponName;
 
     protected float _health;
     protected float _defense;
@@ -26,6 +27,7 @@ public abstract class Hero : MonoBehaviour
     private bool _levelUp;
 
     public string HeroName { get { return _heroName; } }
+    public string HeroWeaponName { get { return _heroWeaponName; } }
     public float MoveSpeed { get; private set; }
 
     private const float DELAY_LEVEL_UP = 0.2f;
