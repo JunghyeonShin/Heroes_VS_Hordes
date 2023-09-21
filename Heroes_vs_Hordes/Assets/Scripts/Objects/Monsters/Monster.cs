@@ -46,7 +46,7 @@ public class Monster : MonoBehaviour
 
     public void OnDamaged(float damage)
     {
-        var waveIndex = Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[Manager.Instance.Ingame.CurrentWaveIndex];
+        var waveIndex = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[Manager.Instance.Ingame.CurrentWaveIndex];
         if (Define.INDEX_GOLD_RUSH_WAVE == waveIndex)
             ShowDropItem<Gold>(Define.RESOURCE_GOLD);
         else

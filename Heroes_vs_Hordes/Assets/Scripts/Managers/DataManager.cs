@@ -9,13 +9,13 @@ public class DataManager : MonoBehaviour
 {
     private bool[] _loadCompletes;
 
-    public HeroAbility HeroCommonAbility { get; private set; }
-    public Dictionary<string, HeroAbility> HeroIndividualAbilityDic { get; private set; }
-    public List<float> RequiredExpList { get; private set; }
-    public List<ChapterInfo> ChapterInfoList { get; private set; }
-    public Dictionary<string, WeaponAbility> WeaponAbilityDic { get; private set; }
-    public Dictionary<string, List<WeaponAbility>> WeaponLevelAbilityDic { get; private set; }
-    public Dictionary<string, List<float>> BookAbilityDic { get; private set; }
+    public HeroAbilityData HeroCommonAbilityData { get; private set; }
+    public Dictionary<string, HeroAbilityData> HeroIndividualAbilityDataDic { get; private set; }
+    public List<float> RequiredExpDataList { get; private set; }
+    public List<ChapterInfoData> ChapterInfoDataList { get; private set; }
+    public Dictionary<string, WeaponAbilityData> WeaponAbilityDataDic { get; private set; }
+    public Dictionary<string, List<WeaponAbilityData>> WeaponLevelAbilityDataDic { get; private set; }
+    public Dictionary<string, List<float>> BookAbilityDataDic { get; private set; }
 
     private const int INDEX_LOAD_TOTAL_VALUE = 7;
     private const int INDEX_LOAD_HERO_COMMON_ABILITY = 0;
@@ -85,7 +85,7 @@ public class DataManager : MonoBehaviour
         var op = await webRequest.SendWebRequest();
 
         var splitRawData = op.downloadHandler.text.Split('\t');
-        HeroCommonAbility = new HeroAbility(splitRawData);
+        HeroCommonAbilityData = new HeroAbilityData(splitRawData);
         _loadCompletes[INDEX_LOAD_HERO_COMMON_ABILITY] = true;
     }
 
@@ -94,12 +94,12 @@ public class DataManager : MonoBehaviour
         var webRequest = UnityWebRequest.Get(URL_HERO_INDIVIDUAL_ABILITY);
         var op = await webRequest.SendWebRequest();
 
-        HeroIndividualAbilityDic = new Dictionary<string, HeroAbility>();
+        HeroIndividualAbilityDataDic = new Dictionary<string, HeroAbilityData>();
         var splitRawData = op.downloadHandler.text.Split('\n');
         foreach (var data in splitRawData)
         {
             var splitData = data.Split('\t');
-            HeroIndividualAbilityDic.Add(splitData[KEY_HERO_ABILITY], new HeroAbility(splitData));
+            HeroIndividualAbilityDataDic.Add(splitData[KEY_HERO_ABILITY], new HeroAbilityData(splitData));
         }
         _loadCompletes[INDEX_LOAD_HERO_INDIVIDUAL_ABILITY] = true;
     }
@@ -111,12 +111,12 @@ public class DataManager : MonoBehaviour
         var webRequest = UnityWebRequest.Get(URL_REQUIRED_EXP);
         var op = await webRequest.SendWebRequest();
 
-        RequiredExpList = new List<float>();
+        RequiredExpDataList = new List<float>();
         var splitRawData = op.downloadHandler.text.Split('\n');
         foreach (var data in splitRawData)
         {
             float.TryParse(data, out var value);
-            RequiredExpList.Add(value);
+            RequiredExpDataList.Add(value);
         }
         _loadCompletes[INDEX_LOAD_REQUIRED_EXP] = true;
     }
@@ -128,12 +128,12 @@ public class DataManager : MonoBehaviour
         var webRequest = UnityWebRequest.Get(URL_CHAPTER_INFO);
         var op = await webRequest.SendWebRequest();
 
-        ChapterInfoList = new List<ChapterInfo>();
+        ChapterInfoDataList = new List<ChapterInfoData>();
         var splitRawData = op.downloadHandler.text.Split('\n');
         foreach (var data in splitRawData)
         {
             var splitData = data.Split('\t');
-            ChapterInfoList.Add(new ChapterInfo(splitData));
+            ChapterInfoDataList.Add(new ChapterInfoData(splitData));
         }
         _loadCompletes[INDEX_LOAD_CHAPTER_INFO] = true;
     }
@@ -145,32 +145,32 @@ public class DataManager : MonoBehaviour
         var webRequest = UnityWebRequest.Get(URL_WEAPON_ABILITY);
         var op = await webRequest.SendWebRequest();
 
-        WeaponAbilityDic = new Dictionary<string, WeaponAbility>();
+        WeaponAbilityDataDic = new Dictionary<string, WeaponAbilityData>();
         var splitRawData = op.downloadHandler.text.Split('\n');
         foreach (var data in splitRawData)
         {
             var splitData = data.Split('\t');
-            WeaponAbilityDic.Add(splitData[KEY_WEAPON_ABILITY], new WeaponAbility(splitData));
+            WeaponAbilityDataDic.Add(splitData[KEY_WEAPON_ABILITY], new WeaponAbilityData(splitData));
         }
         _loadCompletes[INDEX_LOAD_WEAPON_ABILITY] = true;
     }
 
     private async UniTaskVoid _LoadWeaponLevelAbility()
     {
-        WeaponLevelAbilityDic = new Dictionary<string, List<WeaponAbility>>();
+        WeaponLevelAbilityDataDic = new Dictionary<string, List<WeaponAbilityData>>();
         foreach (var weaponLevelAbilityURL in URL_WEAPON_LEVEL_ABILITY_DIC)
         {
             var webRequest = UnityWebRequest.Get(weaponLevelAbilityURL.Value);
             var op = await webRequest.SendWebRequest();
 
-            var weaponAbilityList = new List<WeaponAbility>();
+            var weaponAbilityList = new List<WeaponAbilityData>();
             var splitRawData = op.downloadHandler.text.Split('\n');
             foreach (var data in splitRawData)
             {
                 var splitData = data.Split('\t');
-                weaponAbilityList.Add(new WeaponAbility(splitData));
+                weaponAbilityList.Add(new WeaponAbilityData(splitData));
             }
-            WeaponLevelAbilityDic.Add(weaponLevelAbilityURL.Key, weaponAbilityList);
+            WeaponLevelAbilityDataDic.Add(weaponLevelAbilityURL.Key, weaponAbilityList);
         }
         _loadCompletes[INDEX_LOAD_WEAPON_LEVEL_ABILITY] = true;
     }
@@ -179,7 +179,7 @@ public class DataManager : MonoBehaviour
     #region Load Book Ability
     private async UniTaskVoid _LoadBookAbility()
     {
-        BookAbilityDic = new Dictionary<string, List<float>>();
+        BookAbilityDataDic = new Dictionary<string, List<float>>();
         foreach (var bookAbilityURL in URL_BOOK_ABILITY_DIC)
         {
             var webRequest = UnityWebRequest.Get(bookAbilityURL.Value);
@@ -193,7 +193,7 @@ public class DataManager : MonoBehaviour
                 float.TryParse(splitData[KEY_BOOK_ABILITY], out float abilityValue);
                 bookAbilityList.Add(abilityValue);
             }
-            BookAbilityDic.Add(bookAbilityURL.Key, bookAbilityList);
+            BookAbilityDataDic.Add(bookAbilityURL.Key, bookAbilityList);
         }
         _loadCompletes[INDEX_LOAD_BOOK_ABILITY] = true;
     }

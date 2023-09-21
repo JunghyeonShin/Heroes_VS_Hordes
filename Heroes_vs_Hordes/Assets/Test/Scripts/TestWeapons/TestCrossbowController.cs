@@ -44,8 +44,8 @@ public class TestCrossbowController : MonoBehaviour
 
     public void SetAbility()
     {
-        var weaponAbility = Manager.Instance.Data.WeaponAbilityDic[Define.WEAPON_CROSSBOW];
-        var weaponLevelAbilityList = Manager.Instance.Data.WeaponLevelAbilityDic[Define.WEAPON_CROSSBOW];
+        var weaponAbility = Manager.Instance.Data.WeaponAbilityDataDic[Define.WEAPON_CROSSBOW];
+        var weaponLevelAbilityList = Manager.Instance.Data.WeaponLevelAbilityDataDic[Define.WEAPON_CROSSBOW];
         
         var weaponAttack = 0f;
         if (_weaponLevel >= ADJUST_WEAPON_LEVEL)

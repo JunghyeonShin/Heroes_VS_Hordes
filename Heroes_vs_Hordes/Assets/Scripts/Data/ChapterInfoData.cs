@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChapterInfo
+public class ChapterInfoData
 {
     private string _chapterName;
     private float _time;
@@ -24,7 +24,7 @@ public class ChapterInfo
     private const int INDEX_CHAPTER_INFO_MAP_TYPE = 3;
     private const int INDEX_CHAPTER_INFO_MONSTER_TYPES = 4;
 
-    public ChapterInfo(string[] splitData)
+    public ChapterInfoData(string[] splitData)
     {
         _chapterName = splitData[INDEX_CHAPTER_NAME].TrimEnd();
         float.TryParse(splitData[INDEX_CHAPTER_INFO_TIME].TrimEnd(), out _time);

@@ -7,10 +7,11 @@ public class ArcaneMage_Projectile : MonoBehaviour
 {
     private Rigidbody2D _rigid;
     private Vector2 _moveVec;
+    private string _weaponName;
 
     private Vector3 _targetPos;
-    private bool _isCritical;
     private float _attack;
+    private float _critical;
     private float _moveSpeed;
     private float _penetraitCount;
     private Action<GameObject> _returnObjectHandler;
@@ -24,6 +25,7 @@ public class ArcaneMage_Projectile : MonoBehaviour
     private void Awake()
     {
         _rigid = GetComponent<Rigidbody2D>();
+        _weaponName = Define.RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE;
     }
 
     private void OnEnable()
@@ -42,33 +44,36 @@ public class ArcaneMage_Projectile : MonoBehaviour
     {
         if (collision.CompareTag(Define.TAG_MONSTER))
         {
+            --_penetraitCount;
+            if (_penetraitCount <= END_LIFE)
+                _returnObjectHandler?.Invoke(gameObject);
+
             var randomPos = new Vector3(UnityEngine.Random.Range(MIN_DAMAGE_TEXT_POSITION_X, MAX_DAMAGE_TEXT_POSITION_X), DAMAGE_TEXT_POSITION_Y, 0f);
             var initDamageTextPos = collision.transform.position + randomPos;
             var damageTextGO = Manager.Instance.Object.GetDamageText();
             var damageText = Utils.GetOrAddComponent<DamageText>(damageTextGO);
-            damageText.FloatDamageText(initDamageTextPos, _attack, _isCritical);
+            var isCritical = HeroAbility.IsCritical(_critical);
+            var attack = _attack;
+            if (isCritical)
+                attack = _attack * TWO_MULTIPLES_VALUE;
+            damageText.FloatDamageText(initDamageTextPos, attack, isCritical);
             Utils.SetActive(damageTextGO, true);
 
             var monster = Utils.GetOrAddComponent<Monster>(collision.gameObject);
             monster.OnDamaged(_attack);
-
-            --_penetraitCount;
-            if (_penetraitCount <= END_LIFE)
-                _returnObjectHandler?.Invoke(gameObject);
         }
     }
 
-    public void Init(Vector3 initPos, Vector3 targetPos, bool isCritical, float attack, float moveSpeed, float penetraitCount, Action<GameObject> returnObjectCallback)
+    public void Init(Vector3 initPos, Vector3 targetPos, Action<GameObject> returnObjectCallback)
     {
         transform.position = initPos;
         _targetPos = targetPos;
-        _isCritical = isCritical;
-        if (_isCritical)
-            _attack = attack * TWO_MULTIPLES_VALUE;
-        else
-            _attack = attack;
-        _moveSpeed = moveSpeed;
-        _penetraitCount = penetraitCount;
+
+        var usedHero = Manager.Instance.Ingame.UsedHero;
+        _attack = WeaponAbility.GetWeaponAttack(usedHero.HeroName, _weaponName, 1);
+        _critical = HeroAbility.GetHeroCritical(usedHero.HeroName);
+        _moveSpeed = HeroAbility.GetHeroProjectileSpeed(usedHero.HeroName);
+        _penetraitCount = WeaponAbility.GetWeaponPenetraitCount(_weaponName, 1);
 
         _returnObjectHandler -= returnObjectCallback;
         _returnObjectHandler += returnObjectCallback;

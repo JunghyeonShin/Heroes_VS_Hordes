@@ -40,7 +40,7 @@ public class IngameManager : MonoBehaviour
         HeroLevelUpCount = Define.INIT_HERO_LEVEL_UP_COUNT;
 
         CurrentWaveIndex = INIT_WAVE_INDEX;
-        TotalWaveIndex = Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].TotalWaveIndex;
+        TotalWaveIndex = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].TotalWaveIndex;
 
         ExitIngameForce = false;
 
@@ -59,7 +59,7 @@ public class IngameManager : MonoBehaviour
         clearWaveUI.InitWavePanel();
 
         // ¸Ê »ý¼º
-        Manager.Instance.Object.GetMap(Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].MapType, (mapGO) =>
+        Manager.Instance.Object.GetMap(Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].MapType, (mapGO) =>
         {
             Utils.SetActive(mapGO, true);
 
@@ -107,7 +107,7 @@ public class IngameManager : MonoBehaviour
     public void StartIngame()
     {
         Utils.SetTimeScale(RESTORE_TIMESCALE);
-        CurrentWave = _waveList[Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[CurrentWaveIndex]];
+        CurrentWave = _waveList[Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[CurrentWaveIndex]];
         CurrentWave.StartWave();
     }
 
@@ -155,7 +155,7 @@ public class IngameManager : MonoBehaviour
         Utils.SetActive(Manager.Instance.Object.MonsterSpawner, false);
         Utils.SetActive(Manager.Instance.Object.RepositionArea, false);
         Manager.Instance.Object.ReturnHero(Define.RESOURCE_HERO_ARCANE_MAGE);
-        Manager.Instance.Object.ReturnMap(Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].MapType);
+        Manager.Instance.Object.ReturnMap(Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].MapType);
         Manager.Instance.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE);
     }
 
@@ -239,7 +239,7 @@ public class IngameManager : MonoBehaviour
     public void StopSpawnMonster()
     {
         _spawnMonster = false;
-        var waveIndex = Manager.Instance.Data.ChapterInfoList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[CurrentWaveIndex];
+        var waveIndex = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[CurrentWaveIndex];
         if (Define.INDEX_GOLD_RUSH_WAVE != waveIndex)
             RemainingMonsterHandler?.Invoke();
     }
