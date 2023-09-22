@@ -90,8 +90,8 @@ public class UI_PauseIngame : UI_Popup
 
         for (int ii = 0; ii < CREATE_ABILITY_UI_COUNT; ++ii)
         {
-            var abilityGO = Manager.Instance.UI.GetElementUI(Define.RESOURCE_UI_ABILITY);
-            var abilityUI = Utils.GetOrAddComponent<UI_Ability>(abilityGO);
+            var abilityUIGO = Manager.Instance.UI.GetElementUI(Define.RESOURCE_UI_ABILITY);
+            var abilityUI = Utils.GetOrAddComponent<UI_Ability>(abilityUIGO);
             abilityUI.InitAbilityUI(_ownedWeaponContents.transform);
             _weaponAbilityList.Add(abilityUI);
         }
@@ -102,8 +102,8 @@ public class UI_PauseIngame : UI_Popup
 
         for (int ii = 0; ii < CREATE_ABILITY_UI_COUNT; ++ii)
         {
-            var abilityGO = Manager.Instance.UI.GetElementUI(Define.RESOURCE_UI_ABILITY);
-            var abilityUI = Utils.GetOrAddComponent<UI_Ability>(abilityGO);
+            var abilityUIGO = Manager.Instance.UI.GetElementUI(Define.RESOURCE_UI_ABILITY);
+            var abilityUI = Utils.GetOrAddComponent<UI_Ability>(abilityUIGO);
             abilityUI.InitAbilityUI(_ownedBookContents.transform);
             _bookAbilityList.Add(abilityUI);
         }

@@ -192,8 +192,9 @@ public class UI_IngameScene : UI_Scene
 
     private void _EnhanceHeroAbility()
     {
-        Manager.Instance.UI.ShowPopupUI<UI_EnhanceHeroAbility>(Define.RESOURCE_UI_ENHANCE_HERO_ABILITY, (enhanceHeroAbilityUI) =>
+        Manager.Instance.UI.ShowPopupUI<UI_LevelUpHero>(Define.RESOURCE_UI_LEVEL_UP_HERO, (levelUpHeroUI) =>
         {
+            levelUpHeroUI.UpdateWeaponAbilityUI();
             Manager.Instance.Ingame.ControlIngame(false);
         });
     }

@@ -45,11 +45,12 @@ public class Define
     public const string RESOURCE_UI_CLEAR_CHAPTER = "UI_ClearChapter";
     public const string RESOURCE_UI_CLEAR_WAVE = "UI_ClearWave";
     public const string RESOURCE_UI_PAUSE_INGAME = "UI_PauseIngame";
-    public const string RESOURCE_UI_ENHANCE_HERO_ABILITY = "UI_EnhanceHeroAbility";
+    public const string RESOURCE_UI_LEVEL_UP_HERO = "UI_LevelUpHero";
     // UI_Element
     public const string RESOURCE_UI_NORMAL_BATTLE_WAVE = "UI_NormalBattleWave";
     public const string RESOURCE_UI_GOLD_RUSH_WAVE = "UI_GoldRushWave";
     public const string RESOURCE_UI_ABILITY = "UI_Ability";
+    public const string RESOURCE_UI_SELECT_ABILITY = "UI_SelectAbility";
     // Sprite
     public const string RESOURCE_SPRITES_SLIDER_YELLOW = "Slider_Yellow";
     public const string RESOURCE_SPRITES_SLIDER_RED = "Slider_Red";
@@ -88,4 +89,14 @@ public class Define
     #region TEST
     public const int CURRENT_CHAPTER_INDEX = 0;
     #endregion
+
+    public static readonly Dictionary<string, string> WEAPON_SPRITE_DIC = new Dictionary<string, string>()
+    {
+        {RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE, RESOURCE_SPRITES_ICON_WEAPON_HERO_ARCANE_WAND },
+        {WEAPON_BOMB, RESOURCE_SPRITES_ICON_WEAPON_BOMB },
+        {WEAPON_BOOMERANG, RESOURCE_SPRITES_ICON_WEAPON_BOOMERANG },
+        {WEAPON_CROSSBOW, RESOURCE_SPRITES_ICON_WEAPON_CROSSBOW },
+        {WEAPON_DIVINE_AURA, RESOURCE_SPRITES_ICON_WEAPON_DIVINE_AURA },
+        {WEAPON_FIREBALL, RESOURCE_SPRITES_ICON_WEAPON_FIREBALL }
+    };
 }

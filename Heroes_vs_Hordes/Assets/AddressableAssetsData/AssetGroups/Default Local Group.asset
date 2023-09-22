@@ -113,7 +113,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b93872ae4cad4b0409e2bb2771bef866
-    m_Address: UI_EnhanceHeroAbility
+    m_Address: UI_LevelUpHero
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -158,7 +158,32 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fdbe14652e826ad4c8f6ad7137c198f7
-    m_Address: Assets/Sprites/UIs/Icon_Weapon_Hero_ArcaneWand.png
+    m_Address: Icon_Weapon_Hero_ArcaneWand
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 58cb22ae2111e024eb2a4517fe9a5b68
+    m_Address: Icon_Weapon_Fireball
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 692b1c3ec575ef149851188cfd16f2ea
+    m_Address: Icon_Weapon_DivineAura
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2fdfc9a7fcdb14749b7d9e55046576a2
+    m_Address: Icon_Weapon_Crossbow
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a7d99efc422b0e04a9c4607dde2e683e
+    m_Address: Icon_Weapon_Boomerang
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b49a5ad718468b449b8307a6e4b05179
+    m_Address: UI_SelectAbility
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

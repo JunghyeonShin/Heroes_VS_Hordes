@@ -53,14 +53,19 @@ public class IngameManager : MonoBehaviour
         _ownedWeaponList.Clear();
         _ownedWeaponLevelDic.Clear();
 
-        // UI_PauseIngame의 웨이브 진행도 초기 세팅
+        // UI_PauseIngame 초기 세팅
         var pauseIngameUI = Manager.Instance.UI.FindUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME);
         pauseIngameUI.InitWavePanel();
         pauseIngameUI.InitAbilityUI();
 
-        // UI_ClearWave의 웨이브 진행도 초기 세팅
+        // UI_ClearWave 초기 세팅
         var clearWaveUI = Manager.Instance.UI.FindUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE);
         clearWaveUI.InitWavePanel();
+
+        // UI_LevelUpHero 초기 세팅
+        var levelUpHeroUI = Manager.Instance.UI.FindUI<UI_LevelUpHero>(Define.RESOURCE_UI_LEVEL_UP_HERO);
+        levelUpHeroUI.InitSelectAbilityPanel();
+        levelUpHeroUI.InitAbilityUI();
 
         // 맵 생성
         Manager.Instance.Object.GetMap(Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].MapType, (mapGO) =>
@@ -217,7 +222,10 @@ public class IngameManager : MonoBehaviour
     public void EnhanceHeroAbility()
     {
         if (HeroLevelUpCount > Define.INIT_HERO_LEVEL_UP_COUNT)
+        {
+
             EnhanceHeroAbilityHandler?.Invoke();
+        }
         else
             ChangeHeroLevelUpPostProcessingHandler?.Invoke();
     }
