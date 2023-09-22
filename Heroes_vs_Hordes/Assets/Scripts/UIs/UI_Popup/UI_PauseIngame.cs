@@ -111,14 +111,14 @@ public class UI_PauseIngame : UI_Popup
 
     public void UpdateWeaponAbilityUI()
     {
-        var ownedAllWeaponList = Manager.Instance.Ingame.OwnedAllWeapon;
+        var ownedAllWeaponList = Manager.Instance.Ingame.OwnedWeaponList;
         for (int ii = 0; ii < ownedAllWeaponList.Count; ++ii)
             _weaponAbilityList[ii].UpdateAbilityUI(ownedAllWeaponList[ii]);
     }
 
     public void UpdateBookAbilityUI()
     {
-        var ownedAllBookList = Manager.Instance.Ingame.OwnedAllBook;
+        var ownedAllBookList = Manager.Instance.Ingame.OwnedBookList;
         for (int ii = 0; ii < ownedAllBookList.Count; ++ii)
             _bookAbilityList[ii].UpdateAbilityUI(ownedAllBookList[ii]);
     }

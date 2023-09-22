@@ -32,6 +32,8 @@ public class UI_SelectAbility : UI_Element
     private TextMeshProUGUI _selectAbilityNameText;
     private TextMeshProUGUI _selectAbilityDescriptionText;
 
+    private string _abilityName;
+
     protected override void _Init()
     {
         _BindButton(typeof(EButtons));
@@ -51,6 +53,7 @@ public class UI_SelectAbility : UI_Element
     private void _SelectAbility()
     {
         var ingame = Manager.Instance.Ingame;
+        ingame.RegistAbility(_abilityName);
         OnSelectAbilityHandler?.Invoke();
         ingame.ControlIngame(true);
         --ingame.HeroLevelUpCount;
@@ -69,11 +72,13 @@ public class UI_SelectAbility : UI_Element
     {
         if (string.IsNullOrEmpty(abilityName))
             return;
-        if (false == Define.ABILITY_SPRITE_DIC.TryGetValue(abilityName, out var abilityInfo))
+        if (false == Define.ABILITY_INFO_DIC.TryGetValue(abilityName, out var abilityInfo))
             return;
 
         Manager.Instance.Resource.LoadAsync<Sprite>(abilityInfo.SpriteName, (sprite) =>
         {
+            _abilityName = abilityName;
+
             _selectAbilityIcon.sprite = sprite;
 
             var abilityDescription = Manager.Instance.Data.AbilityDescriptionDic[abilityName][Manager.Instance.Ingame.GetOwnedAbilityLevel(abilityName)];

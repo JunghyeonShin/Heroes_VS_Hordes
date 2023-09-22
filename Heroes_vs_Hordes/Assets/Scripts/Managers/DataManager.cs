@@ -40,7 +40,7 @@ public class DataManager : MonoBehaviour
 
     private readonly Dictionary<string, string> URL_WEAPON_LEVEL_ABILITY_DIC = new Dictionary<string, string>()
     {
-        {Define.WEAPON_ARCANE_MAGE_PROJECTILE, "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&gid=2100824165&range=A2:H"},
+        {Define.WEAPON_ARCANE_MAGE_WAND, "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&gid=2100824165&range=A2:H"},
         {Define.WEAPON_KNIGHT_SWORD, "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&gid=907954984&range=A2:H"},
         {Define.WEAPON_BOMB, "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&gid=1142576319&range=A2:H"},
         {Define.WEAPON_BOOMERANG, "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&gid=690681640&range=A2:H"},
@@ -59,13 +59,19 @@ public class DataManager : MonoBehaviour
     };
     private readonly Dictionary<string, string> URL_ABILITY_DESCRIPTION_DIC = new Dictionary<string, string>()
     {
-        {Define.WEAPON_ARCANE_MAGE_PROJECTILE,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&range=B2:D" },
+        {Define.WEAPON_ARCANE_MAGE_WAND,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&range=B2:D" },
         {Define.WEAPON_KNIGHT_SWORD,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&gid=960709216&range=B2:D" },
         {Define.WEAPON_BOMB,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&gid=1495373022&range=B2:D" },
         {Define.WEAPON_BOOMERANG,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&gid=681918787&range=B2:D" },
         {Define.WEAPON_CROSSBOW,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&gid=722212876&range=B2:D" },
         {Define.WEAPON_DIVINE_AURA,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&gid=1198127096&range=B2:D" },
-        {Define.WEAPON_FIREBALL,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&gid=1311998993&range=B2:D" }
+        {Define.WEAPON_FIREBALL,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&gid=1311998993&range=B2:D" },
+        {Define.BOOK_COOLDOWN,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&gid=1645064844&range=B2:D" },
+        {Define.BOOK_HERO_MOVE_SPEED,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&gid=823477494&range=B2:D" },
+        {Define.BOOK_HERO_RECOVERY,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&gid=468300514&range=B2:D" },
+        {Define.BOOK_PROJECTILE_COPY,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&gid=572090125&range=B2:D" },
+        {Define.BOOK_PROJECTILE_SPEED,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&gid=1592589412&range=B2:D" },
+        {Define.BOOK_RANGE,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&gid=789511474&range=B2:D" }
     };
 
     public void Init()

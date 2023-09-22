@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum EAbilityTypes
 {
+    HeroWeapon,
     Weapon,
     Book
 }
@@ -97,7 +98,7 @@ public class Define
     #endregion
 
     #region Ability
-    public const string WEAPON_ARCANE_MAGE_PROJECTILE = "ArcaneMage_Projectile";
+    public const string WEAPON_ARCANE_MAGE_WAND = "ArcaneMage_Wand";
     public const string WEAPON_KNIGHT_SWORD = "Knight_Sword";
     public const string WEAPON_BOMB = "Bomb";
     public const string WEAPON_BOOMERANG = "Boomerang";
@@ -111,9 +112,27 @@ public class Define
     public const string BOOK_PROJECTILE_SPEED = "ProjectileSpeedBook";
     public const string BOOK_RANGE = "RangeBook";
 
-    public static readonly Dictionary<string, AbilityInfo> ABILITY_SPRITE_DIC = new Dictionary<string, AbilityInfo>()
+    public static readonly List<string> ABILITY_LIST = new List<string>()
     {
-        {WEAPON_ARCANE_MAGE_PROJECTILE, new AbilityInfo() { AbilityType = EAbilityTypes.Weapon, SpriteName = RESOURCE_SPRITES_ICON_WEAPON_HERO_ARCANE_WAND } },
+        WEAPON_ARCANE_MAGE_WAND,
+        WEAPON_KNIGHT_SWORD,
+        WEAPON_BOMB,
+        WEAPON_BOOMERANG,
+        WEAPON_CROSSBOW,
+        WEAPON_DIVINE_AURA,
+        WEAPON_FIREBALL,
+        BOOK_COOLDOWN,
+        BOOK_HERO_MOVE_SPEED,
+        BOOK_HERO_RECOVERY,
+        BOOK_PROJECTILE_COPY,
+        BOOK_PROJECTILE_SPEED,
+        BOOK_RANGE
+    };
+
+    public static readonly Dictionary<string, AbilityInfo> ABILITY_INFO_DIC = new Dictionary<string, AbilityInfo>()
+    {
+        {WEAPON_ARCANE_MAGE_WAND, new AbilityInfo() { AbilityType = EAbilityTypes.HeroWeapon, SpriteName = RESOURCE_SPRITES_ICON_WEAPON_HERO_ARCANE_WAND } },
+        {WEAPON_KNIGHT_SWORD, new AbilityInfo() { AbilityType = EAbilityTypes.HeroWeapon, SpriteName = RESOURCE_SPRITES_ICON_WEAPON_HERO_SWORD } },
         {WEAPON_BOMB, new AbilityInfo() { AbilityType = EAbilityTypes.Weapon, SpriteName = RESOURCE_SPRITES_ICON_WEAPON_BOMB } },
         {WEAPON_BOOMERANG, new AbilityInfo() { AbilityType = EAbilityTypes.Weapon, SpriteName = RESOURCE_SPRITES_ICON_WEAPON_BOOMERANG } },
         {WEAPON_CROSSBOW, new AbilityInfo() { AbilityType = EAbilityTypes.Weapon, SpriteName = RESOURCE_SPRITES_ICON_WEAPON_CROSSBOW } },

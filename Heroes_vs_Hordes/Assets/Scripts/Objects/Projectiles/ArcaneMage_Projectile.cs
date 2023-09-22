@@ -25,7 +25,7 @@ public class ArcaneMage_Projectile : MonoBehaviour
     private void Awake()
     {
         _rigid = GetComponent<Rigidbody2D>();
-        _weaponName = Define.WEAPON_ARCANE_MAGE_PROJECTILE;
+        _weaponName = Define.WEAPON_ARCANE_MAGE_WAND;
     }
 
     private void OnEnable()

@@ -48,7 +48,7 @@ public class UI_Ability : UI_Element
     {
         if (string.IsNullOrEmpty(abilityName))
             return;
-        if (false == Define.ABILITY_SPRITE_DIC.TryGetValue(abilityName, out var abilityInfo))
+        if (false == Define.ABILITY_INFO_DIC.TryGetValue(abilityName, out var abilityInfo))
             return;
 
         Manager.Instance.Resource.LoadAsync<Sprite>(abilityInfo.SpriteName, (sprite) =>

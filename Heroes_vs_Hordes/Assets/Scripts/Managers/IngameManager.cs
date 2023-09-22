@@ -50,8 +50,9 @@ public class IngameManager : MonoBehaviour
         AcquiredGold = INIT_REMAINING_GOLD;
         _remainingGold = INIT_REMAINING_GOLD;
 
-        _ownedWeaponList.Clear();
         _ownedAbilityLevelDic.Clear();
+        _ownedWeaponList.Clear();
+        _ownedBookList.Clear();
 
         // UI_PauseIngame 초기 세팅
         var pauseIngameUI = Manager.Instance.UI.FindUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME);
@@ -78,7 +79,7 @@ public class IngameManager : MonoBehaviour
                 var hero = heroGO.GetComponent<Hero>();
                 UsedHero = hero;
                 // 보유한 무기 세팅
-                _RegistAbility(UsedHero.HeroWeaponName);
+                RegistAbility(UsedHero.HeroWeaponName);
                 UsedHero.SetHeroAbilities();
 
                 var heroController = Utils.GetOrAddComponent<HeroController>(heroGO);
@@ -390,18 +391,27 @@ public class IngameManager : MonoBehaviour
     private Dictionary<string, int> _ownedAbilityLevelDic = new Dictionary<string, int>();
     private List<string> _ownedWeaponList = new List<string>();
     private List<string> _ownedBookList = new List<string>();
+    private List<string> _drawAbilityList = new List<string>();
 
-    public List<string> OwnedAllWeapon { get { return _ownedWeaponList; } }
-    public List<string> OwnedAllBook { get { return _ownedBookList; } }
+    public List<string> OwnedWeaponList { get { return _ownedWeaponList; } }
+    public List<string> OwnedBookList { get { return _ownedBookList; } }
+    public List<string> DrawAbilityList { get { return _drawAbilityList; } }
 
+
+    private const int NEW_ABILITY_LEVEL = 0;
     private const int INIT_OWNED_ABILITY_LEVEL = 1;
+    private const int DRAW_ABILITY_COUNT = 3;
+    private const int MAX_WEAPON_ABILITY_LEVEL = 5;
+    private const int MAX_BOOK_ABILITY_LEVEL = 3;
 
     public int GetOwnedAbilityLevel(string weaponName)
     {
-        return _ownedAbilityLevelDic[weaponName];
+        if (false == _ownedAbilityLevelDic.TryGetValue(weaponName, out var level))
+            return NEW_ABILITY_LEVEL;
+        return level;
     }
 
-    private void _RegistAbility(string abilityName)
+    public void RegistAbility(string abilityName)
     {
         if (_ownedAbilityLevelDic.ContainsKey(abilityName))
         {
@@ -409,8 +419,8 @@ public class IngameManager : MonoBehaviour
             return;
         }
         _ownedAbilityLevelDic.Add(abilityName, INIT_OWNED_ABILITY_LEVEL);
-        var abilityInfo = Define.ABILITY_SPRITE_DIC[abilityName];
-        if (EAbilityTypes.Weapon == abilityInfo.AbilityType)
+        var abilityInfo = Define.ABILITY_INFO_DIC[abilityName];
+        if (EAbilityTypes.HeroWeapon == abilityInfo.AbilityType || EAbilityTypes.Weapon == abilityInfo.AbilityType)
             _ownedWeaponList.Add(abilityName);
         else if (EAbilityTypes.Book == abilityInfo.AbilityType)
             _ownedBookList.Add(abilityName);
@@ -418,7 +428,35 @@ public class IngameManager : MonoBehaviour
 
     private void _DrawAbility()
     {
+        _drawAbilityList.Clear();
+        for (int ii = 0; ii < DRAW_ABILITY_COUNT; ++ii)
+            _drawAbilityList.Add(_Draw());
+    }
 
+    private string _Draw()
+    {
+        var drawIndex = UnityEngine.Random.Range(0, Define.ABILITY_LIST.Count);
+        var abilityName = Define.ABILITY_LIST[drawIndex];
+
+        // 영웅 전용 무기일 때 가져야할 영웅이 아니면 다시 뽑기
+        var abilityType = Define.ABILITY_INFO_DIC[abilityName].AbilityType;
+        if (EAbilityTypes.HeroWeapon == abilityType)
+        {
+            if (false == abilityName.Equals(UsedHero.HeroWeaponName))
+                return _Draw();
+        }
+        // 선택한 능력이 최대 레벨일 때 다시 뽑기
+        if (EAbilityTypes.HeroWeapon == abilityType || EAbilityTypes.Weapon == abilityType)
+        {
+            if (MAX_WEAPON_ABILITY_LEVEL == GetOwnedAbilityLevel(abilityName))
+                return _Draw();
+        }
+        else if (EAbilityTypes.Book == abilityType)
+        {
+            if (MAX_BOOK_ABILITY_LEVEL == GetOwnedAbilityLevel(abilityName))
+                return _Draw();
+        }
+        return abilityName;
     }
     #endregion
 }
