@@ -19,7 +19,7 @@ public abstract class Hero : MonoBehaviour
     protected bool _detectMonster;
     protected bool _attackMonster;
 
-    private event Action _enhanceAbilityHandler;
+    private event Action _levelUpAbilityHandler;
     private event Action<float> _changeExpHandler;
     private event Action<int> _changeLevelHandler;
     private float _exp;
@@ -47,8 +47,8 @@ public abstract class Hero : MonoBehaviour
         _changeExpHandler += ingame.ChangeHeroExp;
         _changeLevelHandler -= ingame.ChangeHeroLevel;
         _changeLevelHandler += ingame.ChangeHeroLevel;
-        _enhanceAbilityHandler -= ingame.EnhanceHeroAbility;
-        _enhanceAbilityHandler += ingame.EnhanceHeroAbility;
+        _levelUpAbilityHandler -= ingame.LevelUpHeroAbility;
+        _levelUpAbilityHandler += ingame.LevelUpHeroAbility;
         ingame.ChangeHeroLevelUpPostProcessingHandler -= _LevelUpPostProcessing;
         ingame.ChangeHeroLevelUpPostProcessingHandler += _LevelUpPostProcessing;
     }
@@ -132,7 +132,7 @@ public abstract class Hero : MonoBehaviour
         else
         {
             await UniTask.Delay(TimeSpan.FromSeconds(DELAY_ENHANCE_ABILITY), ignoreTimeScale: true);
-            _enhanceAbilityHandler?.Invoke();
+            _levelUpAbilityHandler?.Invoke();
         }
     }
 

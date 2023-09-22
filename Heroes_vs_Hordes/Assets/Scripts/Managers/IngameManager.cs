@@ -51,7 +51,7 @@ public class IngameManager : MonoBehaviour
         _remainingGold = INIT_REMAINING_GOLD;
 
         _ownedWeaponList.Clear();
-        _ownedWeaponLevelDic.Clear();
+        _ownedAbilityLevelDic.Clear();
 
         // UI_PauseIngame 초기 세팅
         var pauseIngameUI = Manager.Instance.UI.FindUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME);
@@ -78,7 +78,7 @@ public class IngameManager : MonoBehaviour
                 var hero = heroGO.GetComponent<Hero>();
                 UsedHero = hero;
                 // 보유한 무기 세팅
-                _RegistWeapon(UsedHero.HeroWeaponName);
+                _RegistAbility(UsedHero.HeroWeaponName);
                 UsedHero.SetHeroAbilities();
 
                 var heroController = Utils.GetOrAddComponent<HeroController>(heroGO);
@@ -200,7 +200,7 @@ public class IngameManager : MonoBehaviour
     public event Action<float> ChangeHeroExpHandler;
     public event Action<int> ChangeHeroLevelHandler;
     public event Action ChangeHeroLevelUpPostProcessingHandler;
-    public event Action EnhanceHeroAbilityHandler;
+    public event Action LevelUpHeroAbilityHandler;
 
     public Hero UsedHero { get; private set; }
     public int HeroLevelUpCount { get; set; }
@@ -219,12 +219,12 @@ public class IngameManager : MonoBehaviour
         ChangeHeroLevelHandler?.Invoke(level);
     }
 
-    public void EnhanceHeroAbility()
+    public void LevelUpHeroAbility()
     {
         if (HeroLevelUpCount > Define.INIT_HERO_LEVEL_UP_COUNT)
         {
-
-            EnhanceHeroAbilityHandler?.Invoke();
+            _DrawAbility();
+            LevelUpHeroAbilityHandler?.Invoke();
         }
         else
             ChangeHeroLevelUpPostProcessingHandler?.Invoke();
@@ -387,27 +387,38 @@ public class IngameManager : MonoBehaviour
     #endregion
 
     #region Weapon
-    private Dictionary<string, int> _ownedWeaponLevelDic = new Dictionary<string, int>();
+    private Dictionary<string, int> _ownedAbilityLevelDic = new Dictionary<string, int>();
     private List<string> _ownedWeaponList = new List<string>();
+    private List<string> _ownedBookList = new List<string>();
 
     public List<string> OwnedAllWeapon { get { return _ownedWeaponList; } }
+    public List<string> OwnedAllBook { get { return _ownedBookList; } }
 
-    private const int INIT_OWNED_WEAPON_LEVEL = 1;
+    private const int INIT_OWNED_ABILITY_LEVEL = 1;
 
-    public int GetOwnedWeaponLevel(string weaponName)
+    public int GetOwnedAbilityLevel(string weaponName)
     {
-        return _ownedWeaponLevelDic[weaponName];
+        return _ownedAbilityLevelDic[weaponName];
     }
 
-    private void _RegistWeapon(string weaponName)
+    private void _RegistAbility(string abilityName)
     {
-        if (_ownedWeaponLevelDic.ContainsKey(weaponName))
+        if (_ownedAbilityLevelDic.ContainsKey(abilityName))
         {
-            ++_ownedWeaponLevelDic[weaponName];
+            ++_ownedAbilityLevelDic[abilityName];
             return;
         }
-        _ownedWeaponList.Add(weaponName);
-        _ownedWeaponLevelDic.Add(weaponName, INIT_OWNED_WEAPON_LEVEL);
+        _ownedAbilityLevelDic.Add(abilityName, INIT_OWNED_ABILITY_LEVEL);
+        var abilityInfo = Define.ABILITY_SPRITE_DIC[abilityName];
+        if (EAbilityTypes.Weapon == abilityInfo.AbilityType)
+            _ownedWeaponList.Add(abilityName);
+        else if (EAbilityTypes.Book == abilityInfo.AbilityType)
+            _ownedBookList.Add(abilityName);
+    }
+
+    private void _DrawAbility()
+    {
+
     }
     #endregion
 }

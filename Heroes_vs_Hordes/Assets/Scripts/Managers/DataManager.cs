@@ -16,8 +16,9 @@ public class DataManager : MonoBehaviour
     public Dictionary<string, WeaponAbilityData> WeaponAbilityDataDic { get; private set; }
     public Dictionary<string, List<WeaponAbilityData>> WeaponLevelAbilityDataDic { get; private set; }
     public Dictionary<string, List<float>> BookAbilityDataDic { get; private set; }
+    public Dictionary<string, List<AbilityDescriptionData>> AbilityDescriptionDic { get; private set; }
 
-    private const int INDEX_LOAD_TOTAL_VALUE = 7;
+    private const int INDEX_LOAD_TOTAL_VALUE = 8;
     private const int INDEX_LOAD_HERO_COMMON_ABILITY = 0;
     private const int INDEX_LOAD_HERO_INDIVIDUAL_ABILITY = 1;
     private const int INDEX_LOAD_REQUIRED_EXP = 2;
@@ -25,6 +26,7 @@ public class DataManager : MonoBehaviour
     private const int INDEX_LOAD_WEAPON_ABILITY = 4;
     private const int INDEX_LOAD_WEAPON_LEVEL_ABILITY = 5;
     private const int INDEX_LOAD_BOOK_ABILITY = 6;
+    private const int INDEX_LOAD_ABILITY_DESCRIPTION = 7;
 
     private const int KEY_HERO_ABILITY = 0;
     private const int KEY_WEAPON_ABILITY = 0;
@@ -38,22 +40,32 @@ public class DataManager : MonoBehaviour
 
     private readonly Dictionary<string, string> URL_WEAPON_LEVEL_ABILITY_DIC = new Dictionary<string, string>()
     {
-        {Define.RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE, "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&gid=2100824165&range=A2:H"},
+        {Define.WEAPON_ARCANE_MAGE_PROJECTILE, "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&gid=2100824165&range=A2:H"},
         {Define.WEAPON_KNIGHT_SWORD, "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&gid=907954984&range=A2:H"},
-        {Define.WEAPON_CROSSBOW, "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&gid=2129410322&range=A2:H"},
-        {Define.WEAPON_FIREBALL, "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&gid=1253638460&range=A2:H"},
         {Define.WEAPON_BOMB, "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&gid=1142576319&range=A2:H"},
+        {Define.WEAPON_BOOMERANG, "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&gid=690681640&range=A2:H"},
+        {Define.WEAPON_CROSSBOW, "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&gid=2129410322&range=A2:H"},
         {Define.WEAPON_DIVINE_AURA, "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&gid=38680372&range=A2:H"},
-        {Define.WEAPON_BOOMERANG, "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&gid=690681640&range=A2:H"}
+        {Define.WEAPON_FIREBALL, "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&gid=1253638460&range=A2:H"}
     };
     private readonly Dictionary<string, string> URL_BOOK_ABILITY_DIC = new Dictionary<string, string>()
     {
-        {Define.RESOURCE_BOOK_PROJECTILE_SPEED, "https://docs.google.com/spreadsheets/d/1LTrv5qwXc163K81dVZuo8T0xc6jPGvnJMEOJTfBDKxw/export?format=tsv&range=B2:B"},
-        {Define.RESOURCE_BOOK_PROJECTILE_COPY, "https://docs.google.com/spreadsheets/d/1LTrv5qwXc163K81dVZuo8T0xc6jPGvnJMEOJTfBDKxw/export?format=tsv&gid=1016319567&range=B2:B"},
-        {Define.RESOURCE_BOOK_COOLDOWN, "https://docs.google.com/spreadsheets/d/1LTrv5qwXc163K81dVZuo8T0xc6jPGvnJMEOJTfBDKxw/export?format=tsv&gid=1305674535&range=B2:B"},
-        {Define.RESOURCE_BOOK_RANGE, "https://docs.google.com/spreadsheets/d/1LTrv5qwXc163K81dVZuo8T0xc6jPGvnJMEOJTfBDKxw/export?format=tsv&gid=1033079248&range=B2:B"},
-        {Define.RESOURCE_BOOK_HERO_RECOVERY, "https://docs.google.com/spreadsheets/d/1LTrv5qwXc163K81dVZuo8T0xc6jPGvnJMEOJTfBDKxw/export?format=tsv&gid=1649711332&range=B2:B"},
-        {Define.RESOURCE_BOOK_HERO_MOVE_SPEED, "https://docs.google.com/spreadsheets/d/1LTrv5qwXc163K81dVZuo8T0xc6jPGvnJMEOJTfBDKxw/export?format=tsv&gid=1231208175&range=B2:B"},
+        {Define.BOOK_PROJECTILE_SPEED, "https://docs.google.com/spreadsheets/d/1LTrv5qwXc163K81dVZuo8T0xc6jPGvnJMEOJTfBDKxw/export?format=tsv&range=B2:B"},
+        {Define.BOOK_PROJECTILE_COPY, "https://docs.google.com/spreadsheets/d/1LTrv5qwXc163K81dVZuo8T0xc6jPGvnJMEOJTfBDKxw/export?format=tsv&gid=1016319567&range=B2:B"},
+        {Define.BOOK_COOLDOWN, "https://docs.google.com/spreadsheets/d/1LTrv5qwXc163K81dVZuo8T0xc6jPGvnJMEOJTfBDKxw/export?format=tsv&gid=1305674535&range=B2:B"},
+        {Define.BOOK_RANGE, "https://docs.google.com/spreadsheets/d/1LTrv5qwXc163K81dVZuo8T0xc6jPGvnJMEOJTfBDKxw/export?format=tsv&gid=1033079248&range=B2:B"},
+        {Define.BOOK_HERO_RECOVERY, "https://docs.google.com/spreadsheets/d/1LTrv5qwXc163K81dVZuo8T0xc6jPGvnJMEOJTfBDKxw/export?format=tsv&gid=1649711332&range=B2:B"},
+        {Define.BOOK_HERO_MOVE_SPEED, "https://docs.google.com/spreadsheets/d/1LTrv5qwXc163K81dVZuo8T0xc6jPGvnJMEOJTfBDKxw/export?format=tsv&gid=1231208175&range=B2:B"},
+    };
+    private readonly Dictionary<string, string> URL_ABILITY_DESCRIPTION_DIC = new Dictionary<string, string>()
+    {
+        {Define.WEAPON_ARCANE_MAGE_PROJECTILE,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&range=B2:D" },
+        {Define.WEAPON_KNIGHT_SWORD,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&gid=960709216&range=B2:D" },
+        {Define.WEAPON_BOMB,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&gid=1495373022&range=B2:D" },
+        {Define.WEAPON_BOOMERANG,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&gid=681918787&range=B2:D" },
+        {Define.WEAPON_CROSSBOW,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&gid=722212876&range=B2:D" },
+        {Define.WEAPON_DIVINE_AURA,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&gid=1198127096&range=B2:D" },
+        {Define.WEAPON_FIREBALL,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&gid=1311998993&range=B2:D" }
     };
 
     public void Init()
@@ -66,6 +78,7 @@ public class DataManager : MonoBehaviour
         _LoadWeaponAbility().Forget();
         _LoadWeaponLevelAbility().Forget();
         _LoadBookAbility().Forget();
+        _LoadAbilityDescription().Forget();
     }
 
     public bool LoadComplete()
@@ -196,6 +209,28 @@ public class DataManager : MonoBehaviour
             BookAbilityDataDic.Add(bookAbilityURL.Key, bookAbilityList);
         }
         _loadCompletes[INDEX_LOAD_BOOK_ABILITY] = true;
+    }
+    #endregion
+
+    #region AbilityDescription
+    private async UniTaskVoid _LoadAbilityDescription()
+    {
+        AbilityDescriptionDic = new Dictionary<string, List<AbilityDescriptionData>>();
+        foreach (var abilityDescriptionURL in URL_ABILITY_DESCRIPTION_DIC)
+        {
+            var webRequest = UnityWebRequest.Get(abilityDescriptionURL.Value);
+            var op = await webRequest.SendWebRequest();
+
+            var abilityDescriptionList = new List<AbilityDescriptionData>();
+            var splitRawData = op.downloadHandler.text.Split('\n');
+            foreach (var data in splitRawData)
+            {
+                var splitData = data.Split('\t');
+                abilityDescriptionList.Add(new AbilityDescriptionData(splitData));
+            }
+            AbilityDescriptionDic.Add(abilityDescriptionURL.Key, abilityDescriptionList);
+        }
+        _loadCompletes[INDEX_LOAD_ABILITY_DESCRIPTION] = true;
     }
     #endregion
 }

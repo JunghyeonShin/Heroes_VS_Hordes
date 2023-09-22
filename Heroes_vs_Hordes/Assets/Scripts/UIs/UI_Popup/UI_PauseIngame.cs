@@ -118,7 +118,9 @@ public class UI_PauseIngame : UI_Popup
 
     public void UpdateBookAbilityUI()
     {
-
+        var ownedAllBookList = Manager.Instance.Ingame.OwnedAllBook;
+        for (int ii = 0; ii < ownedAllBookList.Count; ++ii)
+            _bookAbilityList[ii].UpdateAbilityUI(ownedAllBookList[ii]);
     }
 
     private void _InitWavePanel<T>(string wavePanelName, int index) where T : UI_Wave

@@ -55,35 +55,14 @@ public class UIManager
     {
         _loadCompletes = new bool[INDEX_TOTAL_VALUE];
 
-        _InstantiateUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME, () =>
-        {
-            _loadCompletes[INDEX_UI_PAUSE_INGAME] = true;
-        });
-        _InstantiateUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE, () =>
-        {
-            _loadCompletes[INDEX_UI_CLEAR_WAVE] = true;
-        });
-        _InstantiateUI<UI_LevelUpHero>(Define.RESOURCE_UI_LEVEL_UP_HERO, () =>
-        {
-            _loadCompletes[INDEX_UI_LEVEL_UP_HERO] = true;
-        });
+        _InstantiateUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME, () => { _loadCompletes[INDEX_UI_PAUSE_INGAME] = true; });
+        _InstantiateUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE, () => { _loadCompletes[INDEX_UI_CLEAR_WAVE] = true; });
+        _InstantiateUI<UI_LevelUpHero>(Define.RESOURCE_UI_LEVEL_UP_HERO, () => { _loadCompletes[INDEX_UI_LEVEL_UP_HERO] = true; });
 
-        _InstantiateUIElement(Define.RESOURCE_UI_NORMAL_BATTLE_WAVE, CREATE_NORMAL_BATTLE_WAVE_UI_COUNT, () =>
-        {
-            _loadCompletes[INDEX_UI_NORMAL_BATTLE_WAVE] = true;
-        });
-        _InstantiateUIElement(Define.RESOURCE_UI_GOLD_RUSH_WAVE, CREATE_GOLD_RUSH_WAVE_UI_COUNT, () =>
-        {
-            _loadCompletes[INDEX_UI_COIN_RUSH_WAVE] = true;
-        });
-        _InstantiateUIElement(Define.RESOURCE_UI_ABILITY, CREATE_ABILITY_UI_COUNT, () =>
-        {
-            _loadCompletes[INDEX_UI_ABILITY] = true;
-        });
-        _InstantiateUIElement(Define.RESOURCE_UI_SELECT_ABILITY, CREATE_SELECT_ABILITY_UI_COUNT, () =>
-        {
-            _loadCompletes[INDEX_UI_SELECT_ABILITY] = true;
-        });
+        _InstantiateUIElement(Define.RESOURCE_UI_NORMAL_BATTLE_WAVE, CREATE_NORMAL_BATTLE_WAVE_UI_COUNT, () => { _loadCompletes[INDEX_UI_NORMAL_BATTLE_WAVE] = true; });
+        _InstantiateUIElement(Define.RESOURCE_UI_GOLD_RUSH_WAVE, CREATE_GOLD_RUSH_WAVE_UI_COUNT, () => { _loadCompletes[INDEX_UI_COIN_RUSH_WAVE] = true; });
+        _InstantiateUIElement(Define.RESOURCE_UI_ABILITY, CREATE_ABILITY_UI_COUNT, () => { _loadCompletes[INDEX_UI_ABILITY] = true; });
+        _InstantiateUIElement(Define.RESOURCE_UI_SELECT_ABILITY, CREATE_SELECT_ABILITY_UI_COUNT, () => { _loadCompletes[INDEX_UI_SELECT_ABILITY] = true; });
     }
 
     private void _InstantiateUI<T>(string key, Action callback) where T : UI_Base

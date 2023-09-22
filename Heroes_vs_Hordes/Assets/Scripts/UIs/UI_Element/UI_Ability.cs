@@ -44,17 +44,17 @@ public class UI_Ability : UI_Element
         Utils.SetActive(_ownedAblityPanel, false);
     }
 
-    public void UpdateAbilityUI(string weaponName)
+    public void UpdateAbilityUI(string abilityName)
     {
-        if (string.IsNullOrEmpty(weaponName))
+        if (string.IsNullOrEmpty(abilityName))
             return;
-        if (false == Define.WEAPON_SPRITE_DIC.TryGetValue(weaponName, out var spriteName))
+        if (false == Define.ABILITY_SPRITE_DIC.TryGetValue(abilityName, out var abilityInfo))
             return;
 
-        Manager.Instance.Resource.LoadAsync<Sprite>(spriteName, (sprite) =>
+        Manager.Instance.Resource.LoadAsync<Sprite>(abilityInfo.SpriteName, (sprite) =>
         {
             _abilityIcon.sprite = sprite;
-            _abilityLevelText.text = Manager.Instance.Ingame.GetOwnedWeaponLevel(weaponName).ToString();
+            _abilityLevelText.text = Manager.Instance.Ingame.GetOwnedAbilityLevel(abilityName).ToString();
         });
         Utils.SetActive(_ownedAblityPanel, true);
     }

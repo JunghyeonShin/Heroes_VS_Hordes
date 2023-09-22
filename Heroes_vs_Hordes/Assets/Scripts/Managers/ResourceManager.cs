@@ -19,10 +19,22 @@ public class ResourceManager
     #region InitResource
     private bool[] _loadCompletes;
 
-    private const int INDEX_TOTAL_VALUE = 3;
+    private const int INDEX_TOTAL_VALUE = 15;
     private const int INDEX_SPRITE_SLIDER_YELLOW = 0;
     private const int INDEX_SPRITE_SLIDER_RED = 1;
     private const int INDEX_SPRITE_ICON_WEAPON_HERO_ARCANE_WAND = 2;
+    private const int INDEX_SPRITE_ICON_WEAPON_HERO_KNIGHT_SWORD = 3;
+    private const int INDEX_SPRITE_ICON_WEAPON_BOMB = 4;
+    private const int INDEX_SPRITE_ICON_WEAPON_BOOMERANG = 5;
+    private const int INDEX_SPRITE_ICON_WEAPON_CORSSBOW = 6;
+    private const int INDEX_SPRITE_ICON_WEAPON_DIVINE_AURA = 7;
+    private const int INDEX_SPRITE_ICON_WEAPON_FIREBALL = 8;
+    private const int INDEX_SPRITE_ICON_BOOK_COOLDOWN = 9;
+    private const int INDEX_SPRITE_ICON_BOOK_HERO_MOVE_SPEED = 10;
+    private const int INDEX_SPRITE_ICON_BOOK_HERO_RECOVERY = 11;
+    private const int INDEX_SPRITE_ICON_BOOK_PROJECTILE_COPY = 12;
+    private const int INDEX_SPRITE_ICON_BOOK_PROJECTILE_SPEED = 13;
+    private const int INDEX_SPRITE_ICON_BOOK_RANGE = 14;
 
     public bool LoadComplete()
     {
@@ -37,18 +49,21 @@ public class ResourceManager
     private void _LoadEssentialResource()
     {
         _loadCompletes = new bool[INDEX_TOTAL_VALUE];
-        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_SLIDER_YELLOW, (sprite) =>
-        {
-            _loadCompletes[INDEX_SPRITE_SLIDER_YELLOW] = true;
-        });
-        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_SLIDER_RED, (sprite) =>
-        {
-            _loadCompletes[INDEX_SPRITE_SLIDER_RED] = true;
-        });
-        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_WEAPON_HERO_ARCANE_WAND, (sprite) =>
-        {
-            _loadCompletes[INDEX_SPRITE_ICON_WEAPON_HERO_ARCANE_WAND] = true;
-        });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_SLIDER_YELLOW, (sprite) => { _loadCompletes[INDEX_SPRITE_SLIDER_YELLOW] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_SLIDER_RED, (sprite) => { _loadCompletes[INDEX_SPRITE_SLIDER_RED] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_WEAPON_HERO_ARCANE_WAND, (sprite) => { _loadCompletes[INDEX_SPRITE_ICON_WEAPON_HERO_ARCANE_WAND] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_WEAPON_HERO_SWORD, (sprite) => { _loadCompletes[INDEX_SPRITE_ICON_WEAPON_HERO_KNIGHT_SWORD] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_WEAPON_BOMB, (sprite) => { _loadCompletes[INDEX_SPRITE_ICON_WEAPON_BOMB] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_WEAPON_BOOMERANG, (sprite) => { _loadCompletes[INDEX_SPRITE_ICON_WEAPON_BOOMERANG] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_WEAPON_CROSSBOW, (sprite) => { _loadCompletes[INDEX_SPRITE_ICON_WEAPON_CORSSBOW] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_WEAPON_DIVINE_AURA, (sprite) => { _loadCompletes[INDEX_SPRITE_ICON_WEAPON_DIVINE_AURA] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_WEAPON_FIREBALL, (sprite) => { _loadCompletes[INDEX_SPRITE_ICON_WEAPON_FIREBALL] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_BOOK_COOLDOWN, (sprite) => { _loadCompletes[INDEX_SPRITE_ICON_BOOK_COOLDOWN] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_BOOK_HERO_MOVE_SPEED, (sprite) => { _loadCompletes[INDEX_SPRITE_ICON_BOOK_HERO_MOVE_SPEED] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_BOOK_HERO_RECOVERY, (sprite) => { _loadCompletes[INDEX_SPRITE_ICON_BOOK_HERO_RECOVERY] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_BOOK_PROJECTILE_COPY, (sprite) => { _loadCompletes[INDEX_SPRITE_ICON_BOOK_PROJECTILE_COPY] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_BOOK_PROJECTILE_SPEED, (sprite) => { _loadCompletes[INDEX_SPRITE_ICON_BOOK_PROJECTILE_SPEED] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_BOOK_RANGE, (sprite) => { _loadCompletes[INDEX_SPRITE_ICON_BOOK_RANGE] = true; });
     }
     #endregion
 

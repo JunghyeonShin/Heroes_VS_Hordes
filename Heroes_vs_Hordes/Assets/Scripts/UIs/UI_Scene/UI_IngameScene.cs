@@ -103,8 +103,8 @@ public class UI_IngameScene : UI_Scene
         ingame.ChangeHeroExpHandler += _SetExpSlider;
         ingame.ChangeHeroLevelHandler -= _SetLevel;
         ingame.ChangeHeroLevelHandler += _SetLevel;
-        ingame.EnhanceHeroAbilityHandler -= _EnhanceHeroAbility;
-        ingame.EnhanceHeroAbilityHandler += _EnhanceHeroAbility;
+        ingame.LevelUpHeroAbilityHandler -= _LevelUpHeroAbility;
+        ingame.LevelUpHeroAbilityHandler += _LevelUpHeroAbility;
 
         ingame.RemainingMonsterHandler -= _SetMonsterText;
         ingame.RemainingMonsterHandler += _SetMonsterText;
@@ -190,11 +190,13 @@ public class UI_IngameScene : UI_Scene
         _levelText.text = level.ToString();
     }
 
-    private void _EnhanceHeroAbility()
+    private void _LevelUpHeroAbility()
     {
         Manager.Instance.UI.ShowPopupUI<UI_LevelUpHero>(Define.RESOURCE_UI_LEVEL_UP_HERO, (levelUpHeroUI) =>
         {
+            levelUpHeroUI.UpdateSelectAbilityPanel();
             levelUpHeroUI.UpdateWeaponAbilityUI();
+            levelUpHeroUI.UpdateBookAbilityUI();
             Manager.Instance.Ingame.ControlIngame(false);
         });
     }

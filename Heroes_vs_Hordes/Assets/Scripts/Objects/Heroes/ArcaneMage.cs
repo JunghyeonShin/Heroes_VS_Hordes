@@ -36,15 +36,15 @@ public class ArcaneMage : Hero
     {
         base.Awake();
         _heroName = Define.RESOURCE_HERO_ARCANE_MAGE;
-        _heroWeaponName = Define.RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE;
+        _heroWeaponName = Define.WEAPON_ARCANE_MAGE_PROJECTILE;
         _InitProjectile();
     }
 
     public override void SetHeroAbilities()
     {
         base.SetHeroAbilities();
-        var weaponLevel = Manager.Instance.Ingame.GetOwnedWeaponLevel(_heroWeaponName);
-        _projectileCount = WeaponAbility.GetWeaponProjectileCount(Define.RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE, weaponLevel);
+        var weaponLevel = Manager.Instance.Ingame.GetOwnedAbilityLevel(_heroWeaponName);
+        _projectileCount = WeaponAbility.GetWeaponProjectileCount(Define.WEAPON_ARCANE_MAGE_PROJECTILE, weaponLevel);
     }
 
     protected override void _DetectMonster()

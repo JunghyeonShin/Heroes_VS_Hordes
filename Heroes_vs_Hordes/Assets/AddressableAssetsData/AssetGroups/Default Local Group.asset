@@ -187,6 +187,41 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: be7d2e4ae9e215d4292b013ac2db9dbc
+    m_Address: Icon_Book_Cooldown
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 14ee72c1a628caf40b49bf4ccf026182
+    m_Address: Icon_Book_Hero_Move_Speed
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2290c475ac9d3a947a5d7902c47721ca
+    m_Address: Icon_Book_Hero_Recovery
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 15164767063791244a6ca81653d4915b
+    m_Address: Icon_Book_Projectile_Copy
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8cf138f51f7b7e64c9ae2f4266bf51ee
+    m_Address: Icon_Book_Projectile_Speed
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5ce22963d5b7bbe46b42c36d3096dc7a
+    m_Address: Icon_Book_Range
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d669c9ad80b94da40936d8a0471de625
+    m_Address: Icon_Weapon_Hero_Sword
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 517234b9da778344482246fd1d937838, type: 2}
   m_SchemaSet:

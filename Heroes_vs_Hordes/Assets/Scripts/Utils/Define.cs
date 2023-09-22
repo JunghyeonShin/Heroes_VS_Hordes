@@ -2,6 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EAbilityTypes
+{
+    Weapon,
+    Book
+}
+
+public class AbilityInfo
+{
+    public EAbilityTypes AbilityType { get; set; }
+    public string SpriteName { get; set; }
+}
+
 public class Define
 {
     // Map
@@ -10,24 +22,11 @@ public class Define
     public const string RESOURCE_HERO_ARCANE_MAGE = "ArcaneMage";
     // Weapon
     public const string RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE = "ArcaneMage_Projectile";
-    public const string WEAPON_KNIGHT_SWORD = "Knight_Sword";
     public const string RESOURCE_WEAPON_BOMB_CONTROLLER = "BombController";
-    public const string WEAPON_BOMB = "Bomb";
     public const string RESOURCE_BOOMERANG_CONTROLLER = "BoomerangController";
-    public const string WEAPON_BOOMERANG = "Boomerang";
     public const string RESOURCE_WEAPON_CROSSBOW_CONTROLLER = "CrossbowController";
-    public const string WEAPON_CROSSBOW = "Crossbow";
     public const string RESOURCE_DIVINE_AURA_CONTROLLER = "DivineAuraController";
-    public const string WEAPON_DIVINE_AURA = "DivineAura";
     public const string RESOURCE_WEAPON_FIREBALL_CONTROLLER = "FireballController";
-    public const string WEAPON_FIREBALL = "Fireball";
-    // Book
-    public const string RESOURCE_BOOK_PROJECTILE_SPEED = "ProjectileSpeedBook";
-    public const string RESOURCE_BOOK_PROJECTILE_COPY = "ProjectileCopyBook";
-    public const string RESOURCE_BOOK_COOLDOWN = "CooldownBook";
-    public const string RESOURCE_BOOK_RANGE = "RangeBook";
-    public const string RESOURCE_BOOK_HERO_RECOVERY = "HeroRecoveryBook";
-    public const string RESOURCE_BOOK_HERO_MOVE_SPEED = "HeroMoveSpeedBook";
     // Monster
     public const string RESOURCE_MONSTER_SPAWNER = "MonsterSpawner";
     public const string RESOURCE_MONSTER_NORMAL_BAT = "Normal_Bat";
@@ -55,11 +54,18 @@ public class Define
     public const string RESOURCE_SPRITES_SLIDER_YELLOW = "Slider_Yellow";
     public const string RESOURCE_SPRITES_SLIDER_RED = "Slider_Red";
     public const string RESOURCE_SPRITES_ICON_WEAPON_HERO_ARCANE_WAND = "Icon_Weapon_Hero_ArcaneWand";
+    public const string RESOURCE_SPRITES_ICON_WEAPON_HERO_SWORD = "Icon_Weapon_Hero_Sword";
     public const string RESOURCE_SPRITES_ICON_WEAPON_BOMB = "Icon_Weapon_Bomb";
     public const string RESOURCE_SPRITES_ICON_WEAPON_BOOMERANG = "Icon_Weapon_Boomerang";
     public const string RESOURCE_SPRITES_ICON_WEAPON_CROSSBOW = "Icon_Weapon_Crossbow";
     public const string RESOURCE_SPRITES_ICON_WEAPON_DIVINE_AURA = "Icon_Weapon_DivineAura";
     public const string RESOURCE_SPRITES_ICON_WEAPON_FIREBALL = "Icon_Weapon_Fireball";
+    public const string RESOURCE_SPRITES_ICON_BOOK_COOLDOWN = "Icon_Book_Cooldown";
+    public const string RESOURCE_SPRITES_ICON_BOOK_HERO_MOVE_SPEED = "Icon_Book_Hero_Move_Speed";
+    public const string RESOURCE_SPRITES_ICON_BOOK_HERO_RECOVERY = "Icon_Book_Hero_Recovery";
+    public const string RESOURCE_SPRITES_ICON_BOOK_PROJECTILE_COPY = "Icon_Book_Projectile_Copy";
+    public const string RESOURCE_SPRITES_ICON_BOOK_PROJECTILE_SPEED = "Icon_Book_Projectile_Speed";
+    public const string RESOURCE_SPRITES_ICON_BOOK_RANGE = "Icon_Book_Range";
 
     #region TAG
     public const string TAG_REPOSITION_AREA = "RepositionArea";
@@ -90,13 +96,35 @@ public class Define
     public const int CURRENT_CHAPTER_INDEX = 0;
     #endregion
 
-    public static readonly Dictionary<string, string> WEAPON_SPRITE_DIC = new Dictionary<string, string>()
+    #region Ability
+    public const string WEAPON_ARCANE_MAGE_PROJECTILE = "ArcaneMage_Projectile";
+    public const string WEAPON_KNIGHT_SWORD = "Knight_Sword";
+    public const string WEAPON_BOMB = "Bomb";
+    public const string WEAPON_BOOMERANG = "Boomerang";
+    public const string WEAPON_CROSSBOW = "Crossbow";
+    public const string WEAPON_DIVINE_AURA = "DivineAura";
+    public const string WEAPON_FIREBALL = "Fireball";
+    public const string BOOK_COOLDOWN = "CooldownBook";
+    public const string BOOK_HERO_MOVE_SPEED = "HeroMoveSpeedBook";
+    public const string BOOK_HERO_RECOVERY = "HeroRecoveryBook";
+    public const string BOOK_PROJECTILE_COPY = "ProjectileCopyBook";
+    public const string BOOK_PROJECTILE_SPEED = "ProjectileSpeedBook";
+    public const string BOOK_RANGE = "RangeBook";
+
+    public static readonly Dictionary<string, AbilityInfo> ABILITY_SPRITE_DIC = new Dictionary<string, AbilityInfo>()
     {
-        {RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE, RESOURCE_SPRITES_ICON_WEAPON_HERO_ARCANE_WAND },
-        {WEAPON_BOMB, RESOURCE_SPRITES_ICON_WEAPON_BOMB },
-        {WEAPON_BOOMERANG, RESOURCE_SPRITES_ICON_WEAPON_BOOMERANG },
-        {WEAPON_CROSSBOW, RESOURCE_SPRITES_ICON_WEAPON_CROSSBOW },
-        {WEAPON_DIVINE_AURA, RESOURCE_SPRITES_ICON_WEAPON_DIVINE_AURA },
-        {WEAPON_FIREBALL, RESOURCE_SPRITES_ICON_WEAPON_FIREBALL }
+        {WEAPON_ARCANE_MAGE_PROJECTILE, new AbilityInfo() { AbilityType = EAbilityTypes.Weapon, SpriteName = RESOURCE_SPRITES_ICON_WEAPON_HERO_ARCANE_WAND } },
+        {WEAPON_BOMB, new AbilityInfo() { AbilityType = EAbilityTypes.Weapon, SpriteName = RESOURCE_SPRITES_ICON_WEAPON_BOMB } },
+        {WEAPON_BOOMERANG, new AbilityInfo() { AbilityType = EAbilityTypes.Weapon, SpriteName = RESOURCE_SPRITES_ICON_WEAPON_BOOMERANG } },
+        {WEAPON_CROSSBOW, new AbilityInfo() { AbilityType = EAbilityTypes.Weapon, SpriteName = RESOURCE_SPRITES_ICON_WEAPON_CROSSBOW } },
+        {WEAPON_DIVINE_AURA, new AbilityInfo() { AbilityType = EAbilityTypes.Weapon, SpriteName = RESOURCE_SPRITES_ICON_WEAPON_DIVINE_AURA } },
+        {WEAPON_FIREBALL, new AbilityInfo() { AbilityType = EAbilityTypes.Weapon, SpriteName = RESOURCE_SPRITES_ICON_WEAPON_FIREBALL } },
+        {BOOK_COOLDOWN, new AbilityInfo() { AbilityType = EAbilityTypes.Book, SpriteName = RESOURCE_SPRITES_ICON_BOOK_COOLDOWN } },
+        {BOOK_HERO_MOVE_SPEED, new AbilityInfo() { AbilityType = EAbilityTypes.Book, SpriteName = RESOURCE_SPRITES_ICON_BOOK_HERO_MOVE_SPEED } },
+        {BOOK_HERO_RECOVERY, new AbilityInfo() { AbilityType = EAbilityTypes.Book, SpriteName = RESOURCE_SPRITES_ICON_BOOK_HERO_RECOVERY } },
+        {BOOK_PROJECTILE_COPY, new AbilityInfo() { AbilityType = EAbilityTypes.Book, SpriteName = RESOURCE_SPRITES_ICON_BOOK_PROJECTILE_COPY } },
+        {BOOK_PROJECTILE_SPEED, new AbilityInfo() { AbilityType = EAbilityTypes.Book, SpriteName = RESOURCE_SPRITES_ICON_BOOK_PROJECTILE_SPEED } },
+        {BOOK_RANGE, new AbilityInfo() { AbilityType = EAbilityTypes.Book, SpriteName = RESOURCE_SPRITES_ICON_BOOK_RANGE } }
     };
+    #endregion
 }

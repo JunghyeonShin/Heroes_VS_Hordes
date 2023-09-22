@@ -48,6 +48,12 @@ public class UI_LevelUpHero : UI_Popup
         }
     }
 
+    public void UpdateSelectAbilityPanel()
+    {
+        for (int ii = 0; ii < _selectAbilityList.Count; ++ii)
+            _selectAbilityList[ii].UpdateSelectAbilityUI(Define.WEAPON_ARCANE_MAGE_PROJECTILE);
+    }
+
     public void InitAbilityUI()
     {
         for (int ii = 0; ii < _weaponAbilityList.Count; ++ii)
@@ -84,6 +90,8 @@ public class UI_LevelUpHero : UI_Popup
 
     public void UpdateBookAbilityUI()
     {
-
+        var ownedAllBookList = Manager.Instance.Ingame.OwnedAllBook;
+        for (int ii = 0; ii < ownedAllBookList.Count; ++ii)
+            _bookAbilityList[ii].UpdateAbilityUI(ownedAllBookList[ii]);
     }
 }
