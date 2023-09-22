@@ -68,8 +68,6 @@ public abstract class Hero : MonoBehaviour
 
     public virtual void SetHeroAbilities()
     {
-        _health = HeroAbility.GetHeroHealth(_heroName);
-        _defense = HeroAbility.GetHeroDeffence(_heroName);
         _attackCooldown = HeroAbility.GetHeroAttackCooldown(_heroName);
         MoveSpeed = HeroAbility.GetHeroMoveSpeed(_heroName);
     }
@@ -77,6 +75,13 @@ public abstract class Hero : MonoBehaviour
     protected abstract void _DetectMonster();
 
     protected abstract void _AttackMonster();
+
+    public void InitHeroAbilities()
+    {
+        _health = HeroAbility.GetHeroHealth(_heroName);
+        _defense = HeroAbility.GetHeroDeffence(_heroName);
+        SetHeroAbilities();
+    }
 
     public void GetExp(float exp)
     {

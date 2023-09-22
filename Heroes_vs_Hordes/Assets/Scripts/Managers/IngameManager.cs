@@ -80,7 +80,7 @@ public class IngameManager : MonoBehaviour
                 UsedHero = hero;
                 // 보유한 무기 세팅
                 RegistAbility(UsedHero.HeroWeaponName);
-                UsedHero.SetHeroAbilities();
+                UsedHero.InitHeroAbilities();
 
                 var heroController = Utils.GetOrAddComponent<HeroController>(heroGO);
 
@@ -454,6 +454,12 @@ public class IngameManager : MonoBehaviour
         else if (EAbilityTypes.Book == abilityType)
         {
             if (MAX_BOOK_ABILITY_LEVEL == GetOwnedAbilityLevel(abilityName))
+                return _Draw();
+        }
+        // 이미 뽑은 무기라면 다시 뽑기
+        foreach (var drawAbility in DrawAbilityList)
+        {
+            if (abilityName.Equals(drawAbility))
                 return _Draw();
         }
         return abilityName;
