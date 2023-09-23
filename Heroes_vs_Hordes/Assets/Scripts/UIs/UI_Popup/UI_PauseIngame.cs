@@ -90,8 +90,8 @@ public class UI_PauseIngame : UI_Popup
 
         for (int ii = 0; ii < CREATE_ABILITY_UI_COUNT; ++ii)
         {
-            var abilityGO = Manager.Instance.UI.GetElementUI(Define.RESOURCE_UI_ABILITY);
-            var abilityUI = Utils.GetOrAddComponent<UI_Ability>(abilityGO);
+            var abilityUIGO = Manager.Instance.UI.GetElementUI(Define.RESOURCE_UI_ABILITY);
+            var abilityUI = Utils.GetOrAddComponent<UI_Ability>(abilityUIGO);
             abilityUI.InitAbilityUI(_ownedWeaponContents.transform);
             _weaponAbilityList.Add(abilityUI);
         }
@@ -102,8 +102,8 @@ public class UI_PauseIngame : UI_Popup
 
         for (int ii = 0; ii < CREATE_ABILITY_UI_COUNT; ++ii)
         {
-            var abilityGO = Manager.Instance.UI.GetElementUI(Define.RESOURCE_UI_ABILITY);
-            var abilityUI = Utils.GetOrAddComponent<UI_Ability>(abilityGO);
+            var abilityUIGO = Manager.Instance.UI.GetElementUI(Define.RESOURCE_UI_ABILITY);
+            var abilityUI = Utils.GetOrAddComponent<UI_Ability>(abilityUIGO);
             abilityUI.InitAbilityUI(_ownedBookContents.transform);
             _bookAbilityList.Add(abilityUI);
         }
@@ -111,14 +111,16 @@ public class UI_PauseIngame : UI_Popup
 
     public void UpdateWeaponAbilityUI()
     {
-        var ownedAllWeaponList = Manager.Instance.Ingame.OwnedAllWeapon;
+        var ownedAllWeaponList = Manager.Instance.Ingame.OwnedWeaponList;
         for (int ii = 0; ii < ownedAllWeaponList.Count; ++ii)
             _weaponAbilityList[ii].UpdateAbilityUI(ownedAllWeaponList[ii]);
     }
 
     public void UpdateBookAbilityUI()
     {
-
+        var ownedAllBookList = Manager.Instance.Ingame.OwnedBookList;
+        for (int ii = 0; ii < ownedAllBookList.Count; ++ii)
+            _bookAbilityList[ii].UpdateAbilityUI(ownedAllBookList[ii]);
     }
 
     private void _InitWavePanel<T>(string wavePanelName, int index) where T : UI_Wave

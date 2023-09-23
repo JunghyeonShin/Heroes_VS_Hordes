@@ -27,16 +27,19 @@ public class UIManager
     #region InitUI
     private bool[] _loadCompletes;
 
-    private const int INDEX_TOTAL_VALUE = 5;
+    private const int INDEX_TOTAL_VALUE = 7;
     private const int INDEX_UI_PAUSE_INGAME = 0;
     private const int INDEX_UI_CLEAR_WAVE = 1;
-    private const int INDEX_UI_NORMAL_BATTLE_WAVE = 2;
-    private const int INDEX_UI_COIN_RUSH_WAVE = 3;
-    private const int INDEX_UI_ABILITY = 4;
+    private const int INDEX_UI_LEVEL_UP_HERO = 2;
+    private const int INDEX_UI_NORMAL_BATTLE_WAVE = 3;
+    private const int INDEX_UI_COIN_RUSH_WAVE = 4;
+    private const int INDEX_UI_ABILITY = 5;
+    private const int INDEX_UI_SELECT_ABILITY = 6;
 
     private const int CREATE_NORMAL_BATTLE_WAVE_UI_COUNT = 8;
     private const int CREATE_GOLD_RUSH_WAVE_UI_COUNT = 2;
     private const int CREATE_ABILITY_UI_COUNT = 20;
+    private const int CREATE_SELECT_ABILITY_UI_COUNT = 3;
 
     public bool LoadComplete()
     {
@@ -52,27 +55,14 @@ public class UIManager
     {
         _loadCompletes = new bool[INDEX_TOTAL_VALUE];
 
-        _InstantiateUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME, () =>
-        {
-            _loadCompletes[INDEX_UI_PAUSE_INGAME] = true;
-        });
-        _InstantiateUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE, () =>
-        {
-            _loadCompletes[INDEX_UI_CLEAR_WAVE] = true;
-        });
+        _InstantiateUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME, () => { _loadCompletes[INDEX_UI_PAUSE_INGAME] = true; });
+        _InstantiateUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE, () => { _loadCompletes[INDEX_UI_CLEAR_WAVE] = true; });
+        _InstantiateUI<UI_LevelUpHero>(Define.RESOURCE_UI_LEVEL_UP_HERO, () => { _loadCompletes[INDEX_UI_LEVEL_UP_HERO] = true; });
 
-        _InstantiateUIElement(Define.RESOURCE_UI_NORMAL_BATTLE_WAVE, CREATE_NORMAL_BATTLE_WAVE_UI_COUNT, () =>
-        {
-            _loadCompletes[INDEX_UI_NORMAL_BATTLE_WAVE] = true;
-        });
-        _InstantiateUIElement(Define.RESOURCE_UI_GOLD_RUSH_WAVE, CREATE_GOLD_RUSH_WAVE_UI_COUNT, () =>
-        {
-            _loadCompletes[INDEX_UI_COIN_RUSH_WAVE] = true;
-        });
-        _InstantiateUIElement(Define.RESOURCE_UI_ABILITY, CREATE_ABILITY_UI_COUNT, () =>
-        {
-            _loadCompletes[INDEX_UI_ABILITY] = true;
-        });
+        _InstantiateUIElement(Define.RESOURCE_UI_NORMAL_BATTLE_WAVE, CREATE_NORMAL_BATTLE_WAVE_UI_COUNT, () => { _loadCompletes[INDEX_UI_NORMAL_BATTLE_WAVE] = true; });
+        _InstantiateUIElement(Define.RESOURCE_UI_GOLD_RUSH_WAVE, CREATE_GOLD_RUSH_WAVE_UI_COUNT, () => { _loadCompletes[INDEX_UI_COIN_RUSH_WAVE] = true; });
+        _InstantiateUIElement(Define.RESOURCE_UI_ABILITY, CREATE_ABILITY_UI_COUNT, () => { _loadCompletes[INDEX_UI_ABILITY] = true; });
+        _InstantiateUIElement(Define.RESOURCE_UI_SELECT_ABILITY, CREATE_SELECT_ABILITY_UI_COUNT, () => { _loadCompletes[INDEX_UI_SELECT_ABILITY] = true; });
     }
 
     private void _InstantiateUI<T>(string key, Action callback) where T : UI_Base

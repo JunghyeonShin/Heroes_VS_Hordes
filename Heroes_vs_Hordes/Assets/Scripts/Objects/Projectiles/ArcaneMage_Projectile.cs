@@ -25,7 +25,7 @@ public class ArcaneMage_Projectile : MonoBehaviour
     private void Awake()
     {
         _rigid = GetComponent<Rigidbody2D>();
-        _weaponName = Define.RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE;
+        _weaponName = Define.WEAPON_ARCANE_MAGE_WAND;
     }
 
     private void OnEnable()
@@ -70,7 +70,7 @@ public class ArcaneMage_Projectile : MonoBehaviour
         _targetPos = targetPos;
 
         var usedHero = Manager.Instance.Ingame.UsedHero;
-        var weaponLevel = Manager.Instance.Ingame.GetOwnedWeaponLevel(_weaponName);
+        var weaponLevel = Manager.Instance.Ingame.GetOwnedAbilityLevel(_weaponName);
         _attack = WeaponAbility.GetWeaponAttack(usedHero.HeroName, _weaponName, weaponLevel);
         _critical = HeroAbility.GetHeroCritical(usedHero.HeroName);
         _moveSpeed = HeroAbility.GetHeroProjectileSpeed(usedHero.HeroName);

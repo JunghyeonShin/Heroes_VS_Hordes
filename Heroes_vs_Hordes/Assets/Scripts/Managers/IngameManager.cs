@@ -50,17 +50,23 @@ public class IngameManager : MonoBehaviour
         AcquiredGold = INIT_REMAINING_GOLD;
         _remainingGold = INIT_REMAINING_GOLD;
 
+        _ownedAbilityLevelDic.Clear();
         _ownedWeaponList.Clear();
-        _ownedWeaponLevelDic.Clear();
+        _ownedBookList.Clear();
 
-        // UI_PauseIngame의 웨이브 진행도 초기 세팅
+        // UI_PauseIngame 초기 세팅
         var pauseIngameUI = Manager.Instance.UI.FindUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME);
         pauseIngameUI.InitWavePanel();
         pauseIngameUI.InitAbilityUI();
 
-        // UI_ClearWave의 웨이브 진행도 초기 세팅
+        // UI_ClearWave 초기 세팅
         var clearWaveUI = Manager.Instance.UI.FindUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE);
         clearWaveUI.InitWavePanel();
+
+        // UI_LevelUpHero 초기 세팅
+        var levelUpHeroUI = Manager.Instance.UI.FindUI<UI_LevelUpHero>(Define.RESOURCE_UI_LEVEL_UP_HERO);
+        levelUpHeroUI.InitSelectAbilityPanel();
+        levelUpHeroUI.InitAbilityUI();
 
         // 맵 생성
         Manager.Instance.Object.GetMap(Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].MapType, (mapGO) =>
@@ -73,7 +79,7 @@ public class IngameManager : MonoBehaviour
                 var hero = heroGO.GetComponent<Hero>();
                 UsedHero = hero;
                 // 보유한 무기 세팅
-                _RegistWeapon(UsedHero.HeroWeaponName);
+                RegistAbility(UsedHero.HeroWeaponName);
                 UsedHero.SetHeroAbilities();
 
                 var heroController = Utils.GetOrAddComponent<HeroController>(heroGO);
@@ -195,7 +201,7 @@ public class IngameManager : MonoBehaviour
     public event Action<float> ChangeHeroExpHandler;
     public event Action<int> ChangeHeroLevelHandler;
     public event Action ChangeHeroLevelUpPostProcessingHandler;
-    public event Action EnhanceHeroAbilityHandler;
+    public event Action LevelUpHeroAbilityHandler;
 
     public Hero UsedHero { get; private set; }
     public int HeroLevelUpCount { get; set; }
@@ -214,10 +220,13 @@ public class IngameManager : MonoBehaviour
         ChangeHeroLevelHandler?.Invoke(level);
     }
 
-    public void EnhanceHeroAbility()
+    public void LevelUpHeroAbility()
     {
         if (HeroLevelUpCount > Define.INIT_HERO_LEVEL_UP_COUNT)
-            EnhanceHeroAbilityHandler?.Invoke();
+        {
+            _DrawAbility();
+            LevelUpHeroAbilityHandler?.Invoke();
+        }
         else
             ChangeHeroLevelUpPostProcessingHandler?.Invoke();
     }
@@ -379,27 +388,75 @@ public class IngameManager : MonoBehaviour
     #endregion
 
     #region Weapon
-    private Dictionary<string, int> _ownedWeaponLevelDic = new Dictionary<string, int>();
+    private Dictionary<string, int> _ownedAbilityLevelDic = new Dictionary<string, int>();
     private List<string> _ownedWeaponList = new List<string>();
+    private List<string> _ownedBookList = new List<string>();
+    private List<string> _drawAbilityList = new List<string>();
 
-    public List<string> OwnedAllWeapon { get { return _ownedWeaponList; } }
+    public List<string> OwnedWeaponList { get { return _ownedWeaponList; } }
+    public List<string> OwnedBookList { get { return _ownedBookList; } }
+    public List<string> DrawAbilityList { get { return _drawAbilityList; } }
 
-    private const int INIT_OWNED_WEAPON_LEVEL = 1;
 
-    public int GetOwnedWeaponLevel(string weaponName)
+    private const int NEW_ABILITY_LEVEL = 0;
+    private const int INIT_OWNED_ABILITY_LEVEL = 1;
+    private const int DRAW_ABILITY_COUNT = 3;
+    private const int MAX_WEAPON_ABILITY_LEVEL = 5;
+    private const int MAX_BOOK_ABILITY_LEVEL = 3;
+
+    public int GetOwnedAbilityLevel(string weaponName)
     {
-        return _ownedWeaponLevelDic[weaponName];
+        if (false == _ownedAbilityLevelDic.TryGetValue(weaponName, out var level))
+            return NEW_ABILITY_LEVEL;
+        return level;
     }
 
-    private void _RegistWeapon(string weaponName)
+    public void RegistAbility(string abilityName)
     {
-        if (_ownedWeaponLevelDic.ContainsKey(weaponName))
+        if (_ownedAbilityLevelDic.ContainsKey(abilityName))
         {
-            ++_ownedWeaponLevelDic[weaponName];
+            ++_ownedAbilityLevelDic[abilityName];
             return;
         }
-        _ownedWeaponList.Add(weaponName);
-        _ownedWeaponLevelDic.Add(weaponName, INIT_OWNED_WEAPON_LEVEL);
+        _ownedAbilityLevelDic.Add(abilityName, INIT_OWNED_ABILITY_LEVEL);
+        var abilityInfo = Define.ABILITY_INFO_DIC[abilityName];
+        if (EAbilityTypes.HeroWeapon == abilityInfo.AbilityType || EAbilityTypes.Weapon == abilityInfo.AbilityType)
+            _ownedWeaponList.Add(abilityName);
+        else if (EAbilityTypes.Book == abilityInfo.AbilityType)
+            _ownedBookList.Add(abilityName);
+    }
+
+    private void _DrawAbility()
+    {
+        _drawAbilityList.Clear();
+        for (int ii = 0; ii < DRAW_ABILITY_COUNT; ++ii)
+            _drawAbilityList.Add(_Draw());
+    }
+
+    private string _Draw()
+    {
+        var drawIndex = UnityEngine.Random.Range(0, Define.ABILITY_LIST.Count);
+        var abilityName = Define.ABILITY_LIST[drawIndex];
+
+        // 영웅 전용 무기일 때 가져야할 영웅이 아니면 다시 뽑기
+        var abilityType = Define.ABILITY_INFO_DIC[abilityName].AbilityType;
+        if (EAbilityTypes.HeroWeapon == abilityType)
+        {
+            if (false == abilityName.Equals(UsedHero.HeroWeaponName))
+                return _Draw();
+        }
+        // 선택한 능력이 최대 레벨일 때 다시 뽑기
+        if (EAbilityTypes.HeroWeapon == abilityType || EAbilityTypes.Weapon == abilityType)
+        {
+            if (MAX_WEAPON_ABILITY_LEVEL == GetOwnedAbilityLevel(abilityName))
+                return _Draw();
+        }
+        else if (EAbilityTypes.Book == abilityType)
+        {
+            if (MAX_BOOK_ABILITY_LEVEL == GetOwnedAbilityLevel(abilityName))
+                return _Draw();
+        }
+        return abilityName;
     }
     #endregion
 }

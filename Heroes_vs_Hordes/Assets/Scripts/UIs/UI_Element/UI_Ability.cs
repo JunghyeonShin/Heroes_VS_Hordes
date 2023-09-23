@@ -25,16 +25,6 @@ public class UI_Ability : UI_Element
     private Image _abilityIcon;
     private TextMeshProUGUI _abilityLevelText;
 
-    private readonly Dictionary<string, string> WEAPON_SPRITE_DIC = new Dictionary<string, string>()
-    {
-        {Define.RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE, Define.RESOURCE_SPRITES_ICON_WEAPON_HERO_ARCANE_WAND },
-        {Define.WEAPON_BOMB, Define.RESOURCE_SPRITES_ICON_WEAPON_BOMB },
-        {Define.WEAPON_BOOMERANG, Define.RESOURCE_SPRITES_ICON_WEAPON_BOOMERANG },
-        {Define.WEAPON_CROSSBOW, Define.RESOURCE_SPRITES_ICON_WEAPON_CROSSBOW },
-        {Define.WEAPON_DIVINE_AURA, Define.RESOURCE_SPRITES_ICON_WEAPON_DIVINE_AURA },
-        {Define.WEAPON_FIREBALL, Define.RESOURCE_SPRITES_ICON_WEAPON_FIREBALL }
-    };
-
     protected override void _Init()
     {
         _BindGameObject(typeof(EGameObjects));
@@ -54,17 +44,17 @@ public class UI_Ability : UI_Element
         Utils.SetActive(_ownedAblityPanel, false);
     }
 
-    public void UpdateAbilityUI(string weaponName)
+    public void UpdateAbilityUI(string abilityName)
     {
-        if (string.IsNullOrEmpty(weaponName))
+        if (string.IsNullOrEmpty(abilityName))
             return;
-        if (false == WEAPON_SPRITE_DIC.TryGetValue(weaponName, out var spriteName))
+        if (false == Define.ABILITY_INFO_DIC.TryGetValue(abilityName, out var abilityInfo))
             return;
 
-        Manager.Instance.Resource.LoadAsync<Sprite>(spriteName, (sprite) =>
+        Manager.Instance.Resource.LoadAsync<Sprite>(abilityInfo.SpriteName, (sprite) =>
         {
             _abilityIcon.sprite = sprite;
-            _abilityLevelText.text = Manager.Instance.Ingame.GetOwnedWeaponLevel(weaponName).ToString();
+            _abilityLevelText.text = Manager.Instance.Ingame.GetOwnedAbilityLevel(abilityName).ToString();
         });
         Utils.SetActive(_ownedAblityPanel, true);
     }

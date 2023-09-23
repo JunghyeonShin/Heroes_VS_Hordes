@@ -95,8 +95,8 @@ public class TestHeroController : MonoBehaviour
     {
         var heroCommonAbility = Manager.Instance.Data.HeroCommonAbilityData;
         var heroIndividualAbility = Manager.Instance.Data.HeroIndividualAbilityDataDic[Define.RESOURCE_HERO_ARCANE_MAGE];
-        var weaponAbility = Manager.Instance.Data.WeaponAbilityDataDic[Define.RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE];
-        var weaponLevelAbilityList = Manager.Instance.Data.WeaponLevelAbilityDataDic[Define.RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE];
+        var weaponAbility = Manager.Instance.Data.WeaponAbilityDataDic[Define.WEAPON_ARCANE_MAGE_WAND];
+        var weaponLevelAbilityList = Manager.Instance.Data.WeaponLevelAbilityDataDic[Define.WEAPON_ARCANE_MAGE_WAND];
 
         _health = heroCommonAbility.Health + heroIndividualAbility.Health;
         _defense = heroCommonAbility.Defense + heroIndividualAbility.Defense;
@@ -159,7 +159,7 @@ public class TestHeroController : MonoBehaviour
         _startNormalAttack = true;
 
         var testSceneUI = Manager.Instance.UI.CurrentSceneUI as UI_TestScene;
-        testSceneUI.SetWeaponName(Define.RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE);
+        testSceneUI.SetWeaponName(Define.WEAPON_ARCANE_MAGE_WAND);
         testSceneUI.SetAbilityText(Attack, _attackCooldown, _projectileSpeed, 0f, 0f, _projectileCount, _penetraitCount);
     }
 
