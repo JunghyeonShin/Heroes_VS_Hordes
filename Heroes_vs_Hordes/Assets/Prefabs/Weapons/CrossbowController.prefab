@@ -11,13 +11,14 @@ GameObject:
   - component: {fileID: 5208588814046861512}
   - component: {fileID: 2664196440296923776}
   - component: {fileID: 6174332715733406752}
+  - component: {fileID: 5018707392581349098}
   m_Layer: 0
   m_Name: Crossbow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5208588814046861512
 Transform:
   m_ObjectHideFlags: 0
@@ -97,6 +98,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &5018707392581349098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016725990486377151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5121a5184829eb84ca5de3b612f2be90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _arrowhead: {fileID: 7458846835755889317}
 --- !u!1 &6745209193278097180
 GameObject:
   m_ObjectHideFlags: 0
@@ -335,6 +349,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 921437803602272970}
+  - component: {fileID: 6106869393607665859}
   m_Layer: 0
   m_Name: CrossbowController
   m_TagString: Untagged
@@ -358,3 +373,16 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6106869393607665859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7462013916746923231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7298cd2b0fb96054f9b96c99b9336f9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _weaponPrefab: {fileID: 2016725990486377151}

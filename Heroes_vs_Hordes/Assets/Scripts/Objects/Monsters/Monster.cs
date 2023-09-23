@@ -7,7 +7,7 @@ public class Monster : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed = 3f;
 
-    private Rigidbody2D _rigid;
+    private Rigidbody2D _rigidbody;
     private Action _dieHandler;
 
     public Transform Target { get; set; }
@@ -17,7 +17,7 @@ public class Monster : MonoBehaviour
 
     private void Awake()
     {
-        _rigid = GetComponent<Rigidbody2D>();
+        _rigidbody = GetComponent<Rigidbody2D>();
     }
 
     private void OnEnable()
@@ -38,10 +38,10 @@ public class Monster : MonoBehaviour
         var lookAngle = Vector2.Angle(Vector2.up, monsterToHeroNormalVec);
         if (_IsLocatedTargetRightSide(monsterToHeroNormalVec.x))
             lookAngle *= REVERSE_ANGLE;
-        _rigid.rotation = lookAngle;
+        _rigidbody.rotation = lookAngle;
 
         var moveVec = monsterToHeroNormalVec * _moveSpeed * Time.fixedDeltaTime;
-        _rigid.MovePosition(_rigid.position + moveVec);
+        _rigidbody.MovePosition(_rigidbody.position + moveVec);
     }
 
     public void OnDamaged(float damage)

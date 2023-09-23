@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class HeroController : MonoBehaviour
 {
     private Hero _hero;
-    private Rigidbody2D _rigid;
+    private Rigidbody2D _rigidbody;
 
     public Vector2 InputVec { get; set; }
 
@@ -17,29 +17,29 @@ public class HeroController : MonoBehaviour
     private void Awake()
     {
         _hero = GetComponent<Hero>();
-        _rigid = GetComponent<Rigidbody2D>();
+        _rigidbody = GetComponent<Rigidbody2D>();
     }
 
     private void OnEnable()
     {
         transform.position = Vector3.zero;
-        _rigid.rotation = INIT_ROTATION_VALUE;
+        _rigidbody.rotation = INIT_ROTATION_VALUE;
     }
 
     private void FixedUpdate()
     {
         var moveVec = InputVec * _hero.MoveSpeed * Time.fixedDeltaTime;
-        _rigid.MovePosition(_rigid.position + moveVec);
+        _rigidbody.MovePosition(_rigidbody.position + moveVec);
 
         var angle = Vector2.Angle(Vector2.up, InputVec.normalized);
         if (InputVec.Equals(Vector2.zero))
-            _rigid.rotation = _rigid.rotation;
+            _rigidbody.rotation = _rigidbody.rotation;
         else
         {
             if (_IsRightSide(InputVec.x))
-                _rigid.rotation = ANGLE_180 - angle;
+                _rigidbody.rotation = ANGLE_180 - angle;
             else
-                _rigid.rotation = ANGLE_180 + angle;
+                _rigidbody.rotation = ANGLE_180 + angle;
         }
     }
 

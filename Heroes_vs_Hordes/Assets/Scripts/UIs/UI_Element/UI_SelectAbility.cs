@@ -55,7 +55,6 @@ public class UI_SelectAbility : UI_Element
     {
         var ingame = Manager.Instance.Ingame;
         ingame.RegistAbility(_abilityName);
-        ingame.UsedHero.SetHeroAbilities();
         OnSelectAbilityHandler?.Invoke();
         ingame.ControlIngame(true);
         --ingame.HeroLevelUpCount;

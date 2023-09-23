@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Hero : MonoBehaviour
+public abstract class Hero : MonoBehaviour, IAbilityController
 {
     protected Animator _animator;
     protected string _heroName;
@@ -66,10 +66,14 @@ public abstract class Hero : MonoBehaviour
         _DetectMonster();
     }
 
-    public virtual void SetHeroAbilities()
+    public virtual void SetAbilities()
     {
         _attackCooldown = HeroAbility.GetHeroAttackCooldown(_heroName);
         MoveSpeed = HeroAbility.GetHeroMoveSpeed(_heroName);
+    }
+
+    public virtual void ReturnAbilities()
+    {
     }
 
     protected abstract void _DetectMonster();
@@ -80,7 +84,7 @@ public abstract class Hero : MonoBehaviour
     {
         _health = HeroAbility.GetHeroHealth(_heroName);
         _defense = HeroAbility.GetHeroDeffence(_heroName);
-        SetHeroAbilities();
+        SetAbilities();
     }
 
     public void GetExp(float exp)
