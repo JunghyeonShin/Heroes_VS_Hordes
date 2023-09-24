@@ -15,6 +15,7 @@ public abstract class Hero : MonoBehaviour, IAbilityController
     protected float _attack;
     protected float _attackCooldown;
     protected float _critical;
+    protected float _recovery;
 
     protected bool _detectMonster;
     protected bool _attackMonster;
@@ -70,10 +71,12 @@ public abstract class Hero : MonoBehaviour, IAbilityController
     {
         _attackCooldown = HeroAbility.GetHeroAttackCooldown(_heroName);
         MoveSpeed = HeroAbility.GetHeroMoveSpeed(_heroName);
+        _recovery = HeroAbility.GetHeroRecovery();
     }
 
     public virtual void ReturnAbilities()
     {
+
     }
 
     protected abstract void _DetectMonster();

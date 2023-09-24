@@ -6,6 +6,7 @@ public class WeaponAbility
 {
     private const float DEFAULT_ABILITY_VALUE = 1f;
     private const int ADJUST_WEAPON_LEVEL = 2;
+    private const int ADJUST_BOOK_LEVEL = 1;
 
     public static float GetWeaponAttack(string heroName, string weaponName, int weaponLevel)
     {
@@ -28,7 +29,16 @@ public class WeaponAbility
             for (int ii = 0; ii <= weaponLevel - ADJUST_WEAPON_LEVEL; ++ii)
                 weaponAdditionalAttackCooldown += weaponLevelAbilityList[ii].AttackCooldown;
         }
-        return weaponAbility.AttackCooldown + weaponAdditionalAttackCooldown;
+        var weaponAttackCooldownValue = weaponAbility.AttackCooldown + weaponAdditionalAttackCooldown;
+
+        var attackCooldownBookLevel = Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_COOLDOWN);
+        if (attackCooldownBookLevel - ADJUST_BOOK_LEVEL >= 0)
+        {
+            var bookAbility = Manager.Instance.Data.BookAbilityDataDic[Define.BOOK_COOLDOWN];
+            return weaponAttackCooldownValue * (DEFAULT_ABILITY_VALUE + bookAbility[Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_COOLDOWN) - ADJUST_BOOK_LEVEL]);
+        }
+        else
+            return weaponAttackCooldownValue;
     }
 
     public static float GetWeaponSpeed(string weaponName, int weaponLevel)
@@ -40,7 +50,16 @@ public class WeaponAbility
             for (int ii = 0; ii <= weaponLevel - ADJUST_WEAPON_LEVEL; ++ii)
                 weaponAdditionalSpeed += weaponLevelAbilityList[ii].Speed;
         }
-        return weaponAbility.Speed * (DEFAULT_ABILITY_VALUE + weaponAdditionalSpeed);
+        var weaponSpeedValue = weaponAbility.Speed * (DEFAULT_ABILITY_VALUE + weaponAdditionalSpeed);
+
+        var speedBookLevel = Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_PROJECTILE_SPEED);
+        if (speedBookLevel - ADJUST_BOOK_LEVEL >= 0)
+        {
+            var bookAbility = Manager.Instance.Data.BookAbilityDataDic[Define.BOOK_PROJECTILE_SPEED];
+            return weaponSpeedValue * (DEFAULT_ABILITY_VALUE + bookAbility[Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_PROJECTILE_SPEED) - ADJUST_BOOK_LEVEL]);
+        }
+        else
+            return weaponSpeedValue;
     }
 
     public static float GetWeaponEffectRange(string weaponName, int weaponLevel)
@@ -52,7 +71,16 @@ public class WeaponAbility
             for (int ii = 0; ii <= weaponLevel - ADJUST_WEAPON_LEVEL; ++ii)
                 weaponAdditionalEffectRange += weaponLevelAbilityList[ii].EffectRange;
         }
-        return weaponAbility.EffectRange * (DEFAULT_ABILITY_VALUE + weaponAdditionalEffectRange);
+        var weaponEffectRangeValue = weaponAbility.EffectRange * (DEFAULT_ABILITY_VALUE + weaponAdditionalEffectRange);
+
+        var effectRangeBookLevel = Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_RANGE);
+        if (effectRangeBookLevel - ADJUST_BOOK_LEVEL >= 0)
+        {
+            var bookAbility = Manager.Instance.Data.BookAbilityDataDic[Define.BOOK_RANGE];
+            return weaponEffectRangeValue * (DEFAULT_ABILITY_VALUE + bookAbility[Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_RANGE) - ADJUST_BOOK_LEVEL]);
+        }
+        else
+            return weaponEffectRangeValue;
     }
 
     public static float GetWeaponEffectTime(string weaponName, int weaponLevel)
@@ -76,7 +104,16 @@ public class WeaponAbility
             for (int ii = 0; ii <= weaponLevel - ADJUST_WEAPON_LEVEL; ++ii)
                 weaponAdditionalProjectileCount += weaponLevelAbilityList[ii].ProjectileCount;
         }
-        return weaponAbility.ProjectileCount + weaponAdditionalProjectileCount;
+        var weaponProjectileCountValue = weaponAbility.ProjectileCount + weaponAdditionalProjectileCount;
+
+        var projectileCountBookLevel = Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_PROJECTILE_COPY);
+        if (projectileCountBookLevel - ADJUST_BOOK_LEVEL >= 0)
+        {
+            var bookAbility = Manager.Instance.Data.BookAbilityDataDic[Define.BOOK_PROJECTILE_COPY];
+            return weaponProjectileCountValue + bookAbility[Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_PROJECTILE_COPY) - ADJUST_BOOK_LEVEL];
+        }
+        else
+            return weaponProjectileCountValue;
     }
 
     public static float GetWeaponPenetraitCount(string weaponName, int weaponLevel)
