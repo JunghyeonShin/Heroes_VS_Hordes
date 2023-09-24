@@ -11,6 +11,7 @@ public abstract class Weapon : MonoBehaviour
     protected Vector3 _targetPos;
     protected float _attack;
     protected float _critical;
+    protected float _attackCooldown;
     protected float _speed;
     protected float _effectRange;
     protected float _effectTime;
@@ -76,6 +77,7 @@ public abstract class Weapon : MonoBehaviour
         var weaponLevel = Manager.Instance.Ingame.GetOwnedAbilityLevel(_weaponName);
         _attack = WeaponAbility.GetWeaponAttack(usedHero.HeroName, _weaponName, weaponLevel);
         _critical = HeroAbility.GetHeroCritical(usedHero.HeroName);
+        _attackCooldown = WeaponAbility.GetWeaponAttackCooldown(_weaponName, weaponLevel);
         _speed = WeaponAbility.GetWeaponSpeed(_weaponName, weaponLevel);
         _effectRange = WeaponAbility.GetWeaponEffectRange(_weaponName, weaponLevel);
         _effectTime = WeaponAbility.GetWeaponEffectTime(_weaponName, weaponLevel);

@@ -94,6 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4680332796667720946}
   - component: {fileID: 7432465483203091686}
+  - component: {fileID: 760778664770312599}
   m_Layer: 0
   m_Name: DivineAura
   m_TagString: Untagged
@@ -153,6 +154,20 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 2
+--- !u!114 &760778664770312599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5329674734606443120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10adc9f286fc764eb1f579341c30e2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _divineArua: {fileID: 2462536223012199063}
+  _divineAruaBorder: {fileID: 5563380927464956838}
 --- !u!1 &5563380927464956838
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,6 +261,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 726354091191686835}
+  - component: {fileID: 8432454360489083866}
   m_Layer: 0
   m_Name: DivineAuraController
   m_TagString: Untagged
@@ -267,5 +283,18 @@ Transform:
   m_Children:
   - {fileID: 4680332796667720946}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8432454360489083866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6003044260510897409}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1dcc49c9ee6f7d42b60f2dd4486fd46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _weaponPrefab: {fileID: 5329674734606443120}

@@ -20,7 +20,7 @@ public class ObjectManager
     public GameObject MonsterSpawner { get; private set; }
     public GameObject LevelUpText { get; private set; }
 
-    private const int INDEX_TOTAL_VALUE = 10;
+    private const int INDEX_TOTAL_VALUE = 11;
     private const int INDEX_REPOSITION_AREA = 0;
     private const int INDEX_MONSTER_SPAWNER = 1;
     private const int INDEX_LEVEL_UP_TEXT = 2;
@@ -31,6 +31,7 @@ public class ObjectManager
     private const int INDEX_WEAPON_BOMB_CONTROLLER = 7;
     private const int INDEX_WEAPON_BOOMERNAG_CONTROLLER = 8;
     private const int INDEX_WEAPON_CROSSBOW_CONTROLLER = 9;
+    private const int INDEX_WEAPON_DIVINE_AURA_CONTROLLER = 10;
     private const string NAME_ROOT_OBJECT = "[ROOT_OBJECT]";
 
     public void Init()
@@ -246,6 +247,7 @@ public class ObjectManager
         _InitWeaponController(Define.RESOURCE_WEAPON_BOMB_CONTROLLER, (bombController) => { _loadCompletes[INDEX_WEAPON_BOMB_CONTROLLER] = true; });
         _InitWeaponController(Define.RESOURCE_WEAPON_BOOMERANG_CONTROLLER, (boomerangController) => { _loadCompletes[INDEX_WEAPON_BOOMERNAG_CONTROLLER] = true; });
         _InitWeaponController(Define.RESOURCE_WEAPON_CROSSBOW_CONTROLLER, (crossbowController) => { _loadCompletes[INDEX_WEAPON_CROSSBOW_CONTROLLER] = true; });
+        _InitWeaponController(Define.RESOURCE_WEAPON_DIVINE_AURA_CONTROLLER, (crossbowController) => { _loadCompletes[INDEX_WEAPON_DIVINE_AURA_CONTROLLER] = true; });
     }
 
     private void _InitWeaponController(string key, Action<GameObject> callback = null)

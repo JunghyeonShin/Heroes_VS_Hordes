@@ -38,7 +38,7 @@ public class Define
     public const string RESOURCE_WEAPON_BOMB_CONTROLLER = "BombController";
     public const string RESOURCE_WEAPON_BOOMERANG_CONTROLLER = "BoomerangController";
     public const string RESOURCE_WEAPON_CROSSBOW_CONTROLLER = "CrossbowController";
-    public const string RESOURCE_DIVINE_AURA_CONTROLLER = "DivineAuraController";
+    public const string RESOURCE_WEAPON_DIVINE_AURA_CONTROLLER = "DivineAuraController";
     public const string RESOURCE_WEAPON_FIREBALL_CONTROLLER = "FireballController";
     // Monster
     public const string RESOURCE_MONSTER_SPAWNER = "MonsterSpawner";

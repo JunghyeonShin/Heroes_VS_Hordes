@@ -51,6 +51,7 @@ public class Bomb : Weapon
     {
         if (false == _allertBomb)
             return;
+
         await UniTask.Delay(TimeSpan.FromSeconds(DELAY_FADE_IN_TIME));
 
         // Fade-In
