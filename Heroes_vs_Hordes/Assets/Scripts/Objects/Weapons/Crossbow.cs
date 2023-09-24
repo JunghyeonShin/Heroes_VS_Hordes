@@ -17,6 +17,7 @@ public class Crossbow : Weapon
     protected override void Awake()
     {
         base.Awake();
+
         _weaponName = Define.WEAPON_CROSSBOW;
     }
     protected override void FixedUpdate()
@@ -60,6 +61,7 @@ public class Crossbow : Weapon
     public override void Init(Vector3 initPos, Vector3 targetPos)
     {
         base.Init(initPos, targetPos);
+
         _RotateArrowheadToTarget();
     }
 

@@ -13,11 +13,14 @@ public abstract class Weapon : MonoBehaviour
     protected float _critical;
     protected float _speed;
     protected float _effectRange;
+    protected float _effectTime;
 
     protected const float MIN_DAMAGE_TEXT_POSITION_X = -1f;
     protected const float MAX_DAMAGE_TEXT_POSITION_X = 1f;
     protected const float DAMAGE_TEXT_POSITION_Y = 1f;
     protected const float TWO_MULTIPLES_VALUE = 2f;
+    protected const float ZERO_SECOND = 0f;
+    protected const float ONE_SECOND = 1f;
 
     protected virtual void Awake()
     {
@@ -75,6 +78,7 @@ public abstract class Weapon : MonoBehaviour
         _critical = HeroAbility.GetHeroCritical(usedHero.HeroName);
         _speed = WeaponAbility.GetWeaponSpeed(_weaponName, weaponLevel);
         _effectRange = WeaponAbility.GetWeaponEffectRange(_weaponName, weaponLevel);
+        _effectTime = WeaponAbility.GetWeaponEffectTime(_weaponName, weaponLevel);
     }
 
     public virtual void Init(Vector3 initPos, Vector3 targetPos)

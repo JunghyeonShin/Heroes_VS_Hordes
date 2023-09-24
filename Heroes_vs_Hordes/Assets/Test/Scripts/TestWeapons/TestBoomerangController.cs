@@ -18,7 +18,7 @@ public class TestBoomerangController : MonoBehaviour
     private float _speed;
     private float _effectRange;
     private float _effectTime;
-    [SerializeField] private float _projectileCount;
+    private float _projectileCount;
     private int _weaponLevel;
 
     private bool _isAttack;

@@ -398,6 +398,7 @@ public class IngameManager : MonoBehaviour
         _usedWeaponControllerDic.Clear();
 
         _InitWaeponController(Define.RESOURCE_WEAPON_BOMB_CONTROLLER);
+        _InitWaeponController(Define.RESOURCE_WEAPON_BOOMERANG_CONTROLLER);
         _InitWaeponController(Define.RESOURCE_WEAPON_CROSSBOW_CONTROLLER);
     }
 
@@ -461,6 +462,10 @@ public class IngameManager : MonoBehaviour
             case Define.WEAPON_BOMB:
                 _ownedAbilityInfoDic.Add(abilityName, new OwnedAbilityInfo() { Level = INIT_OWNED_ABILITY_LEVEL, AbilityControllerList = new List<IAbilityController>() { _usedWeaponControllerDic[Define.RESOURCE_WEAPON_BOMB_CONTROLLER] } });
                 Utils.SetActive(_usedWeaponControllerDic[Define.RESOURCE_WEAPON_BOMB_CONTROLLER].gameObject, true);
+                break;
+            case Define.WEAPON_BOOMERANG:
+                _ownedAbilityInfoDic.Add(abilityName, new OwnedAbilityInfo() { Level = INIT_OWNED_ABILITY_LEVEL, AbilityControllerList = new List<IAbilityController>() { _usedWeaponControllerDic[Define.RESOURCE_WEAPON_BOOMERANG_CONTROLLER] } });
+                Utils.SetActive(_usedWeaponControllerDic[Define.RESOURCE_WEAPON_BOOMERANG_CONTROLLER].gameObject, true);
                 break;
             case Define.WEAPON_CROSSBOW:
                 _ownedAbilityInfoDic.Add(abilityName, new OwnedAbilityInfo() { Level = INIT_OWNED_ABILITY_LEVEL, AbilityControllerList = new List<IAbilityController>() { _usedWeaponControllerDic[Define.RESOURCE_WEAPON_CROSSBOW_CONTROLLER] } });

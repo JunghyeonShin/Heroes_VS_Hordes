@@ -36,7 +36,7 @@ public class Define
     // Weapon
     public const string RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE = "ArcaneMage_Projectile";
     public const string RESOURCE_WEAPON_BOMB_CONTROLLER = "BombController";
-    public const string RESOURCE_BOOMERANG_CONTROLLER = "BoomerangController";
+    public const string RESOURCE_WEAPON_BOOMERANG_CONTROLLER = "BoomerangController";
     public const string RESOURCE_WEAPON_CROSSBOW_CONTROLLER = "CrossbowController";
     public const string RESOURCE_DIVINE_AURA_CONTROLLER = "DivineAuraController";
     public const string RESOURCE_WEAPON_FIREBALL_CONTROLLER = "FireballController";

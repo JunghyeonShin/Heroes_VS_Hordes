@@ -21,8 +21,6 @@ public class Bomb : Weapon
     private const float DELAY_FINISH_ATTACK_TIME = 1.1f;
     private const float DEVIDE_HALF = 0.5f;
     private const float FADE_IN_TIME = 5f;
-    private const float ZERO_SECOND = 0f;
-    private const float ONE_SECOND = 1f;
 
     private readonly Vector3 ADJUST_MID_POSITION_Y = new Vector3(0f, 0.5f, 0f);
     private readonly Color BOMB_ALLERT_SPRITE_COLOR = new Color(255f / 255f, 123f / 255f, 0f, ALPHA_ZERO);
@@ -30,6 +28,7 @@ public class Bomb : Weapon
     protected override void Awake()
     {
         base.Awake();
+
         _weaponName = Define.WEAPON_BOMB;
     }
 
@@ -52,7 +51,6 @@ public class Bomb : Weapon
     {
         if (false == _allertBomb)
             return;
-
         await UniTask.Delay(TimeSpan.FromSeconds(DELAY_FADE_IN_TIME));
 
         // Fade-In

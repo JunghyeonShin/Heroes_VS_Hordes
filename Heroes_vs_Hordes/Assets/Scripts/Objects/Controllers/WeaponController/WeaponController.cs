@@ -36,7 +36,12 @@ public abstract class WeaponController : MonoBehaviour, IAbilityController
         Utils.SetActive(_weaponPrefab, false);
     }
 
-    protected abstract void _Attack();
+    protected virtual bool _Attack()
+    {
+        if (false == _startAttack)
+            return false;
+        return true;
+    }
 
     public void SetAbilities()
     {

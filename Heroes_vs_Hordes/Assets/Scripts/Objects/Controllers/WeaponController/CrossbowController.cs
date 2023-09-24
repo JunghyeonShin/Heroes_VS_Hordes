@@ -13,11 +13,15 @@ public class CrossbowController : WeaponController
     {
         _weaponName = Define.WEAPON_CROSSBOW;
         _initWeaponCount = INIT_CROSSBOW_COUNT;
+
         base._Init();
     }
 
-    protected override void _Attack()
+    protected override bool _Attack()
     {
+        if (base._Attack())
+            return false;
+
         for (int ii = 0; ii < _projectileCount; ++ii)
         {
             var crossbowGO = _GetWeapon();
@@ -27,6 +31,7 @@ public class CrossbowController : WeaponController
             Utils.SetActive(crossbowGO, true);
         }
         _ReAttack().Forget();
+        return true;
     }
 
     private Vector3 _GetRandomPos()
