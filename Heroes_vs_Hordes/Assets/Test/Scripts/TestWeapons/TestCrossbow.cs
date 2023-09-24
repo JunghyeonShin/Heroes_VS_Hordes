@@ -17,8 +17,10 @@ public class TestCrossbow : MonoBehaviour
 
     private const float REVERSE_ANGLE = -1f;
     private const float CHECK_DIRECTION = 0f;
-    private const float MIN_WORLD_TO_VIEWPORT_POINT = 0f;
-    private const float MAX_WORLD_TO_VIEWPORT_POINT = 1f;
+    private const float MIN_IN_WORLD_TO_VIEWPORT_POINT = 0.3f;
+    private const float MAX_IN_WORLD_TO_VIEWPORT_POINT = 0.7f;
+    private const float MIN_OUT_WORLD_TO_VIEWPORT_POINT = 0f;
+    private const float MAX_OUT_WORLD_TO_VIEWPORT_POINT = 1f;
     private const float MIN_DAMAGE_TEXT_POSITION_X = -1f;
     private const float MAX_DAMAGE_TEXT_POSITION_X = 1f;
     private const float DAMAGE_TEXT_POSITION_Y = 1f;
@@ -63,7 +65,7 @@ public class TestCrossbow : MonoBehaviour
     private void Update()
     {
         var pos = Camera.main.WorldToViewportPoint(transform.position);
-        if (pos.x <= MIN_WORLD_TO_VIEWPORT_POINT || pos.x >= MAX_WORLD_TO_VIEWPORT_POINT)
+        if (pos.x <= MIN_OUT_WORLD_TO_VIEWPORT_POINT || pos.x >= MAX_OUT_WORLD_TO_VIEWPORT_POINT)
         {
             if (_reflectHorizontal)
                 return;
@@ -72,10 +74,13 @@ public class TestCrossbow : MonoBehaviour
             _targetPos = Vector3.Reflect(_targetPos, Vector3.right);
             _RotateArrowheadToTarget();
         }
-        else
-            _reflectHorizontal = false;
+        else if (MIN_IN_WORLD_TO_VIEWPORT_POINT <= pos.x && pos.x <= MAX_IN_WORLD_TO_VIEWPORT_POINT)
+        {
+            if (_reflectHorizontal)
+                _reflectHorizontal = false;
+        }
 
-        if (pos.y <= MIN_WORLD_TO_VIEWPORT_POINT || pos.y >= MAX_WORLD_TO_VIEWPORT_POINT)
+        if (pos.y <= MIN_OUT_WORLD_TO_VIEWPORT_POINT || pos.y >= MAX_OUT_WORLD_TO_VIEWPORT_POINT)
         {
             if (_reflectVertical)
                 return;
@@ -84,8 +89,11 @@ public class TestCrossbow : MonoBehaviour
             _targetPos = Vector3.Reflect(_targetPos, Vector3.up);
             _RotateArrowheadToTarget();
         }
-        else
-            _reflectVertical = false;
+        else if (MIN_IN_WORLD_TO_VIEWPORT_POINT <= pos.y && pos.y <= MAX_IN_WORLD_TO_VIEWPORT_POINT)
+        {
+            if (_reflectVertical)
+                _reflectVertical = false;
+        }
     }
 
     public void Init(Vector3 initPos, Vector3 targetPos, float speed, float attack)
