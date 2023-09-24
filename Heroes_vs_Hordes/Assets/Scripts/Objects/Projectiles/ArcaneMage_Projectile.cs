@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class ArcaneMage_Projectile : MonoBehaviour
 {
-    private Rigidbody2D _rigid;
-    private Vector2 _moveVec;
+    private Rigidbody2D _rigidbody;
     private string _weaponName;
 
     private Vector3 _targetPos;
+    private Vector2 _moveVec;
     private float _attack;
     private float _critical;
     private float _moveSpeed;
@@ -24,7 +24,7 @@ public class ArcaneMage_Projectile : MonoBehaviour
 
     private void Awake()
     {
-        _rigid = GetComponent<Rigidbody2D>();
+        _rigidbody = GetComponent<Rigidbody2D>();
         _weaponName = Define.WEAPON_ARCANE_MAGE_WAND;
     }
 
@@ -37,7 +37,7 @@ public class ArcaneMage_Projectile : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _rigid.MovePosition(_rigid.position + _moveVec);
+        _rigidbody.MovePosition(_rigidbody.position + _moveVec);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

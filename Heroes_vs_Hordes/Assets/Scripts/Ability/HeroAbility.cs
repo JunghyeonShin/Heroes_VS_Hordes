@@ -7,6 +7,7 @@ public class HeroAbility
     private const float DEFAULT_ABILITY_VALUE = 1f;
     private const float MIN_CRITICAL_VALUE = 0f;
     private const float MAX_CRITICAL_VALUE = 1f;
+    private const int ADJUST_BOOK_LEVEL = 1;
 
     public static float GetHeroHealth(string heroName)
     {
@@ -29,7 +30,16 @@ public class HeroAbility
     public static float GetHeroAttackCooldown(string heroName)
     {
         (var heroCommonAbility, var heroIndividualAbility) = _GetHeroAbilityData(heroName);
-        return heroCommonAbility.AttackCooldown + heroIndividualAbility.AttackCooldown;
+        var heroAttackCooldownValue = heroCommonAbility.AttackCooldown + heroIndividualAbility.AttackCooldown;
+
+        var attackCooldownBookLevel = Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_COOLDOWN);
+        if (attackCooldownBookLevel - ADJUST_BOOK_LEVEL >= 0)
+        {
+            var bookAbility = Manager.Instance.Data.BookAbilityDataDic[Define.BOOK_COOLDOWN];
+            return heroAttackCooldownValue * (DEFAULT_ABILITY_VALUE + bookAbility[Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_COOLDOWN) - ADJUST_BOOK_LEVEL]);
+        }
+        else
+            return heroAttackCooldownValue;
     }
 
     public static float GetHeroCritical(string heroName)
@@ -41,13 +51,43 @@ public class HeroAbility
     public static float GetHeroMoveSpeed(string heroName)
     {
         (var heroCommonAbility, var heroIndividualAbility) = _GetHeroAbilityData(heroName);
-        return heroCommonAbility.MoveSpeed * (DEFAULT_ABILITY_VALUE + heroIndividualAbility.MoveSpeed);
+        var heroMoveSpeedValue = heroCommonAbility.MoveSpeed * (DEFAULT_ABILITY_VALUE + heroIndividualAbility.MoveSpeed);
+
+        var heroMoveSpeedBookLevel = Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_HERO_MOVE_SPEED);
+        if (heroMoveSpeedBookLevel - ADJUST_BOOK_LEVEL >= 0)
+        {
+            var bookAbility = Manager.Instance.Data.BookAbilityDataDic[Define.BOOK_HERO_MOVE_SPEED];
+            return heroMoveSpeedValue * (DEFAULT_ABILITY_VALUE + bookAbility[Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_HERO_MOVE_SPEED) - ADJUST_BOOK_LEVEL]);
+        }
+        else
+            return heroMoveSpeedValue;
     }
 
     public static float GetHeroProjectileSpeed(string heroName)
     {
         (var heroCommonAbility, var heroIndividualAbility) = _GetHeroAbilityData(heroName);
-        return heroCommonAbility.ProjectileSpeed * (DEFAULT_ABILITY_VALUE + heroIndividualAbility.ProjectileSpeed);
+        var heroProjectileValue = heroCommonAbility.ProjectileSpeed * (DEFAULT_ABILITY_VALUE + heroIndividualAbility.ProjectileSpeed);
+
+        var projectileSpeedBookLevel = Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_PROJECTILE_SPEED);
+        if (projectileSpeedBookLevel - ADJUST_BOOK_LEVEL >= 0)
+        {
+            var bookAbility = Manager.Instance.Data.BookAbilityDataDic[Define.BOOK_PROJECTILE_SPEED];
+            return heroProjectileValue * (DEFAULT_ABILITY_VALUE + bookAbility[Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_PROJECTILE_SPEED) - ADJUST_BOOK_LEVEL]);
+        }
+        else
+            return heroProjectileValue;
+    }
+
+    public static float GetHeroRecovery()
+    {
+        var heroRecoveryBoolLevel = Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_HERO_RECOVERY);
+        if (heroRecoveryBoolLevel - ADJUST_BOOK_LEVEL >= 0)
+        {
+            var bookAbility = Manager.Instance.Data.BookAbilityDataDic[Define.BOOK_HERO_RECOVERY];
+            return bookAbility[Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_HERO_RECOVERY) - ADJUST_BOOK_LEVEL];
+        }
+        else
+            return 0f;
     }
 
     public static bool IsCritical(float critical)

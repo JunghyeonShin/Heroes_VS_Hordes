@@ -50,7 +50,9 @@ public class IngameManager : MonoBehaviour
         AcquiredGold = INIT_REMAINING_GOLD;
         _remainingGold = INIT_REMAINING_GOLD;
 
-        _ownedAbilityLevelDic.Clear();
+        _InitWeaponController();
+
+        _ownedAbilityInfoDic.Clear();
         _ownedWeaponList.Clear();
         _ownedBookList.Clear();
 
@@ -80,7 +82,7 @@ public class IngameManager : MonoBehaviour
                 UsedHero = hero;
                 // 보유한 무기 세팅
                 RegistAbility(UsedHero.HeroWeaponName);
-                UsedHero.SetHeroAbilities();
+                UsedHero.InitHeroAbilities();
 
                 var heroController = Utils.GetOrAddComponent<HeroController>(heroGO);
 
@@ -163,6 +165,7 @@ public class IngameManager : MonoBehaviour
         ReturnUsedMonster();
         ReturnUsedExpGem();
         ReturnUsedGold();
+        _ReturnWeaponController();
         Manager.Instance.CameraController.SetFollower();
         Utils.SetActive(Manager.Instance.Object.MonsterSpawner, false);
         Utils.SetActive(Manager.Instance.Object.RepositionArea, false);
@@ -387,8 +390,41 @@ public class IngameManager : MonoBehaviour
     }
     #endregion
 
-    #region Weapon
-    private Dictionary<string, int> _ownedAbilityLevelDic = new Dictionary<string, int>();
+    #region WeaponController
+    private Dictionary<string, WeaponController> _usedWeaponControllerDic = new Dictionary<string, WeaponController>();
+
+    private void _InitWeaponController()
+    {
+        _usedWeaponControllerDic.Clear();
+
+        _InitWaeponController(Define.RESOURCE_WEAPON_BOMB_CONTROLLER);
+        _InitWaeponController(Define.RESOURCE_WEAPON_BOOMERANG_CONTROLLER);
+        _InitWaeponController(Define.RESOURCE_WEAPON_CROSSBOW_CONTROLLER);
+        _InitWaeponController(Define.RESOURCE_WEAPON_DIVINE_AURA_CONTROLLER);
+        _InitWaeponController(Define.RESOURCE_WEAPON_FIREBALL_CONTROLLER);
+    }
+
+    private void _InitWaeponController(string key)
+    {
+        Manager.Instance.Object.GetWeaponController(key, (weaponControllerGO) =>
+        {
+            var weaponController = Utils.GetOrAddComponent<WeaponController>(weaponControllerGO);
+            _usedWeaponControllerDic.Add(key, weaponController);
+        });
+    }
+
+    private void _ReturnWeaponController()
+    {
+        foreach (var abilityController in _usedWeaponControllerDic)
+        {
+            abilityController.Value.ReturnAbilities();
+            Manager.Instance.Object.ReturnWeaponController(abilityController.Key);
+        }
+    }
+    #endregion
+
+    #region Ability
+    private Dictionary<string, OwnedAbilityInfo> _ownedAbilityInfoDic = new Dictionary<string, OwnedAbilityInfo>();
     private List<string> _ownedWeaponList = new List<string>();
     private List<string> _ownedBookList = new List<string>();
     private List<string> _drawAbilityList = new List<string>();
@@ -397,28 +433,73 @@ public class IngameManager : MonoBehaviour
     public List<string> OwnedBookList { get { return _ownedBookList; } }
     public List<string> DrawAbilityList { get { return _drawAbilityList; } }
 
-
     private const int NEW_ABILITY_LEVEL = 0;
     private const int INIT_OWNED_ABILITY_LEVEL = 1;
     private const int DRAW_ABILITY_COUNT = 3;
     private const int MAX_WEAPON_ABILITY_LEVEL = 5;
     private const int MAX_BOOK_ABILITY_LEVEL = 3;
 
-    public int GetOwnedAbilityLevel(string weaponName)
+    public int GetOwnedAbilityLevel(string abilityName)
     {
-        if (false == _ownedAbilityLevelDic.TryGetValue(weaponName, out var level))
+        if (false == _ownedAbilityInfoDic.TryGetValue(abilityName, out var abilityInfo))
             return NEW_ABILITY_LEVEL;
-        return level;
+        return abilityInfo.Level;
     }
 
     public void RegistAbility(string abilityName)
     {
-        if (_ownedAbilityLevelDic.ContainsKey(abilityName))
+        if (_ownedAbilityInfoDic.TryGetValue(abilityName, out var ownedAbilityInfo))
         {
-            ++_ownedAbilityLevelDic[abilityName];
+            ++ownedAbilityInfo.Level;
+            foreach (var abilityController in ownedAbilityInfo.AbilityControllerList)
+                abilityController.SetAbilities();
             return;
         }
-        _ownedAbilityLevelDic.Add(abilityName, INIT_OWNED_ABILITY_LEVEL);
+
+        switch (abilityName)
+        {
+            case Define.WEAPON_ARCANE_MAGE_WAND:
+                _ownedAbilityInfoDic.Add(abilityName, new OwnedAbilityInfo() { Level = INIT_OWNED_ABILITY_LEVEL, AbilityControllerList = new List<IAbilityController>() { UsedHero } });
+                break;
+            case Define.WEAPON_BOMB:
+                _ownedAbilityInfoDic.Add(abilityName, new OwnedAbilityInfo() { Level = INIT_OWNED_ABILITY_LEVEL, AbilityControllerList = new List<IAbilityController>() { _usedWeaponControllerDic[Define.RESOURCE_WEAPON_BOMB_CONTROLLER] } });
+                Utils.SetActive(_usedWeaponControllerDic[Define.RESOURCE_WEAPON_BOMB_CONTROLLER].gameObject, true);
+                break;
+            case Define.WEAPON_BOOMERANG:
+                _ownedAbilityInfoDic.Add(abilityName, new OwnedAbilityInfo() { Level = INIT_OWNED_ABILITY_LEVEL, AbilityControllerList = new List<IAbilityController>() { _usedWeaponControllerDic[Define.RESOURCE_WEAPON_BOOMERANG_CONTROLLER] } });
+                Utils.SetActive(_usedWeaponControllerDic[Define.RESOURCE_WEAPON_BOOMERANG_CONTROLLER].gameObject, true);
+                break;
+            case Define.WEAPON_CROSSBOW:
+                _ownedAbilityInfoDic.Add(abilityName, new OwnedAbilityInfo() { Level = INIT_OWNED_ABILITY_LEVEL, AbilityControllerList = new List<IAbilityController>() { _usedWeaponControllerDic[Define.RESOURCE_WEAPON_CROSSBOW_CONTROLLER] } });
+                Utils.SetActive(_usedWeaponControllerDic[Define.RESOURCE_WEAPON_CROSSBOW_CONTROLLER].gameObject, true);
+                break;
+            case Define.WEAPON_DIVINE_AURA:
+                _ownedAbilityInfoDic.Add(abilityName, new OwnedAbilityInfo() { Level = INIT_OWNED_ABILITY_LEVEL, AbilityControllerList = new List<IAbilityController>() { _usedWeaponControllerDic[Define.RESOURCE_WEAPON_DIVINE_AURA_CONTROLLER] } });
+                Utils.SetActive(_usedWeaponControllerDic[Define.RESOURCE_WEAPON_DIVINE_AURA_CONTROLLER].gameObject, true);
+                break;
+            case Define.WEAPON_FIREBALL:
+                _ownedAbilityInfoDic.Add(abilityName, new OwnedAbilityInfo() { Level = INIT_OWNED_ABILITY_LEVEL, AbilityControllerList = new List<IAbilityController>() { _usedWeaponControllerDic[Define.RESOURCE_WEAPON_FIREBALL_CONTROLLER] } });
+                Utils.SetActive(_usedWeaponControllerDic[Define.RESOURCE_WEAPON_FIREBALL_CONTROLLER].gameObject, true);
+                break;
+            case Define.BOOK_COOLDOWN:
+            case Define.BOOK_PROJECTILE_COPY:
+                _ownedAbilityInfoDic.Add(abilityName, new OwnedAbilityInfo() { Level = INIT_OWNED_ABILITY_LEVEL, AbilityControllerList = new List<IAbilityController>() { UsedHero, _usedWeaponControllerDic[Define.RESOURCE_WEAPON_BOMB_CONTROLLER], _usedWeaponControllerDic[Define.RESOURCE_WEAPON_BOOMERANG_CONTROLLER], _usedWeaponControllerDic[Define.RESOURCE_WEAPON_CROSSBOW_CONTROLLER], _usedWeaponControllerDic[Define.RESOURCE_WEAPON_DIVINE_AURA_CONTROLLER], _usedWeaponControllerDic[Define.RESOURCE_WEAPON_FIREBALL_CONTROLLER] } });
+                break;
+            case Define.BOOK_HERO_MOVE_SPEED:
+            case Define.BOOK_HERO_RECOVERY:
+                _ownedAbilityInfoDic.Add(abilityName, new OwnedAbilityInfo() { Level = INIT_OWNED_ABILITY_LEVEL, AbilityControllerList = new List<IAbilityController>() { UsedHero } });
+                break;
+            case Define.BOOK_PROJECTILE_SPEED:
+            case Define.BOOK_RANGE:
+                _ownedAbilityInfoDic.Add(abilityName, new OwnedAbilityInfo() { Level = INIT_OWNED_ABILITY_LEVEL, AbilityControllerList = new List<IAbilityController>() { _usedWeaponControllerDic[Define.RESOURCE_WEAPON_BOMB_CONTROLLER], _usedWeaponControllerDic[Define.RESOURCE_WEAPON_BOOMERANG_CONTROLLER], _usedWeaponControllerDic[Define.RESOURCE_WEAPON_CROSSBOW_CONTROLLER], _usedWeaponControllerDic[Define.RESOURCE_WEAPON_DIVINE_AURA_CONTROLLER], _usedWeaponControllerDic[Define.RESOURCE_WEAPON_FIREBALL_CONTROLLER] } });
+                break;
+            default:
+                Debug.LogError($"Out of range of ability! : {abilityName}");
+                return;
+        }
+        foreach (var abilityController in _ownedAbilityInfoDic[abilityName].AbilityControllerList)
+            abilityController.SetAbilities();
+
         var abilityInfo = Define.ABILITY_INFO_DIC[abilityName];
         if (EAbilityTypes.HeroWeapon == abilityInfo.AbilityType || EAbilityTypes.Weapon == abilityInfo.AbilityType)
             _ownedWeaponList.Add(abilityName);
@@ -454,6 +535,12 @@ public class IngameManager : MonoBehaviour
         else if (EAbilityTypes.Book == abilityType)
         {
             if (MAX_BOOK_ABILITY_LEVEL == GetOwnedAbilityLevel(abilityName))
+                return _Draw();
+        }
+        // 이미 뽑은 무기라면 다시 뽑기
+        foreach (var drawAbility in DrawAbilityList)
+        {
+            if (abilityName.Equals(drawAbility))
                 return _Draw();
         }
         return abilityName;

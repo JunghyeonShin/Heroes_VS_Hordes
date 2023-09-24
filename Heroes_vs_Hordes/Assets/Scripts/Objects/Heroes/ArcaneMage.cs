@@ -7,6 +7,7 @@ using UnityEngine;
 public class ArcaneMage : Hero
 {
     private ObjectPool _projectilePool = new ObjectPool();
+    private Queue<GameObject> _usedProjectileQueue = new Queue<GameObject>();
 
     private float _projectileCount;
 
@@ -40,11 +41,17 @@ public class ArcaneMage : Hero
         _InitProjectile();
     }
 
-    public override void SetHeroAbilities()
+    public override void SetAbilities()
     {
-        base.SetHeroAbilities();
+        base.SetAbilities();
         var weaponLevel = Manager.Instance.Ingame.GetOwnedAbilityLevel(_heroWeaponName);
         _projectileCount = WeaponAbility.GetWeaponProjectileCount(Define.WEAPON_ARCANE_MAGE_WAND, weaponLevel);
+    }
+
+    public override void ReturnAbilities()
+    {
+        base.ReturnAbilities();
+        _ReturnAllProjectile();
     }
 
     protected override void _DetectMonster()
@@ -119,6 +126,7 @@ public class ArcaneMage : Hero
 
             var initProjectilePos = transform.TransformPoint(INIT_PROJECTILE_POSITIONS[ii]);
             var projectileGO = _GetProjectile();
+            _usedProjectileQueue.Enqueue(projectileGO);
             var projectile = Utils.GetOrAddComponent<ArcaneMage_Projectile>(projectileGO);
             projectile.Init(initProjectilePos, _targetMonsterPositions[ii], _ReturnProjectile);
             Utils.SetActive(projectileGO, true);
@@ -139,6 +147,16 @@ public class ArcaneMage : Hero
     private GameObject _GetProjectile()
     {
         return _projectilePool.GetObject();
+    }
+
+    private void _ReturnAllProjectile()
+    {
+        while (_usedProjectileQueue.Count > 0)
+        {
+            var projectile = _usedProjectileQueue.Dequeue();
+            if (projectile.activeSelf)
+                _ReturnProjectile(projectile);
+        }
     }
 
     private void _ReturnProjectile(GameObject projectile)
