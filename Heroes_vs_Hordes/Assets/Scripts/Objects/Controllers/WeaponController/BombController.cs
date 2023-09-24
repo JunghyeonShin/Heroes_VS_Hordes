@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class BombController : WeaponController
 {
-    private List<int> _targetMonsterIndexList = new List<int>();
     private float _finishAttackCount;
+    private List<int> _targetMonsterIndexList = new List<int>();
 
     private const float DEFAULT_DETECT_BOX_ANGLE = 0f;
     private const float FINISH_ATTACK_COUNT = 0f;
@@ -28,9 +28,8 @@ public class BombController : WeaponController
         if (base._Attack())
             return false;
 
-        _targetMonsterIndexList.Clear();
         _finishAttackCount = _projectileCount;
-
+        _targetMonsterIndexList.Clear();
         var layerMask = 1 << LayerMask.NameToLayer(Define.LAYER_MONSTER);
         var monsters = Physics2D.OverlapBoxAll(Manager.Instance.Ingame.UsedHero.transform.position, OVERLAP_SIZE, DEFAULT_DETECT_BOX_ANGLE, layerMask);
         if (monsters.Length > 0)
@@ -48,7 +47,7 @@ public class BombController : WeaponController
                 bomb.FinishAttackHandler += _FinishAttack;
                 Utils.SetActive(bombGO, true);
             }
-            _ReAttack().Forget();
+            _Reattack().Forget();
         }
         return true;
     }
@@ -63,7 +62,7 @@ public class BombController : WeaponController
         --_finishAttackCount;
     }
 
-    private async UniTaskVoid _ReAttack()
+    private async UniTaskVoid _Reattack()
     {
         while (_finishAttackCount > FINISH_ATTACK_COUNT)
             await UniTask.Yield();

@@ -30,7 +30,7 @@ public class CrossbowController : WeaponController
             crossbow.Init(Manager.Instance.Ingame.UsedHero.transform.position, _GetRandomPos());
             Utils.SetActive(crossbowGO, true);
         }
-        _ReAttack().Forget();
+        _Reattack().Forget();
         return true;
     }
 
@@ -41,7 +41,7 @@ public class CrossbowController : WeaponController
         return new Vector3(posX, posY).normalized;
     }
 
-    private async UniTaskVoid _ReAttack()
+    private async UniTaskVoid _Reattack()
     {
         await UniTask.Delay(TimeSpan.FromSeconds(_effectTime));
 

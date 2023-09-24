@@ -4,50 +4,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoomerangController : WeaponController
+public class FireballController : WeaponController
 {
-    private float _rotateAngle;
     private float _finishAttackCount;
 
-    private const float ROTATE_ANGLE = 45f;
     private const float ANGLE_360 = 360f;
     private const float FINISH_ATTACK_COUNT = 0f;
-    private const int INIT_BOOMERANG_COUNT = 10;
+    private const int INIT_FIREBALL_COUNT = 10;
 
     protected override void _Init()
     {
-        _weaponName = Define.WEAPON_BOOMERANG;
-        _initWeaponCount = INIT_BOOMERANG_COUNT;
+        _weaponName = Define.WEAPON_FIREBALL;
+        _initWeaponCount = INIT_FIREBALL_COUNT;
 
         base._Init();
     }
 
     protected override bool _Attack()
     {
-        if (base._Attack())
+        if (false == base._Attack())
             return false;
 
         _finishAttackCount = _projectileCount;
         for (int ii = 0; ii < _projectileCount; ++ii)
         {
-            var boomerangGO = _GetWeapon();
-            _usedWeaponQueue.Enqueue(boomerangGO);
-            var boomerang = Utils.GetOrAddComponent<Boomerang>(boomerangGO);
-            boomerang.Init(Manager.Instance.Ingame.UsedHero.transform.position, _GetTargetPos(ii));
-            boomerang.FinishAttackHandler -= _FinishAttack;
-            boomerang.FinishAttackHandler += _FinishAttack;
-            Utils.SetActive(boomerangGO, true);
+            var testFireballGO = _GetWeapon();
+            _usedWeaponQueue.Enqueue(testFireballGO);
+            var fireball = Utils.GetOrAddComponent<Fireball>(testFireballGO);
+            fireball.Init(Manager.Instance.Ingame.UsedHero.transform.position, _GetTargetPos(ii));
+            fireball.FinishAttackHandler -= _FinishAttack;
+            fireball.FinishAttackHandler += _FinishAttack;
+            Utils.SetActive(testFireballGO, true);
         }
-        _rotateAngle -= ROTATE_ANGLE;
-        if (_rotateAngle <= ANGLE_360)
-            _rotateAngle += ANGLE_360;
         _Reattack().Forget();
         return true;
     }
 
     private Vector3 _GetTargetPos(int index)
     {
-        var angle = (ANGLE_360 / _projectileCount) * index + _rotateAngle;
+        var angle = (ANGLE_360 / _projectileCount) * index;
         var targetPos = Quaternion.AngleAxis(angle, Vector3.forward) * Vector3.up;
         return targetPos.normalized * _effectRange;
     }

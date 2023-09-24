@@ -32,10 +32,10 @@ public class DivineAuraController : WeaponController
 
     private void _FinishAttack()
     {
-        _ReAttack().Forget();
+        _Reattack().Forget();
     }
 
-    private async UniTaskVoid _ReAttack()
+    private async UniTaskVoid _Reattack()
     {
         await UniTask.Delay(TimeSpan.FromSeconds(_attackCooldown));
 

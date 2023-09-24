@@ -401,6 +401,7 @@ public class IngameManager : MonoBehaviour
         _InitWaeponController(Define.RESOURCE_WEAPON_BOOMERANG_CONTROLLER);
         _InitWaeponController(Define.RESOURCE_WEAPON_CROSSBOW_CONTROLLER);
         _InitWaeponController(Define.RESOURCE_WEAPON_DIVINE_AURA_CONTROLLER);
+        _InitWaeponController(Define.RESOURCE_WEAPON_FIREBALL_CONTROLLER);
     }
 
     private void _InitWaeponController(string key)
@@ -475,6 +476,10 @@ public class IngameManager : MonoBehaviour
             case Define.WEAPON_DIVINE_AURA:
                 _ownedAbilityInfoDic.Add(abilityName, new OwnedAbilityInfo() { Level = INIT_OWNED_ABILITY_LEVEL, AbilityControllerList = new List<IAbilityController>() { _usedWeaponControllerDic[Define.RESOURCE_WEAPON_DIVINE_AURA_CONTROLLER] } });
                 Utils.SetActive(_usedWeaponControllerDic[Define.RESOURCE_WEAPON_DIVINE_AURA_CONTROLLER].gameObject, true);
+                break;
+            case Define.WEAPON_FIREBALL:
+                _ownedAbilityInfoDic.Add(abilityName, new OwnedAbilityInfo() { Level = INIT_OWNED_ABILITY_LEVEL, AbilityControllerList = new List<IAbilityController>() { _usedWeaponControllerDic[Define.RESOURCE_WEAPON_FIREBALL_CONTROLLER] } });
+                Utils.SetActive(_usedWeaponControllerDic[Define.RESOURCE_WEAPON_FIREBALL_CONTROLLER].gameObject, true);
                 break;
         }
         foreach (var abilityController in _ownedAbilityInfoDic[abilityName].AbilityControllerList)
