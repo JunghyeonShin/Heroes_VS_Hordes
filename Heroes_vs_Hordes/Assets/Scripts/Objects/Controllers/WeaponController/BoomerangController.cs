@@ -24,7 +24,7 @@ public class BoomerangController : WeaponController
 
     protected override bool _Attack()
     {
-        if (base._Attack())
+        if (false == base._Attack())
             return false;
 
         _finishAttackCount = _projectileCount;

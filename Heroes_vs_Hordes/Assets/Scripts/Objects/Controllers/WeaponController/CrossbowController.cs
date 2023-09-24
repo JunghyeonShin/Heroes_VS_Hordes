@@ -19,7 +19,7 @@ public class CrossbowController : WeaponController
 
     protected override bool _Attack()
     {
-        if (base._Attack())
+        if (false == base._Attack())
             return false;
 
         for (int ii = 0; ii < _projectileCount; ++ii)
