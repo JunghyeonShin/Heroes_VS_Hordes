@@ -51,7 +51,8 @@ public class UI_LevelUpHero : UI_Popup
     public void UpdateSelectAbilityPanel()
     {
         for (int ii = 0; ii < _selectAbilityList.Count; ++ii)
-            _selectAbilityList[ii].UpdateSelectAbilityUI(Manager.Instance.Ingame.DrawAbilityList[ii]);
+            //_selectAbilityList[ii].UpdateSelectAbilityUI(Manager.Instance.Ingame.DrawAbilityList[ii]);
+            _selectAbilityList[ii].UpdateSelectAbilityUI(Define.WEAPON_BOMB);
     }
 
     public void InitAbilityUI()

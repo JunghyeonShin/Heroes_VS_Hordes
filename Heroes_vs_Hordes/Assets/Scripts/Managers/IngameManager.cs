@@ -397,10 +397,16 @@ public class IngameManager : MonoBehaviour
     {
         _usedWeaponControllerDic.Clear();
 
-        Manager.Instance.Object.GetWeaponController(Define.RESOURCE_WEAPON_CROSSBOW_CONTROLLER, (weaponControllerGO) =>
+        _InitWaeponController(Define.RESOURCE_WEAPON_BOMB_CONTROLLER);
+        _InitWaeponController(Define.RESOURCE_WEAPON_CROSSBOW_CONTROLLER);
+    }
+
+    private void _InitWaeponController(string key)
+    {
+        Manager.Instance.Object.GetWeaponController(key, (weaponControllerGO) =>
         {
             var weaponController = Utils.GetOrAddComponent<WeaponController>(weaponControllerGO);
-            _usedWeaponControllerDic.Add(Define.RESOURCE_WEAPON_CROSSBOW_CONTROLLER, weaponController);
+            _usedWeaponControllerDic.Add(key, weaponController);
         });
     }
 
@@ -451,6 +457,10 @@ public class IngameManager : MonoBehaviour
         {
             case Define.WEAPON_ARCANE_MAGE_WAND:
                 _ownedAbilityInfoDic.Add(abilityName, new OwnedAbilityInfo() { Level = INIT_OWNED_ABILITY_LEVEL, AbilityControllerList = new List<IAbilityController>() { UsedHero } });
+                break;
+            case Define.WEAPON_BOMB:
+                _ownedAbilityInfoDic.Add(abilityName, new OwnedAbilityInfo() { Level = INIT_OWNED_ABILITY_LEVEL, AbilityControllerList = new List<IAbilityController>() { _usedWeaponControllerDic[Define.RESOURCE_WEAPON_BOMB_CONTROLLER] } });
+                Utils.SetActive(_usedWeaponControllerDic[Define.RESOURCE_WEAPON_BOMB_CONTROLLER].gameObject, true);
                 break;
             case Define.WEAPON_CROSSBOW:
                 _ownedAbilityInfoDic.Add(abilityName, new OwnedAbilityInfo() { Level = INIT_OWNED_ABILITY_LEVEL, AbilityControllerList = new List<IAbilityController>() { _usedWeaponControllerDic[Define.RESOURCE_WEAPON_CROSSBOW_CONTROLLER] } });

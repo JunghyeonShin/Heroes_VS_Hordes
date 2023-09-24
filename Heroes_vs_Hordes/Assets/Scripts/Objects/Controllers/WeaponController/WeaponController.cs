@@ -55,6 +55,7 @@ public abstract class WeaponController : MonoBehaviour, IAbilityController
 
     public void ReturnAbilities()
     {
+        _startAttack = false;
         _ReturnWeapon();
     }
 

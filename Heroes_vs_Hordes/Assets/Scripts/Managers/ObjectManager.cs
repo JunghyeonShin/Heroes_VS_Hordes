@@ -20,7 +20,7 @@ public class ObjectManager
     public GameObject MonsterSpawner { get; private set; }
     public GameObject LevelUpText { get; private set; }
 
-    private const int INDEX_TOTAL_VALUE = 8;
+    private const int INDEX_TOTAL_VALUE = 9;
     private const int INDEX_REPOSITION_AREA = 0;
     private const int INDEX_MONSTER_SPAWNER = 1;
     private const int INDEX_LEVEL_UP_TEXT = 2;
@@ -29,6 +29,7 @@ public class ObjectManager
     private const int INDEX_GOLD = 5;
     private const int INDEX_MONSTER_NORMAL_BAT = 6;
     private const int INDEX_WEAPON_CROSSBOW_CONTROLLER = 7;
+    private const int INDEX_WEAPON_BOMB_CONTROLLER = 8;
     private const string NAME_ROOT_OBJECT = "[ROOT_OBJECT]";
 
     public void Init()
@@ -242,6 +243,7 @@ public class ObjectManager
     private void _InitWeaponController()
     {
         _InitWeaponController(Define.RESOURCE_WEAPON_CROSSBOW_CONTROLLER, (crossbowController) => { _loadCompletes[INDEX_WEAPON_CROSSBOW_CONTROLLER] = true; });
+        _InitWeaponController(Define.RESOURCE_WEAPON_BOMB_CONTROLLER, (crossbowController) => { _loadCompletes[INDEX_WEAPON_BOMB_CONTROLLER] = true; });
     }
 
     private void _InitWeaponController(string key, Action<GameObject> callback = null)
