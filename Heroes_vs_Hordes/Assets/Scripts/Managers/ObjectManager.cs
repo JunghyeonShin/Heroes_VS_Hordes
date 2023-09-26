@@ -20,19 +20,20 @@ public class ObjectManager
     public GameObject MonsterSpawner { get; private set; }
     public GameObject LevelUpText { get; private set; }
 
-    private const int INDEX_TOTAL_VALUE = 12;
+    private const int INDEX_TOTAL_VALUE = 13;
     private const int INDEX_REPOSITION_AREA = 0;
     private const int INDEX_MONSTER_SPAWNER = 1;
     private const int INDEX_LEVEL_UP_TEXT = 2;
     private const int INDEX_DAMAGE_TEXT = 3;
     private const int INDEX_EXP_GEM = 4;
     private const int INDEX_GOLD = 5;
-    private const int INDEX_MONSTER_NORMAL_BAT = 6;
-    private const int INDEX_WEAPON_BOMB_CONTROLLER = 7;
-    private const int INDEX_WEAPON_BOOMERNAG_CONTROLLER = 8;
-    private const int INDEX_WEAPON_CROSSBOW_CONTROLLER = 9;
-    private const int INDEX_WEAPON_DIVINE_AURA_CONTROLLER = 10;
-    private const int INDEX_WEAPON_FIREBALL_CONTROLLER = 11;
+    private const int INDEX_WEAPON_BOMB_CONTROLLER = 6;
+    private const int INDEX_WEAPON_BOOMERNAG_CONTROLLER = 7;
+    private const int INDEX_WEAPON_CROSSBOW_CONTROLLER = 8;
+    private const int INDEX_WEAPON_DIVINE_AURA_CONTROLLER = 9;
+    private const int INDEX_WEAPON_FIREBALL_CONTROLLER = 10;
+    private const int INDEX_MONSTER_NORMAL_BAT = 11;
+    private const int INDEX_MONSTER_NORMAL_GOBLIN = 12;
     private const string NAME_ROOT_OBJECT = "[ROOT_OBJECT]";
 
     public void Init()
@@ -68,8 +69,8 @@ public class ObjectManager
         });
 
         _InitDropItem();
-        _InitMonster();
         _InitWeaponController();
+        _InitMonster();
     }
 
     public bool LoadComplete()
@@ -127,45 +128,6 @@ public class ObjectManager
     public void ReturnHero(string key)
     {
         Utils.SetActive(_heroDic[key], false);
-    }
-    #endregion
-
-    #region Monster
-    private const int DEFAULT_INSTANTIATE_MONSTER_COUNT = 50;
-
-    public void GetMonster(string key, Action<GameObject> callback)
-    {
-        // 캐시 확인
-        if (_monsterPoolDic.TryGetValue(key, out var monsterPool))
-        {
-            callback?.Invoke(monsterPool.GetObject());
-            return;
-        }
-
-        // 몬스터 오브젝트 생성 후 캐싱
-        _InitMonster(key, DEFAULT_INSTANTIATE_MONSTER_COUNT, callback);
-    }
-
-    public void ReturnMonster(string key, GameObject monster)
-    {
-        _monsterPoolDic[key].ReturnObject(monster);
-    }
-
-    private void _InitMonster()
-    {
-        _InitMonster(Define.RESOURCE_MONSTER_NORMAL_BAT, DEFAULT_INSTANTIATE_MONSTER_COUNT, (monster) => { _loadCompletes[INDEX_MONSTER_NORMAL_BAT] = true; });
-    }
-
-    private void _InitMonster(string key, int count, Action<GameObject> callback)
-    {
-        var objectPool = new ObjectPool();
-
-        Manager.Instance.Resource.LoadAsync<GameObject>(key, (monster) =>
-        {
-            objectPool.InitPool(monster, _rootObject, count);
-            _monsterPoolDic.Add(key, objectPool);
-            callback?.Invoke(objectPool.GetObject());
-        });
     }
     #endregion
 
@@ -259,6 +221,46 @@ public class ObjectManager
             _weaponControllerDic.Add(key, weaponController);
             Utils.SetActive(weaponController, false);
             callback?.Invoke(weaponController);
+        });
+    }
+    #endregion
+
+    #region Monster
+    private const int DEFAULT_INSTANTIATE_MONSTER_COUNT = 50;
+
+    public void GetMonster(string key, Action<GameObject> callback)
+    {
+        // 캐시 확인
+        if (_monsterPoolDic.TryGetValue(key, out var monsterPool))
+        {
+            callback?.Invoke(monsterPool.GetObject());
+            return;
+        }
+
+        // 몬스터 오브젝트 생성 후 캐싱
+        _InitMonster(key, DEFAULT_INSTANTIATE_MONSTER_COUNT, callback);
+    }
+
+    public void ReturnMonster(string key, GameObject monster)
+    {
+        _monsterPoolDic[key].ReturnObject(monster);
+    }
+
+    private void _InitMonster()
+    {
+        _InitMonster(Define.RESOURCE_MONSTER_NORMAL_BAT, DEFAULT_INSTANTIATE_MONSTER_COUNT, (monster) => { _loadCompletes[INDEX_MONSTER_NORMAL_BAT] = true; });
+        _InitMonster(Define.RESOURCE_MONSTER_NORMAL_GOBLIN, DEFAULT_INSTANTIATE_MONSTER_COUNT, (monster) => { _loadCompletes[INDEX_MONSTER_NORMAL_GOBLIN] = true; });
+    }
+
+    private void _InitMonster(string key, int count, Action<GameObject> callback)
+    {
+        var objectPool = new ObjectPool();
+
+        Manager.Instance.Resource.LoadAsync<GameObject>(key, (monster) =>
+        {
+            objectPool.InitPool(monster, _rootObject, count);
+            _monsterPoolDic.Add(key, objectPool);
+            callback?.Invoke(objectPool.GetObject());
         });
     }
     #endregion

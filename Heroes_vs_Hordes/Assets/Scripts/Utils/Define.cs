@@ -43,6 +43,7 @@ public class Define
     // Monster
     public const string RESOURCE_MONSTER_SPAWNER = "MonsterSpawner";
     public const string RESOURCE_MONSTER_NORMAL_BAT = "Normal_Bat";
+    public const string RESOURCE_MONSTER_NORMAL_GOBLIN = "Normal_Goblin";
     // Text
     public const string RESROUCE_DAMAGE_TEXT = "DamageText";
     public const string RESROUCE_LEVEL_UP_TEXT = "LevelUpText";

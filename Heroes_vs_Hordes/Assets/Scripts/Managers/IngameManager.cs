@@ -292,7 +292,8 @@ public class IngameManager : MonoBehaviour
             #region TEST
             var spawnMonster = Utils.GetOrAddComponent<SpawnMonster>(Manager.Instance.Object.MonsterSpawner);
             spawnMonster.Spawn(Define.RESOURCE_MONSTER_NORMAL_BAT, 10);
-            _remainingMonsterCount += 10;
+            spawnMonster.Spawn(Define.RESOURCE_MONSTER_NORMAL_GOBLIN, 10);
+            _remainingMonsterCount += 20;
             await UniTask.Delay(TimeSpan.FromSeconds(10));
             #endregion
         }
