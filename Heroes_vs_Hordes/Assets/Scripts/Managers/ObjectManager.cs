@@ -20,7 +20,7 @@ public class ObjectManager
     public GameObject MonsterSpawner { get; private set; }
     public GameObject LevelUpText { get; private set; }
 
-    private const int INDEX_TOTAL_VALUE = 13;
+    private const int INDEX_TOTAL_VALUE = 20;
     private const int INDEX_REPOSITION_AREA = 0;
     private const int INDEX_MONSTER_SPAWNER = 1;
     private const int INDEX_LEVEL_UP_TEXT = 2;
@@ -33,7 +33,14 @@ public class ObjectManager
     private const int INDEX_WEAPON_DIVINE_AURA_CONTROLLER = 9;
     private const int INDEX_WEAPON_FIREBALL_CONTROLLER = 10;
     private const int INDEX_MONSTER_NORMAL_BAT = 11;
-    private const int INDEX_MONSTER_NORMAL_GOBLIN = 12;
+    private const int INDEX_MONSTER_SWARM_BAT = 12;
+    private const int INDEX_MONSTER_NORMAL_GOBLIN = 13;
+    private const int INDEX_MONSTER_CLUB_GOBLIN = 14;
+    private const int INDEX_MONSTER_ARMOR_GOBLIN = 15;
+    private const int INDEX_MONSTER_NORMAL_SKELETON = 16;
+    private const int INDEX_MONSTER_ARMOR_SKELETON = 17;
+    private const int INDEX_MONSTER_NORMAL_SPIDER = 18;
+    private const int INDEX_MONSTER_CAVE_SPIDER = 19;
     private const string NAME_ROOT_OBJECT = "[ROOT_OBJECT]";
 
     public void Init()
@@ -249,7 +256,14 @@ public class ObjectManager
     private void _InitMonster()
     {
         _InitMonster(Define.RESOURCE_MONSTER_NORMAL_BAT, DEFAULT_INSTANTIATE_MONSTER_COUNT, (monster) => { _loadCompletes[INDEX_MONSTER_NORMAL_BAT] = true; });
+        _InitMonster(Define.RESOURCE_MONSTER_SWARM_BAT, DEFAULT_INSTANTIATE_MONSTER_COUNT, (monster) => { _loadCompletes[INDEX_MONSTER_SWARM_BAT] = true; });
         _InitMonster(Define.RESOURCE_MONSTER_NORMAL_GOBLIN, DEFAULT_INSTANTIATE_MONSTER_COUNT, (monster) => { _loadCompletes[INDEX_MONSTER_NORMAL_GOBLIN] = true; });
+        _InitMonster(Define.RESOURCE_MONSTER_CLUB_GOBLIN, DEFAULT_INSTANTIATE_MONSTER_COUNT, (monster) => { _loadCompletes[INDEX_MONSTER_CLUB_GOBLIN] = true; });
+        _InitMonster(Define.RESOURCE_MONSTER_ARMOR_GOBLIN, DEFAULT_INSTANTIATE_MONSTER_COUNT, (monster) => { _loadCompletes[INDEX_MONSTER_ARMOR_GOBLIN] = true; });
+        _InitMonster(Define.RESOURCE_MONSTER_NORMAL_SKELETON, DEFAULT_INSTANTIATE_MONSTER_COUNT, (monster) => { _loadCompletes[INDEX_MONSTER_NORMAL_SKELETON] = true; });
+        _InitMonster(Define.RESOURCE_MONSTER_ARMOR_SKELETON, DEFAULT_INSTANTIATE_MONSTER_COUNT, (monster) => { _loadCompletes[INDEX_MONSTER_ARMOR_SKELETON] = true; });
+        _InitMonster(Define.RESOURCE_MONSTER_NORMAL_SPIDER, DEFAULT_INSTANTIATE_MONSTER_COUNT, (monster) => { _loadCompletes[INDEX_MONSTER_NORMAL_SPIDER] = true; });
+        _InitMonster(Define.RESOURCE_MONSTER_CAVE_SPIDER, DEFAULT_INSTANTIATE_MONSTER_COUNT, (monster) => { _loadCompletes[INDEX_MONSTER_CAVE_SPIDER] = true; });
     }
 
     private void _InitMonster(string key, int count, Action<GameObject> callback)
