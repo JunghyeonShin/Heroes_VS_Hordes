@@ -36,7 +36,6 @@ public class IngameManager : MonoBehaviour
     /// </summary>
     public void InitIngame(UI_Loading loadingUI)
     {
-        _spawnMonster = false;
         HeroLevelUpCount = Define.INIT_HERO_LEVEL_UP_COUNT;
 
         CurrentWaveIndex = INIT_WAVE_INDEX;
@@ -100,8 +99,9 @@ public class IngameManager : MonoBehaviour
                     var monsterSpawner = Manager.Instance.Object.MonsterSpawner;
                     var chaseHero = Utils.GetOrAddComponent<ChaseHero>(monsterSpawner);
                     chaseHero.HeroTransform = heroGO.transform;
-                    var spawnMonster = Utils.GetOrAddComponent<SpawnMonster>(monsterSpawner);
-                    spawnMonster.HeroController = heroController;
+                    _monsterSpawner = Utils.GetOrAddComponent<MonsterSpawner>(monsterSpawner);
+                    _monsterSpawner.HeroController = heroController;
+                    _monsterSpawner.InitSpawnMonster();
                     Utils.SetActive(monsterSpawner, true);
                 }
 
@@ -162,6 +162,7 @@ public class IngameManager : MonoBehaviour
     {
         Utils.SetTimeScale(RESTORE_TIMESCALE);
         CurrentWave.ExitWave();
+        StopSpawnMonster();
         ReturnUsedMonster();
         ReturnUsedExpGem();
         ReturnUsedGold();
@@ -240,7 +241,7 @@ public class IngameManager : MonoBehaviour
 
     private Queue<Monster> _usedMonsterQueue = new Queue<Monster>();
 
-    private bool _spawnMonster;
+    private MonsterSpawner _monsterSpawner;
     private int _remainingMonsterCount;
 
     public int RemainingMonsterCount { get { return _remainingMonsterCount; } }
@@ -250,13 +251,12 @@ public class IngameManager : MonoBehaviour
 
     public void StartSpawnMonster()
     {
-        _spawnMonster = true;
-        _SpawnMonster().Forget();
+        _monsterSpawner.StartSpawnMonster();
     }
 
     public void StopSpawnMonster()
     {
-        _spawnMonster = false;
+        _monsterSpawner.StopSpawnMonster();
         var waveIndex = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[CurrentWaveIndex];
         if (Define.INDEX_GOLD_RUSH_WAVE != waveIndex)
             RemainingMonsterHandler?.Invoke();
@@ -270,6 +270,7 @@ public class IngameManager : MonoBehaviour
 
     public void EnqueueUsedMonster(Monster monster)
     {
+        ++_remainingMonsterCount;
         _usedMonsterQueue.Enqueue(monster);
     }
 
@@ -282,27 +283,6 @@ public class IngameManager : MonoBehaviour
                 continue;
 
             monster.ReturnMonster();
-        }
-    }
-
-    private async UniTaskVoid _SpawnMonster()
-    {
-        while (_spawnMonster)
-        {
-            #region TEST
-            var spawnMonster = Utils.GetOrAddComponent<SpawnMonster>(Manager.Instance.Object.MonsterSpawner);
-            spawnMonster.Spawn(Define.RESOURCE_MONSTER_NORMAL_BAT, 10);
-            spawnMonster.Spawn(Define.RESOURCE_MONSTER_NORMAL_GOBLIN, 10);
-            spawnMonster.Spawn(Define.RESOURCE_MONSTER_CLUB_GOBLIN, 10);
-            spawnMonster.Spawn(Define.RESOURCE_MONSTER_ARMOR_GOBLIN, 10);
-            spawnMonster.Spawn(Define.RESOURCE_MONSTER_NORMAL_SKELETON, 10);
-            spawnMonster.Spawn(Define.RESOURCE_MONSTER_ARMOR_SKELETON, 10);
-            spawnMonster.Spawn(Define.RESOURCE_MONSTER_SWARM_BAT, 10);
-            spawnMonster.Spawn(Define.RESOURCE_MONSTER_NORMAL_SPIDER, 10);
-            spawnMonster.Spawn(Define.RESOURCE_MONSTER_CAVE_SPIDER, 10);
-            _remainingMonsterCount += 90;
-            await UniTask.Delay(TimeSpan.FromSeconds(10));
-            #endregion
         }
     }
     #endregion
