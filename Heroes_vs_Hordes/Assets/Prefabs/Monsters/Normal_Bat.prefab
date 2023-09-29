@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 84128243334680509}
   - component: {fileID: 3188427498201608475}
   - component: {fileID: 810105362479065202}
-  - component: {fileID: 9162776329102473843}
+  - component: {fileID: 518687568914004493}
   - component: {fileID: 5239215740555884851}
   m_Layer: 10
   m_Name: Normal_Bat
@@ -172,7 +172,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &9162776329102473843
+--- !u!114 &518687568914004493
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -181,7 +181,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 829923838201807053}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dec24b7711de6b549807bfadbb29d066, type: 3}
+  m_Script: {fileID: 11500000, guid: 063297a8aae16604dbad064c9e6bda2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _moveSpeed: 3

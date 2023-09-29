@@ -17,8 +17,9 @@ public class DataManager : MonoBehaviour
     public Dictionary<string, List<WeaponAbilityData>> WeaponLevelAbilityDataDic { get; private set; }
     public Dictionary<string, List<float>> BookAbilityDataDic { get; private set; }
     public Dictionary<string, List<AbilityDescriptionData>> AbilityDescriptionDic { get; private set; }
+    public Dictionary<string, MonsterInfoData> MonsterInfoDic { get; private set; }
 
-    private const int INDEX_LOAD_TOTAL_VALUE = 8;
+    private const int INDEX_LOAD_TOTAL_VALUE = 9;
     private const int INDEX_LOAD_HERO_COMMON_ABILITY = 0;
     private const int INDEX_LOAD_HERO_INDIVIDUAL_ABILITY = 1;
     private const int INDEX_LOAD_REQUIRED_EXP = 2;
@@ -27,16 +28,19 @@ public class DataManager : MonoBehaviour
     private const int INDEX_LOAD_WEAPON_LEVEL_ABILITY = 5;
     private const int INDEX_LOAD_BOOK_ABILITY = 6;
     private const int INDEX_LOAD_ABILITY_DESCRIPTION = 7;
+    private const int INDEX_LOAD_MONSTER_INFO = 8;
 
     private const int KEY_HERO_ABILITY = 0;
     private const int KEY_WEAPON_ABILITY = 0;
     private const int KEY_BOOK_ABILITY = 0;
+    private const int KEY_MONSTER_INFO = 0;
 
     private const string URL_HERO_COMMON_ABILITY = "https://docs.google.com/spreadsheets/d/12WFyu9JDe1fl3O3zK9XvCx2CUZ7UbsYBBLUWCyyKdT8/export?format=tsv&range=A2:H";
     private const string URL_HERO_INDIVIDUAL_ABILITY = "https://docs.google.com/spreadsheets/d/12WFyu9JDe1fl3O3zK9XvCx2CUZ7UbsYBBLUWCyyKdT8/export?format=tsv&gid=915946808&range=A2:H";
     private const string URL_REQUIRED_EXP = "https://docs.google.com/spreadsheets/d/1sYr9S551mNMXqMTbALU21Y0b1bshLWUrDth8JqUnqU4/export?format=tsv&range=B2:B";
     private const string URL_CHAPTER_INFO = "https://docs.google.com/spreadsheets/d/1ptxHR2aiz_O8_7dHXWig4HZfOraFTpzJJWPBpDrn5Yw/export?format=tsv&range=A2:E";
     private const string URL_WEAPON_ABILITY = "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&range=A2:H";
+    private const string URL_MONSTER_INFO = "https://docs.google.com/spreadsheets/d/1IoSyWsESeudzCxpTH7C9OuVO4DSK9dxACgsTze3T64g/export?format=tsv&range=A2:D";
 
     private readonly Dictionary<string, string> URL_WEAPON_LEVEL_ABILITY_DIC = new Dictionary<string, string>()
     {
@@ -85,6 +89,7 @@ public class DataManager : MonoBehaviour
         _LoadWeaponLevelAbility().Forget();
         _LoadBookAbility().Forget();
         _LoadAbilityDescription().Forget();
+        _LoadMonsterInfo().Forget();
     }
 
     public bool LoadComplete()
@@ -237,6 +242,23 @@ public class DataManager : MonoBehaviour
             AbilityDescriptionDic.Add(abilityDescriptionURL.Key, abilityDescriptionList);
         }
         _loadCompletes[INDEX_LOAD_ABILITY_DESCRIPTION] = true;
+    }
+    #endregion
+
+    #region MonsterInfo
+    private async UniTaskVoid _LoadMonsterInfo()
+    {
+        var webRequest = UnityWebRequest.Get(URL_MONSTER_INFO);
+        var op = await webRequest.SendWebRequest();
+
+        MonsterInfoDic = new Dictionary<string, MonsterInfoData>();
+        var splitRawData = op.downloadHandler.text.Split('\n');
+        foreach (var data in splitRawData)
+        {
+            var splitData = data.Split('\t');
+            MonsterInfoDic.Add(splitData[KEY_MONSTER_INFO], new MonsterInfoData(splitData));
+        }
+        _loadCompletes[INDEX_LOAD_MONSTER_INFO] = true;
     }
     #endregion
 }

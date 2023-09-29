@@ -16,6 +16,7 @@ public class SpawnMonster : MonoBehaviour
             {
                 var monster = Utils.GetOrAddComponent<Monster>(monsterGO);
                 monster.Target = HeroController.transform;
+                monster.InitMonsterAbilities();
 
                 var randomPoint = _spawnPoints[Random.Range(0, _spawnPoints.Length - 1)];
                 monster.transform.position = randomPoint.position;
