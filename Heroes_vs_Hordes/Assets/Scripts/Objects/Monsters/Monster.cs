@@ -11,7 +11,6 @@ public abstract class Monster : MonoBehaviour
     protected float _attack;
 
     private Rigidbody2D _rigidbody;
-    private Action _dieHandler;
 
     public Transform Target { get; set; }
 
@@ -21,17 +20,6 @@ public abstract class Monster : MonoBehaviour
     protected virtual void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
-    }
-
-    private void OnEnable()
-    {
-        _dieHandler -= Manager.Instance.Ingame.OnDeadMonster;
-        _dieHandler += Manager.Instance.Ingame.OnDeadMonster;
-    }
-
-    private void OnDisable()
-    {
-        _dieHandler -= Manager.Instance.Ingame.OnDeadMonster;
     }
 
     private void FixedUpdate()
@@ -44,11 +32,18 @@ public abstract class Monster : MonoBehaviour
 
     public virtual void OnDamaged(float damage)
     {
-        var waveIndex = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[Manager.Instance.Ingame.CurrentWaveIndex];
-        if (Define.INDEX_GOLD_RUSH_WAVE == waveIndex)
-            _ShowDropItem<Gold>(Define.RESOURCE_GOLD);
-        else
-            _ShowDropItem<ExpGem>(Define.RESOURCE_EXP_GEM);
+        if (_health <= 0f)
+            return;
+
+        _health -= damage;
+        if (_health <= 0f)
+        {
+            var waveIndex = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[Manager.Instance.Ingame.CurrentWaveIndex];
+            if (Define.INDEX_GOLD_RUSH_WAVE == waveIndex)
+                _ShowDropItem<Gold>(Define.RESOURCE_GOLD);
+            else
+                _ShowDropItem<ExpGem>(Define.RESOURCE_EXP_GEM);
+        }
     }
 
     public void InitMonsterAbilities()
@@ -86,7 +81,7 @@ public abstract class Monster : MonoBehaviour
             dropItem.InitTransform(transform.position);
             Utils.SetActive(dropItemGO, true);
 
-            _dieHandler?.Invoke();
+            Manager.Instance.Ingame.OnDeadMonster();
             ReturnMonster();
         });
     }
