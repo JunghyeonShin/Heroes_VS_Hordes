@@ -38,8 +38,10 @@ public abstract class Hero : MonoBehaviour, IAbilityController
 
     private const float DELAY_LEVEL_UP = 0.2f;
     private const float DELAY_ENHANCE_ABILITY = 1f;
+    private const float DELAY_RECOVERY = 6f;
     private const float INIT_EXP = 0f;
     private const float ZERO_HEALTH = 0f;
+    private const float ADJUST_RECOVERY_CYCLE = 0.1f;
     private const int INIT_LEVEL = 1;
     private const int ADJUST_LEVEL = 1;
     private const int INCREASE_LEVEL_VALUE = 1;
@@ -97,6 +99,7 @@ public abstract class Hero : MonoBehaviour, IAbilityController
         _health = _totalHealth;
         _defense = HeroAbility.GetHeroDeffence(_heroName);
         SetAbilities();
+        _Recovery().Forget();
     }
 
     public void OnDamage(float damage)
@@ -169,5 +172,23 @@ public abstract class Hero : MonoBehaviour, IAbilityController
     {
         _levelUp = false;
         _GetExp();
+    }
+
+    private async UniTaskVoid _Recovery()
+    {
+        if (_health >= _totalHealth)
+        {
+            await UniTask.Yield();
+            _Recovery().Forget();
+            return;
+        }
+        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_RECOVERY));
+
+        var recoveryValue = _totalHealth * _recovery * ADJUST_RECOVERY_CYCLE;
+        _health += recoveryValue;
+        if (_health >= _totalHealth)
+            _health = _totalHealth;
+        ChangeHealthHandler?.Invoke(_health / _totalHealth);
+        _Recovery().Forget();
     }
 }
