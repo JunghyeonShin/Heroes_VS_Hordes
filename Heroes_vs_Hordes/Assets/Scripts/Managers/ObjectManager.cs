@@ -16,31 +16,33 @@ public class ObjectManager
     private Dictionary<string, GameObject> _weaponControllerDic = new Dictionary<string, GameObject>();
     private ObjectPool _damageTextPool = new ObjectPool();
 
+    public GameObject HeroHealth { get; private set; }
     public GameObject RepositionArea { get; private set; }
     public GameObject MonsterSpawner { get; private set; }
     public GameObject LevelUpText { get; private set; }
 
-    private const int INDEX_TOTAL_VALUE = 20;
-    private const int INDEX_REPOSITION_AREA = 0;
-    private const int INDEX_MONSTER_SPAWNER = 1;
-    private const int INDEX_LEVEL_UP_TEXT = 2;
-    private const int INDEX_DAMAGE_TEXT = 3;
-    private const int INDEX_EXP_GEM = 4;
-    private const int INDEX_GOLD = 5;
-    private const int INDEX_WEAPON_BOMB_CONTROLLER = 6;
-    private const int INDEX_WEAPON_BOOMERNAG_CONTROLLER = 7;
-    private const int INDEX_WEAPON_CROSSBOW_CONTROLLER = 8;
-    private const int INDEX_WEAPON_DIVINE_AURA_CONTROLLER = 9;
-    private const int INDEX_WEAPON_FIREBALL_CONTROLLER = 10;
-    private const int INDEX_MONSTER_NORMAL_BAT = 11;
-    private const int INDEX_MONSTER_SWARM_BAT = 12;
-    private const int INDEX_MONSTER_NORMAL_GOBLIN = 13;
-    private const int INDEX_MONSTER_CLUB_GOBLIN = 14;
-    private const int INDEX_MONSTER_ARMOR_GOBLIN = 15;
-    private const int INDEX_MONSTER_NORMAL_SKELETON = 16;
-    private const int INDEX_MONSTER_ARMOR_SKELETON = 17;
-    private const int INDEX_MONSTER_NORMAL_SPIDER = 18;
-    private const int INDEX_MONSTER_CAVE_SPIDER = 19;
+    private const int INDEX_TOTAL_VALUE = 21;
+    private const int INDEX_HERO_HEALTH = 0;
+    private const int INDEX_REPOSITION_AREA = 1;
+    private const int INDEX_MONSTER_SPAWNER = 2;
+    private const int INDEX_LEVEL_UP_TEXT = 3;
+    private const int INDEX_DAMAGE_TEXT = 4;
+    private const int INDEX_EXP_GEM = 5;
+    private const int INDEX_GOLD = 6;
+    private const int INDEX_WEAPON_BOMB_CONTROLLER = 7;
+    private const int INDEX_WEAPON_BOOMERNAG_CONTROLLER = 8;
+    private const int INDEX_WEAPON_CROSSBOW_CONTROLLER = 9;
+    private const int INDEX_WEAPON_DIVINE_AURA_CONTROLLER = 10;
+    private const int INDEX_WEAPON_FIREBALL_CONTROLLER = 11;
+    private const int INDEX_MONSTER_NORMAL_BAT = 12;
+    private const int INDEX_MONSTER_SWARM_BAT = 13;
+    private const int INDEX_MONSTER_NORMAL_GOBLIN = 14;
+    private const int INDEX_MONSTER_CLUB_GOBLIN = 15;
+    private const int INDEX_MONSTER_ARMOR_GOBLIN = 16;
+    private const int INDEX_MONSTER_NORMAL_SKELETON = 17;
+    private const int INDEX_MONSTER_ARMOR_SKELETON = 18;
+    private const int INDEX_MONSTER_NORMAL_SPIDER = 19;
+    private const int INDEX_MONSTER_CAVE_SPIDER = 20;
     private const string NAME_ROOT_OBJECT = "[ROOT_OBJECT]";
 
     public void Init()
@@ -48,6 +50,14 @@ public class ObjectManager
         _rootObject = new GameObject(NAME_ROOT_OBJECT);
 
         _loadCompletes = new bool[INDEX_TOTAL_VALUE];
+
+        Manager.Instance.Resource.Instantiate(Define.RESOURCE_HERO_HEALTH, _rootObject.transform, (heroHealth) =>
+        {
+            HeroHealth = heroHealth;
+            Utils.SetActive(heroHealth, false);
+            _loadCompletes[INDEX_HERO_HEALTH] = true;
+        });
+
         Manager.Instance.Resource.Instantiate(Define.RESOURCE_REPOSITION_AREA, _rootObject.transform, (repositionArea) =>
         {
             RepositionArea = repositionArea;

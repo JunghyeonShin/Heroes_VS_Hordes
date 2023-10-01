@@ -9,18 +9,11 @@ public class GoldRushWave : Wave
     private const string NAME_GOLD_RUSH = "°ñµå ·¯½¬";
     private const float DELAY_CLEAR_CHAPTER_TIME = 1f;
 
-    #region TEST
-    private bool _test;
-    #endregion
-
     public override void StartWave()
     {
         Manager.Instance.Ingame.ShowWavePanel(NAME_GOLD_RUSH);
         Manager.Instance.Ingame.ChangeGold();
         _progressTime = INIT_PROGRESS_TIME;
-        #region TEST
-        _test = true; ;
-        #endregion
     }
 
     public override void ClearWave()
@@ -29,22 +22,10 @@ public class GoldRushWave : Wave
         _ClearWave().Forget();
     }
 
-    protected override void _ProgressWaveTime()
+    public override void OnDeadHero()
     {
-        if (false == ProgressWave)
-            return;
-
-        #region TEST
-        if (_test)
-        {
-            _progressTime += Time.deltaTime;
-            if (_progressTime > 20f)
-            {
-                Manager.Instance.Ingame.UsedHero.SetDead();
-                _test = false;
-            }
-        }
-        #endregion
+        var ingameSceneUI = Manager.Instance.UI.CurrentSceneUI as UI_IngameScene;
+        ingameSceneUI.FinishIngame();
     }
 
     private async UniTaskVoid _ClearWave()

@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,10 +13,14 @@ public abstract class Monster : MonoBehaviour
 
     private Rigidbody2D _rigidbody;
 
+    private bool _isAttack;
+
     public Transform Target { get; set; }
 
     private const float REVERSE_ANGLE = -1f;
     private const float CHECK_DIRECTION = 0f;
+    private const float ZERO_HEALTH = 0f;
+    private const float DELAY_REATTACK_TIME = 2f;
 
     protected virtual void Awake()
     {
@@ -30,13 +35,35 @@ public abstract class Monster : MonoBehaviour
         _ChaseHero(monsterToHeroNormalVec);
     }
 
-    public virtual void OnDamaged(float damage)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        if (_health <= 0f)
+        if (_isAttack)
+            return;
+
+        if (collision.CompareTag(Define.TAG_HERO))
+        {
+            var hero = Utils.GetOrAddComponent<Hero>(collision.gameObject);
+            hero.OnDamage(_attack);
+            _isAttack = true;
+            _Reattack().Forget();
+        }
+    }
+
+    public void InitMonsterAbilities()
+    {
+        var monsterInfo = Manager.Instance.Data.MonsterInfoDic[_monsterName];
+        _health = monsterInfo.Health;
+        _moveSpeed = monsterInfo.MoveSpeed;
+        _attack = monsterInfo.Attack;
+    }
+
+    public virtual void OnDamage(float damage)
+    {
+        if (_health <= ZERO_HEALTH)
             return;
 
         _health -= damage;
-        if (_health <= 0f)
+        if (_health <= ZERO_HEALTH)
         {
             var waveIndex = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[Manager.Instance.Ingame.CurrentWaveIndex];
             if (Define.INDEX_GOLD_RUSH_WAVE == waveIndex)
@@ -46,12 +73,9 @@ public abstract class Monster : MonoBehaviour
         }
     }
 
-    public void InitMonsterAbilities()
+    public void ReturnMonster()
     {
-        var monsterInfo = Manager.Instance.Data.MonsterInfoDic[_monsterName];
-        _health = monsterInfo.Health;
-        _moveSpeed = monsterInfo.MoveSpeed;
-        _health = monsterInfo.Health;
+        Manager.Instance.Object.ReturnMonster(_monsterName, gameObject);
     }
 
     private void _LookHero(Vector2 monsterToHeroNormalVec)
@@ -86,8 +110,10 @@ public abstract class Monster : MonoBehaviour
         });
     }
 
-    public void ReturnMonster()
+    private async UniTaskVoid _Reattack()
     {
-        Manager.Instance.Object.ReturnMonster(_monsterName, gameObject);
+        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_REATTACK_TIME));
+
+        _isAttack = false;
     }
 }

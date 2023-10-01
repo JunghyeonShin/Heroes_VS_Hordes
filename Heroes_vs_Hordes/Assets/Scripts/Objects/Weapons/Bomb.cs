@@ -107,7 +107,7 @@ public class Bomb : Weapon
             Utils.SetActive(damageTextGO, true);
 
             var monster = Utils.GetOrAddComponent<Monster>(monsterGO.gameObject);
-            monster.OnDamaged(attack);
+            monster.OnDamage(attack);
         }
         await UniTask.Delay(TimeSpan.FromSeconds(DELAY_FINISH_ATTACK_TIME));
 

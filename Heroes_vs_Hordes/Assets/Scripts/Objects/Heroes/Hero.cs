@@ -6,6 +6,8 @@ using UnityEngine;
 
 public abstract class Hero : MonoBehaviour, IAbilityController
 {
+    public event Action<float> ChangeHealthHandler;
+
     protected Animator _animator;
     protected string _heroName;
     protected string _heroWeaponName;
@@ -19,6 +21,9 @@ public abstract class Hero : MonoBehaviour, IAbilityController
 
     protected bool _detectMonster;
     protected bool _attackMonster;
+
+    private float _totalHealth;
+    private bool _isDead;
 
     private event Action _levelUpAbilityHandler;
     private event Action<float> _changeExpHandler;
@@ -34,7 +39,7 @@ public abstract class Hero : MonoBehaviour, IAbilityController
     private const float DELAY_LEVEL_UP = 0.2f;
     private const float DELAY_ENHANCE_ABILITY = 1f;
     private const float INIT_EXP = 0f;
-    private const float HP_ZERO = 0f;
+    private const float ZERO_HEALTH = 0f;
     private const int INIT_LEVEL = 1;
     private const int ADJUST_LEVEL = 1;
     private const int INCREASE_LEVEL_VALUE = 1;
@@ -56,6 +61,8 @@ public abstract class Hero : MonoBehaviour, IAbilityController
 
     private void OnEnable()
     {
+        _isDead = false;
+
         _exp = INIT_EXP;
         _level = INIT_LEVEL;
         _changeExpHandler?.Invoke(INIT_EXP);
@@ -64,7 +71,8 @@ public abstract class Hero : MonoBehaviour, IAbilityController
 
     private void Update()
     {
-        _DetectMonster();
+        if (false == _isDead)
+            _DetectMonster();
     }
 
     public virtual void SetAbilities()
@@ -85,9 +93,26 @@ public abstract class Hero : MonoBehaviour, IAbilityController
 
     public void InitHeroAbilities()
     {
-        _health = HeroAbility.GetHeroHealth(_heroName);
+        _totalHealth = HeroAbility.GetHeroHealth(_heroName);
+        _health = _totalHealth;
         _defense = HeroAbility.GetHeroDeffence(_heroName);
         SetAbilities();
+    }
+
+    public void OnDamage(float damage)
+    {
+        if (_health <= ZERO_HEALTH)
+            return;
+
+        _health -= damage;
+        if (_health <= ZERO_HEALTH)
+            _health = ZERO_HEALTH;
+        ChangeHealthHandler?.Invoke(_health / _totalHealth);
+        if (_health <= ZERO_HEALTH)
+        {
+            _isDead = true;
+            Manager.Instance.Ingame.CurrentWave.OnDeadHero();
+        }
     }
 
     public void GetExp(float exp)
@@ -98,14 +123,6 @@ public abstract class Hero : MonoBehaviour, IAbilityController
 
         _GetExp();
     }
-
-    #region TEST
-    public void SetDead()
-    {
-        _health = HP_ZERO;
-        Manager.Instance.Ingame.ClearIngame();
-    }
-    #endregion
 
     private void _GetExp()
     {

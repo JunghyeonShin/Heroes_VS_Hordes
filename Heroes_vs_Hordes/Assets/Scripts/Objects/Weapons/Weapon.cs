@@ -55,7 +55,7 @@ public abstract class Weapon : MonoBehaviour
             Utils.SetActive(damageTextGO, true);
 
             var monster = Utils.GetOrAddComponent<Monster>(collision.gameObject);
-            monster.OnDamaged(attack);
+            monster.OnDamage(attack);
         }
     }
 

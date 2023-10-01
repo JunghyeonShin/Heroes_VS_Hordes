@@ -32,6 +32,7 @@ public class Define
     // Map
     public const string RESOURCE_REPOSITION_AREA = "RepositionArea";
     // Hero
+    public const string RESOURCE_HERO_HEALTH = "Hero_Health";
     public const string RESOURCE_HERO_ARCANE_MAGE = "ArcaneMage";
     // Weapon
     public const string RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE = "ArcaneMage_Projectile";
@@ -64,6 +65,7 @@ public class Define
     public const string RESOURCE_UI_LOADING = "UI_Loading";
     public const string RESOURCE_UI_CLEAR_CHAPTER = "UI_ClearChapter";
     public const string RESOURCE_UI_CLEAR_WAVE = "UI_ClearWave";
+    public const string RESOURCE_UI_DEFEAT_WAVE = "UI_DefeatWave";
     public const string RESOURCE_UI_PAUSE_INGAME = "UI_PauseIngame";
     public const string RESOURCE_UI_LEVEL_UP_HERO = "UI_LevelUpHero";
     // UI_Element
