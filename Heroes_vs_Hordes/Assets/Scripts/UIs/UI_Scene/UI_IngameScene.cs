@@ -145,7 +145,7 @@ public class UI_IngameScene : UI_Scene
             Utils.SetActive(_chapterCheckPanel, false);
             Utils.SetActive(_monsterCheckPanel, false);
             Utils.SetActive(_goldPanel, true);
-        }
+        }        
 
         _waveText.text = wavePanelText;
         _ShowWavePanel().Forget();

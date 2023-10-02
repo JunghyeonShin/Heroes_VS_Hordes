@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_NormalBattleWave : UI_Wave
+public class UI_BattleWave : UI_Wave
 {
     private enum EGameObjects
     {
@@ -43,30 +43,6 @@ public class UI_NormalBattleWave : UI_Wave
 
     private readonly Vector2 ADJUST_BLOCK_PANEL_SIZE = new Vector2(0f, 20f);
     private readonly Vector2 ADJUST_CURRENT_BATTLE_ICON_SIZE = new Vector2(10f, 15f);
-
-    protected override void _Init()
-    {
-        _BindGameObject(typeof(EGameObjects));
-        _BindImage(typeof(EImages));
-        _BindSlider(typeof(ESliders));
-
-        _nextBattleIcon = _GetGameObject((int)EGameObjects.NextBattleIcon);
-        _currentBattleIcon = _GetGameObject((int)EGameObjects.CurrentBattleIcon);
-        _finishedBattleIcon = _GetGameObject((int)EGameObjects.FinishedBattleIcon);
-        _blockPanel = _GetGameObject((int)EGameObjects.BlockPanel);
-
-        _fillSliderImage = _GetImage((int)EImages.FillSliderImage);
-        Manager.Instance.Resource.LoadAsync<Sprite>(Define.RESOURCE_SPRITES_SLIDER_RED, (sprite) =>
-        {
-            _redSliderSprite = sprite;
-        });
-        Manager.Instance.Resource.LoadAsync<Sprite>(Define.RESOURCE_SPRITES_SLIDER_YELLOW, (sprite) =>
-        {
-            _yellowSliderSprite = sprite;
-        });
-
-        _waveSlider = _GetSlider((int)ESliders.WaveSlider);
-    }
 
     public override void InitWaveUI(int elementIndex, Transform parent, Vector2 elementPosition, Vector2 elementSize, Vector2 iconSize)
     {
@@ -111,6 +87,30 @@ public class UI_NormalBattleWave : UI_Wave
         _ActiveWaveIcon(true, false, false);
         _waveSlider.value = INIT_WAVE_SLIDER_VALUE;
         Manager.Instance.UI.ReturnElementUI(Define.RESOURCE_UI_NORMAL_BATTLE_WAVE, gameObject);
+    }
+
+    protected override void _Init()
+    {
+        _BindGameObject(typeof(EGameObjects));
+        _BindImage(typeof(EImages));
+        _BindSlider(typeof(ESliders));
+
+        _nextBattleIcon = _GetGameObject((int)EGameObjects.NextBattleIcon);
+        _currentBattleIcon = _GetGameObject((int)EGameObjects.CurrentBattleIcon);
+        _finishedBattleIcon = _GetGameObject((int)EGameObjects.FinishedBattleIcon);
+        _blockPanel = _GetGameObject((int)EGameObjects.BlockPanel);
+
+        _fillSliderImage = _GetImage((int)EImages.FillSliderImage);
+        Manager.Instance.Resource.LoadAsync<Sprite>(Define.RESOURCE_SPRITES_SLIDER_RED, (sprite) =>
+        {
+            _redSliderSprite = sprite;
+        });
+        Manager.Instance.Resource.LoadAsync<Sprite>(Define.RESOURCE_SPRITES_SLIDER_YELLOW, (sprite) =>
+        {
+            _yellowSliderSprite = sprite;
+        });
+
+        _waveSlider = _GetSlider((int)ESliders.WaveSlider);
     }
 
     private void _InitTransform(GameObject icon, Vector2 size)

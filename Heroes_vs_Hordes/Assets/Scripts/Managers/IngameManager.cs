@@ -208,6 +208,8 @@ public class IngameManager : MonoBehaviour
         _waveList.Add(normalBattleWave);
         var goldRushWave = Utils.GetOrAddComponent<GoldRushWave>(wave);
         _waveList.Add(goldRushWave);
+        var bossBattleWave = Utils.GetOrAddComponent<BossBattleWave>(wave);
+        _waveList.Add(bossBattleWave);
     }
     #endregion
 

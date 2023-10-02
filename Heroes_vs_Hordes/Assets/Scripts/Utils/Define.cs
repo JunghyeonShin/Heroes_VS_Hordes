@@ -71,6 +71,7 @@ public class Define
     // UI_Element
     public const string RESOURCE_UI_NORMAL_BATTLE_WAVE = "UI_NormalBattleWave";
     public const string RESOURCE_UI_GOLD_RUSH_WAVE = "UI_GoldRushWave";
+    public const string RESOURCE_UI_BOSS_BATTLE_WAVE = "UI_BossBattleWave";
     public const string RESOURCE_UI_ABILITY = "UI_Ability";
     public const string RESOURCE_UI_SELECT_ABILITY = "UI_SelectAbility";
     // Sprite
@@ -110,6 +111,7 @@ public class Define
     public const float INCREASE_GOLD_VALUE = 1;
     public const int INDEX_NORMAL_BATTLE_WAVE = 0;
     public const int INDEX_GOLD_RUSH_WAVE = 1;
+    public const int INDEX_BOSS_BATTLE_WAVE = 2;
     public const int INDEX_TIME_ATTACK_MODE = 0;
     public const int INDEX_ANNIHILATION_MODE = 1;
     public const int INIT_HERO_LEVEL_UP_COUNT = 0;
@@ -117,6 +119,27 @@ public class Define
 
     #region TEST
     public const int CURRENT_CHAPTER_INDEX = 0;
+    #endregion
+
+    #region Wave Panel Transform
+    public const int FOUR_WAVE = 4;
+    public const int FIVE_WAVE = 5;
+
+    public static readonly WavePanelTransform[] FOUR_WAVE_PANEL_TRANSFORMS = new WavePanelTransform[]
+    {
+        new WavePanelTransform() { PanelPosition = new Vector2(-125f, 0f), PanelSize = new Vector2(125f, 40f), IconSize = new Vector2(50f, 55f) },
+        new WavePanelTransform() { PanelPosition = Vector2.zero, PanelSize = new Vector2(125f, 40f), IconSize = new Vector2(50f, 55f) },
+        new WavePanelTransform() { PanelPosition = new Vector2(125f, 0f), PanelSize = new Vector2(125f, 40f), IconSize = new Vector2(50f, 55f) },
+        new WavePanelTransform() { PanelPosition = new Vector2(187.5f, 30f), PanelSize = new Vector2(100f, 100f), IconSize = new Vector2(50f, 55f) }
+    };
+    public static readonly WavePanelTransform[] FIVE_WAVE_PANEL_TRANSFORMS = new WavePanelTransform[]
+    {
+        new WavePanelTransform() { PanelPosition = new Vector2(-185f, 0f), PanelSize = new Vector2(125f, 40f), IconSize = new Vector2(50f, 55f) },
+        new WavePanelTransform() { PanelPosition = new Vector2(-60f, 0f), PanelSize = new Vector2(125f, 40f), IconSize = new Vector2(50f, 55f) },
+        new WavePanelTransform() { PanelPosition = new Vector2(65f, 0f), PanelSize = new Vector2(125f, 40f), IconSize = new Vector2(50f, 55f) },
+        new WavePanelTransform() { PanelPosition = new Vector2(190f, 0f), PanelSize = new Vector2(100f, 100f), IconSize = new Vector2(50f, 55f) },
+        new WavePanelTransform() { PanelPosition = new Vector2(252.5f, 30f), PanelSize = new Vector2(100f, 100f), IconSize = new Vector2(50f, 55f) }
+    };
     #endregion
 
     #region Ability
@@ -150,7 +173,6 @@ public class Define
         BOOK_PROJECTILE_SPEED,
         BOOK_RANGE
     };
-
     public static readonly Dictionary<string, AbilityInfo> ABILITY_INFO_DIC = new Dictionary<string, AbilityInfo>()
     {
         {WEAPON_ARCANE_MAGE_WAND, new AbilityInfo() { AbilityType = EAbilityTypes.HeroWeapon, SpriteName = RESOURCE_SPRITES_ICON_WEAPON_HERO_ARCANE_WAND } },
