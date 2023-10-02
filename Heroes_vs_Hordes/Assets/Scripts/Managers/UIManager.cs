@@ -27,15 +27,16 @@ public class UIManager
     #region InitUI
     private bool[] _loadCompletes;
 
-    private const int INDEX_TOTAL_VALUE = 8;
+    private const int INDEX_TOTAL_VALUE = 9;
     private const int INDEX_UI_PAUSE_INGAME = 0;
     private const int INDEX_UI_CLEAR_WAVE = 1;
     private const int INDEX_UI_LEVEL_UP_HERO = 2;
     private const int INDEX_UI_NORMAL_BATTLE_WAVE = 3;
-    private const int INDEX_UI_COIN_RUSH_WAVE = 4;
-    private const int INDEX_UI_COIN_BOSS_BATTLE_WAVE = 5;
-    private const int INDEX_UI_ABILITY = 6;
-    private const int INDEX_UI_SELECT_ABILITY = 7;
+    private const int INDEX_UI_FADE = 4;
+    private const int INDEX_UI_COIN_RUSH_WAVE = 5;
+    private const int INDEX_UI_COIN_BOSS_BATTLE_WAVE = 6;
+    private const int INDEX_UI_ABILITY = 7;
+    private const int INDEX_UI_SELECT_ABILITY = 8;
 
     private const int CREATE_NORMAL_BATTLE_WAVE_UI_COUNT = 8;
     private const int CREATE_GOLD_RUSH_WAVE_UI_COUNT = 2;
@@ -60,6 +61,7 @@ public class UIManager
         _InstantiateUI<UI_PauseIngame>(Define.RESOURCE_UI_PAUSE_INGAME, () => { _loadCompletes[INDEX_UI_PAUSE_INGAME] = true; });
         _InstantiateUI<UI_ClearWave>(Define.RESOURCE_UI_CLEAR_WAVE, () => { _loadCompletes[INDEX_UI_CLEAR_WAVE] = true; });
         _InstantiateUI<UI_LevelUpHero>(Define.RESOURCE_UI_LEVEL_UP_HERO, () => { _loadCompletes[INDEX_UI_LEVEL_UP_HERO] = true; });
+        _InstantiateUI<UI_Fade>(Define.RESOURCE_UI_FADE, () => { _loadCompletes[INDEX_UI_FADE] = true; });
 
         _InstantiateUIElement(Define.RESOURCE_UI_NORMAL_BATTLE_WAVE, CREATE_NORMAL_BATTLE_WAVE_UI_COUNT, () => { _loadCompletes[INDEX_UI_NORMAL_BATTLE_WAVE] = true; });
         _InstantiateUIElement(Define.RESOURCE_UI_GOLD_RUSH_WAVE, CREATE_GOLD_RUSH_WAVE_UI_COUNT, () => { _loadCompletes[INDEX_UI_COIN_RUSH_WAVE] = true; });

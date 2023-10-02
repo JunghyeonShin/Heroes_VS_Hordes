@@ -68,6 +68,7 @@ public class Define
     public const string RESOURCE_UI_DEFEAT_WAVE = "UI_DefeatWave";
     public const string RESOURCE_UI_PAUSE_INGAME = "UI_PauseIngame";
     public const string RESOURCE_UI_LEVEL_UP_HERO = "UI_LevelUpHero";
+    public const string RESOURCE_UI_FADE = "UI_Fade";
     // UI_Element
     public const string RESOURCE_UI_NORMAL_BATTLE_WAVE = "UI_NormalBattleWave";
     public const string RESOURCE_UI_GOLD_RUSH_WAVE = "UI_GoldRushWave";
@@ -98,7 +99,9 @@ public class Define
     #endregion
 
     #region Layer
-    public const string LAYER_MONSTER = "Monster";
+    public const string LAYER_LAND_MONSTER = "LandMonster";
+    public const string LAYER_SKY_MONSTER = "SkyMonster";
+    public static readonly int LAYER_MASK_MONSTER = 1 << LayerMask.NameToLayer(LAYER_LAND_MONSTER) | 1 << LayerMask.NameToLayer(LAYER_SKY_MONSTER);
     #endregion
 
     #region Animator

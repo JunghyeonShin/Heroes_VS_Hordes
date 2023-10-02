@@ -11,6 +11,7 @@ public class ObjectManager
 
     private Dictionary<string, GameObject> _mapDic = new Dictionary<string, GameObject>();
     private Dictionary<string, GameObject> _heroDic = new Dictionary<string, GameObject>();
+    private Dictionary<string, GameObject> _bossMapDic = new Dictionary<string, GameObject>();
     private Dictionary<string, ObjectPool> _dropItemDic = new Dictionary<string, ObjectPool>();
     private Dictionary<string, ObjectPool> _monsterPoolDic = new Dictionary<string, ObjectPool>();
     private Dictionary<string, GameObject> _weaponControllerDic = new Dictionary<string, GameObject>();
@@ -145,6 +146,30 @@ public class ObjectManager
     public void ReturnHero(string key)
     {
         Utils.SetActive(_heroDic[key], false);
+    }
+    #endregion
+
+    #region Boss Map
+    public void GetBossMap(string key, Action<GameObject> callback)
+    {
+        // 캐시 확인
+        if (_bossMapDic.TryGetValue(key, out var map))
+        {
+            callback?.Invoke(map);
+            return;
+        }
+
+        // 보스 맵 오브젝트 생성 후 캐싱
+        Manager.Instance.Resource.Instantiate(key, _rootObject.transform, (map) =>
+        {
+            _bossMapDic.Add(key, map);
+            callback?.Invoke(map);
+        });
+    }
+
+    public void ReturnBossMap(string key)
+    {
+        Utils.SetActive(_bossMapDic[key], false);
     }
     #endregion
 

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 810105362479065202}
   - component: {fileID: 518687568914004493}
   - component: {fileID: 5239215740555884851}
-  m_Layer: 10
+  m_Layer: 21
   m_Name: Normal_Bat
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -184,7 +184,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 063297a8aae16604dbad064c9e6bda2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 3
 --- !u!114 &5239215740555884851
 MonoBehaviour:
   m_ObjectHideFlags: 0

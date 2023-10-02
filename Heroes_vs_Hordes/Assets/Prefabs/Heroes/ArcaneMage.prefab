@@ -771,7 +771,7 @@ GameObject:
   - component: {fileID: 7482478725188684888}
   - component: {fileID: 2883649255798308435}
   - component: {fileID: 6014556725729511180}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ArcaneMage
   m_TagString: Hero
   m_Icon: {fileID: 0}

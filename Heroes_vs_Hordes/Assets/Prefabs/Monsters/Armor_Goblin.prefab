@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4803451223873676235}
   - component: {fileID: 3768399602288314997}
   - component: {fileID: 4509262890232988207}
-  m_Layer: 10
+  m_Layer: 20
   m_Name: Armor_Goblin
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -35,7 +35,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6895127848408359034
 SpriteRenderer:

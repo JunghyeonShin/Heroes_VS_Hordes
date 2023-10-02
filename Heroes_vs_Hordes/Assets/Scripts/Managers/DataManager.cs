@@ -38,7 +38,7 @@ public class DataManager : MonoBehaviour
     private const string URL_HERO_COMMON_ABILITY = "https://docs.google.com/spreadsheets/d/12WFyu9JDe1fl3O3zK9XvCx2CUZ7UbsYBBLUWCyyKdT8/export?format=tsv&range=A2:H";
     private const string URL_HERO_INDIVIDUAL_ABILITY = "https://docs.google.com/spreadsheets/d/12WFyu9JDe1fl3O3zK9XvCx2CUZ7UbsYBBLUWCyyKdT8/export?format=tsv&gid=915946808&range=A2:H";
     private const string URL_REQUIRED_EXP = "https://docs.google.com/spreadsheets/d/1sYr9S551mNMXqMTbALU21Y0b1bshLWUrDth8JqUnqU4/export?format=tsv&range=B2:B";
-    private const string URL_CHAPTER_INFO = "https://docs.google.com/spreadsheets/d/1ptxHR2aiz_O8_7dHXWig4HZfOraFTpzJJWPBpDrn5Yw/export?format=tsv&range=A2:E";
+    private const string URL_CHAPTER_INFO = "https://docs.google.com/spreadsheets/d/1ptxHR2aiz_O8_7dHXWig4HZfOraFTpzJJWPBpDrn5Yw/export?format=tsv&range=A2:F";
     private const string URL_WEAPON_ABILITY = "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&range=A2:H";
     private const string URL_MONSTER_INFO = "https://docs.google.com/spreadsheets/d/1IoSyWsESeudzCxpTH7C9OuVO4DSK9dxACgsTze3T64g/export?format=tsv&range=A2:D";
 

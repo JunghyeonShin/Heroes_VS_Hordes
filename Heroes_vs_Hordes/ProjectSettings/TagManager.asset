@@ -11,14 +11,13 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Hero
   - Water
   - UI
   - 
   - 
   - 
   - 
-  - Monster
   - 
   - 
   - 
@@ -29,7 +28,8 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - LandMonster
+  - SkyMonster
   - 
   - 
   - 

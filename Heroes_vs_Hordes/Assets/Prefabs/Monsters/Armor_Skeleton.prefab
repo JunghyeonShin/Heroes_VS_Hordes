@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6173659547684339744}
   - component: {fileID: 4528800634923980159}
   - component: {fileID: 4796481597751604084}
-  m_Layer: 10
+  m_Layer: 20
   m_Name: Armor_Skeleton
   m_TagString: Monster
   m_Icon: {fileID: 0}

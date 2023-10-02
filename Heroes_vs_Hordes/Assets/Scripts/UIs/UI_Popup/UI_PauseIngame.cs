@@ -44,7 +44,7 @@ public class UI_PauseIngame : UI_Popup
     private void _RestartIngame()
     {
         Manager.Instance.Ingame.ControlIngame(true);
-        _ClosePopupUI();
+        ClosePopupUI();
     }
 
     private void _GiveUpIngame()

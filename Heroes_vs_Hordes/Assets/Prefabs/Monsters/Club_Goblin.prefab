@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5212262194674043795}
   - component: {fileID: 5677465962012916361}
   - component: {fileID: 6929491641069225946}
-  m_Layer: 10
+  m_Layer: 20
   m_Name: Club_Goblin
   m_TagString: Monster
   m_Icon: {fileID: 0}
