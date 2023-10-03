@@ -16,14 +16,6 @@ public class UI_GoldRushWave : UI_Wave
 
     private readonly Vector2 ADJUST_CURRENT_ICON_SIZE = new Vector2(10f, 15f);
 
-    protected override void _Init()
-    {
-        _BindGameObject(typeof(EGameObjects));
-
-        _nextGoldIcon = _GetGameObject((int)EGameObjects.NextGoldIcon);
-        _currentGoldIcon = _GetGameObject((int)EGameObjects.CurrentGoldIcon);
-    }
-
     public override void InitWaveUI(int elementIndex, Transform parent, Vector2 elementPosition, Vector2 elementSize, Vector2 iconSize)
     {
         base.InitWaveUI(elementIndex, parent, elementPosition, elementSize, iconSize);
@@ -48,6 +40,14 @@ public class UI_GoldRushWave : UI_Wave
     {
         _ActiveWaveIcon(true, false);
         Manager.Instance.UI.ReturnElementUI(Define.RESOURCE_UI_GOLD_RUSH_WAVE, gameObject);
+    }
+
+    protected override void _Init()
+    {
+        _BindGameObject(typeof(EGameObjects));
+
+        _nextGoldIcon = _GetGameObject((int)EGameObjects.NextGoldIcon);
+        _currentGoldIcon = _GetGameObject((int)EGameObjects.CurrentGoldIcon);
     }
 
     private void _InitTransform(GameObject icon, Vector2 size)

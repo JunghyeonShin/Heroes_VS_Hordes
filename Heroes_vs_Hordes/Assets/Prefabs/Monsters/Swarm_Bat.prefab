@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1263173133168600930}
   - component: {fileID: 7740192412349861363}
   - component: {fileID: 2099233878878825998}
-  m_Layer: 10
+  m_Layer: 21
   m_Name: Swarm_Bat
   m_TagString: Monster
   m_Icon: {fileID: 0}

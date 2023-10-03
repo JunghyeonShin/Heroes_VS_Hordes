@@ -29,14 +29,6 @@ public class UI_ClearWave : UI_Popup
 
     private const int PREV_WAVE_INDEX = 1;
 
-    private readonly WavePanelTransform[] FOUR_WAVE_PANEL_TRANSFORMS = new WavePanelTransform[]
-    {
-        new WavePanelTransform() { PanelPosition = new Vector2(-150f, 0f), PanelSize = new Vector2(150f, 50f), IconSize = new Vector2(60f, 65f) },
-        new WavePanelTransform() { PanelPosition = Vector2.zero, PanelSize = new Vector2(150f, 50f), IconSize = new Vector2(60f, 65f) },
-        new WavePanelTransform() { PanelPosition = new Vector2(150f, 0f), PanelSize = new Vector2(150f, 50f), IconSize = new Vector2(60f, 65f) },
-        new WavePanelTransform() { PanelPosition = new Vector2(225f, 25f), PanelSize = new Vector2(100f, 100f), IconSize = new Vector2(60f, 65f) }
-    };
-
     protected override void _Init()
     {
         _BindButton(typeof(EButtons));
@@ -54,7 +46,7 @@ public class UI_ClearWave : UI_Popup
     private void _StartNextWave()
     {
         Manager.Instance.Ingame.StartIngame();
-        _ClosePopupUI();
+        ClosePopupUI();
     }
     #endregion
 
@@ -71,9 +63,25 @@ public class UI_ClearWave : UI_Popup
         _wavePanelList.Clear();
 
         // 사용할 WaveUI를 가져옴
-        for (int ii = 0; ii < Manager.Instance.Ingame.TotalWaveIndex - 1; ++ii)
-            _InitWavePanel<UI_NormalBattleWave>(Define.RESOURCE_UI_NORMAL_BATTLE_WAVE, ii);
-        _InitWavePanel<UI_GoldRushWave>(Define.RESOURCE_UI_GOLD_RUSH_WAVE, Manager.Instance.Ingame.TotalWaveIndex - 1);
+        var waveIndices = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex;
+        for (int ii = 0; ii < Manager.Instance.Ingame.TotalWaveIndex; ++ii)
+        {
+            switch (waveIndices[ii])
+            {
+                case Define.INDEX_NORMAL_BATTLE_WAVE:
+                    _InitWavePanel<UI_BattleWave>(Define.RESOURCE_UI_NORMAL_BATTLE_WAVE, waveIndices.Length, ii);
+                    break;
+                case Define.INDEX_GOLD_RUSH_WAVE:
+                    _InitWavePanel<UI_GoldRushWave>(Define.RESOURCE_UI_GOLD_RUSH_WAVE, waveIndices.Length, ii);
+                    break;
+                case Define.INDEX_BOSS_BATTLE_WAVE:
+                    _InitWavePanel<UI_BattleWave>(Define.RESOURCE_UI_BOSS_BATTLE_WAVE, waveIndices.Length, ii);
+                    break;
+                default:
+                    Debug.LogError($"Invalid Wave Index : {waveIndices[ii]}");
+                    return;
+            }
+        }
     }
 
     public void UpdateWavePanel()
@@ -81,11 +89,14 @@ public class UI_ClearWave : UI_Popup
         _UpdateWavePanel().Forget();
     }
 
-    private void _InitWavePanel<T>(string wavePanelName, int index) where T : UI_Wave
+    private void _InitWavePanel<T>(string wavePanelName, int totalWaveIndex, int index) where T : UI_Wave
     {
         var wave = Manager.Instance.UI.GetElementUI(wavePanelName);
         var waveUI = Utils.GetOrAddComponent<T>(wave);
-        waveUI.InitWaveUI(index, _totalWaves.transform, FOUR_WAVE_PANEL_TRANSFORMS[index].PanelPosition, FOUR_WAVE_PANEL_TRANSFORMS[index].PanelSize, FOUR_WAVE_PANEL_TRANSFORMS[index].IconSize);
+        if (Define.FOUR_WAVE == totalWaveIndex)
+            waveUI.InitWaveUI(index, _totalWaves.transform, Define.FOUR_WAVE_PANEL_TRANSFORMS[index].PanelPosition, Define.FOUR_WAVE_PANEL_TRANSFORMS[index].PanelSize, Define.FOUR_WAVE_PANEL_TRANSFORMS[index].IconSize);
+        else if (Define.FIVE_WAVE == totalWaveIndex)
+            waveUI.InitWaveUI(index, _totalWaves.transform, Define.FIVE_WAVE_PANEL_TRANSFORMS[index].PanelPosition, Define.FIVE_WAVE_PANEL_TRANSFORMS[index].PanelSize, Define.FIVE_WAVE_PANEL_TRANSFORMS[index].IconSize);
         Utils.SetActive(wave, true);
         _wavePanelList.Add(waveUI);
     }

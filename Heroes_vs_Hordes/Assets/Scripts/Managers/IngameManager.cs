@@ -22,6 +22,7 @@ public class IngameManager : MonoBehaviour
     public Wave CurrentWave { get; private set; }
     public int CurrentWaveIndex { get; private set; }
     public int TotalWaveIndex { get; private set; }
+    public bool DefeatIngame { get; set; }
     public bool ExitIngameForce { get; set; }
 
     private const float PAUSE_INGAME = 0f;
@@ -41,6 +42,7 @@ public class IngameManager : MonoBehaviour
         CurrentWaveIndex = INIT_WAVE_INDEX;
         TotalWaveIndex = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].TotalWaveIndex;
 
+        DefeatIngame = false;
         ExitIngameForce = false;
 
         _remainingMonsterCount = INIT_REMAINIG_MONSTER_COUNT;
@@ -83,32 +85,39 @@ public class IngameManager : MonoBehaviour
                 RegistAbility(UsedHero.HeroWeaponName);
                 UsedHero.InitHeroAbilities();
 
-                var heroController = Utils.GetOrAddComponent<HeroController>(heroGO);
+                var heroController = Utils.GetOrAddComponent<HeroController>(UsedHero.gameObject);
 
                 var mapController = Utils.GetOrAddComponent<MapController>(mapGO);
                 mapController.SetHeroController(heroController);
 
+                var heroHealthGO = Manager.Instance.Object.HeroHealth;
+                var heroHealth = Utils.GetOrAddComponent<HeroHealth>(heroHealthGO);
+                heroHealth.HeroTransform = UsedHero.transform;
+                UsedHero.ChangeHealthHandler -= heroHealth.ChangeHealthValue;
+                UsedHero.ChangeHealthHandler += heroHealth.ChangeHealthValue;
+                Utils.SetActive(heroHealthGO, true);
+
                 {
-                    var mapCollisionArea = Manager.Instance.Object.RepositionArea;
-                    var chaseHero = Utils.GetOrAddComponent<ChaseHero>(mapCollisionArea);
-                    chaseHero.HeroTransform = heroGO.transform;
-                    Utils.SetActive(mapCollisionArea, true);
+                    var repositionAreaGO = Manager.Instance.Object.RepositionArea;
+                    var chaseHero = Utils.GetOrAddComponent<ChaseHero>(repositionAreaGO);
+                    chaseHero.HeroTransform = UsedHero.transform;
+                    Utils.SetActive(repositionAreaGO, true);
                 }
 
                 {
-                    var monsterSpawner = Manager.Instance.Object.MonsterSpawner;
-                    var chaseHero = Utils.GetOrAddComponent<ChaseHero>(monsterSpawner);
-                    chaseHero.HeroTransform = heroGO.transform;
-                    _monsterSpawner = Utils.GetOrAddComponent<MonsterSpawner>(monsterSpawner);
+                    var monsterSpawnerGO = Manager.Instance.Object.MonsterSpawner;
+                    var chaseHero = Utils.GetOrAddComponent<ChaseHero>(monsterSpawnerGO);
+                    chaseHero.HeroTransform = UsedHero.transform;
+                    _monsterSpawner = Utils.GetOrAddComponent<MonsterSpawner>(monsterSpawnerGO);
                     _monsterSpawner.HeroController = heroController;
                     _monsterSpawner.InitSpawnMonster();
-                    Utils.SetActive(monsterSpawner, true);
+                    Utils.SetActive(monsterSpawnerGO, true);
                 }
 
                 // 카메라 팔로워 세팅
-                Manager.Instance.CameraController.SetFollower(heroGO.transform);
+                Manager.Instance.CameraController.SetFollower(UsedHero.transform);
 
-                Utils.SetActive(heroGO, true);
+                Utils.SetActive(UsedHero.gameObject, true);
 
                 loadingUI.CompleteLoading();
             });
@@ -170,6 +179,7 @@ public class IngameManager : MonoBehaviour
         Manager.Instance.CameraController.SetFollower();
         Utils.SetActive(Manager.Instance.Object.MonsterSpawner, false);
         Utils.SetActive(Manager.Instance.Object.RepositionArea, false);
+        Utils.SetActive(Manager.Instance.Object.HeroHealth, false);
         Manager.Instance.Object.ReturnHero(Define.RESOURCE_HERO_ARCANE_MAGE);
         Manager.Instance.Object.ReturnMap(Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].MapType);
         Manager.Instance.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE);
@@ -198,6 +208,8 @@ public class IngameManager : MonoBehaviour
         _waveList.Add(normalBattleWave);
         var goldRushWave = Utils.GetOrAddComponent<GoldRushWave>(wave);
         _waveList.Add(goldRushWave);
+        var bossBattleWave = Utils.GetOrAddComponent<BossBattleWave>(wave);
+        _waveList.Add(bossBattleWave);
     }
     #endregion
 
@@ -239,7 +251,7 @@ public class IngameManager : MonoBehaviour
     #region Monster
     public event Action RemainingMonsterHandler;
 
-    private Queue<Monster> _usedMonsterQueue = new Queue<Monster>();
+    private Queue<NormalMonster> _usedMonsterQueue = new Queue<NormalMonster>();
 
     private MonsterSpawner _monsterSpawner;
     private int _remainingMonsterCount;
@@ -268,21 +280,21 @@ public class IngameManager : MonoBehaviour
         RemainingMonsterHandler?.Invoke();
     }
 
-    public void EnqueueUsedMonster(Monster monster)
+    public void EnqueueUsedMonster(NormalMonster normalMmonster)
     {
         ++_remainingMonsterCount;
-        _usedMonsterQueue.Enqueue(monster);
+        _usedMonsterQueue.Enqueue(normalMmonster);
     }
 
     public void ReturnUsedMonster()
     {
         while (_usedMonsterQueue.Count > EMPTY_USED_MONSTER)
         {
-            var monster = _usedMonsterQueue.Dequeue();
-            if (false == monster.gameObject.activeSelf)
+            var normalMonster = _usedMonsterQueue.Dequeue();
+            if (false == normalMonster.gameObject.activeSelf)
                 continue;
 
-            monster.ReturnMonster();
+            normalMonster.ReturnMonster();
         }
     }
     #endregion
@@ -308,7 +320,7 @@ public class IngameManager : MonoBehaviour
             if (false == expGem.gameObject.activeSelf)
                 continue;
 
-            if (ExitIngameForce)
+            if (DefeatIngame || ExitIngameForce)
                 expGem.ReturnDropItem();
             else
             {
@@ -349,7 +361,7 @@ public class IngameManager : MonoBehaviour
             if (false == gold.gameObject.activeSelf)
                 continue;
 
-            if (ExitIngameForce)
+            if (DefeatIngame || ExitIngameForce)
                 gold.ReturnDropItem();
             else
             {

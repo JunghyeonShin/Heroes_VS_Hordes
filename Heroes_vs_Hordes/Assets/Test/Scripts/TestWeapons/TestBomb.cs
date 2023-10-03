@@ -99,8 +99,7 @@ public class TestBomb : MonoBehaviour
         Utils.SetActive(_bombSprite.gameObject, false);
         _bombExplosionAnimator.SetTrigger(Define.ANIMATOR_TRIGGER_EXPLODE);
 
-        var layerMask = 1 << LayerMask.NameToLayer(Define.LAYER_MONSTER);
-        var monsters = Physics2D.OverlapCircleAll(_targetPos, _effectRange, layerMask);
+        var monsters = Physics2D.OverlapCircleAll(_targetPos, _effectRange, Define.LAYER_MASK_MONSTER);
         foreach (var monster in monsters)
         {
             var randomPos = new Vector3(UnityEngine.Random.Range(MIN_DAMAGE_TEXT_POSITION_X, MAX_DAMAGE_TEXT_POSITION_X), DAMAGE_TEXT_POSITION_Y, 0f);

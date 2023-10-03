@@ -42,8 +42,8 @@ public class UI_LevelUpHero : UI_Popup
             var selectAbilityUIGO = Manager.Instance.UI.GetElementUI(Define.RESOURCE_UI_SELECT_ABILITY);
             var selectAbilityUI = Utils.GetOrAddComponent<UI_SelectAbility>(selectAbilityUIGO);
             selectAbilityUI.InitSelectAbilityUI(_selectAbilityContents.transform);
-            selectAbilityUI.OnSelectAbilityHandler -= _ClosePopupUI;
-            selectAbilityUI.OnSelectAbilityHandler += _ClosePopupUI;
+            selectAbilityUI.OnSelectAbilityHandler -= ClosePopupUI;
+            selectAbilityUI.OnSelectAbilityHandler += ClosePopupUI;
             _selectAbilityList.Add(selectAbilityUI);
         }
     }

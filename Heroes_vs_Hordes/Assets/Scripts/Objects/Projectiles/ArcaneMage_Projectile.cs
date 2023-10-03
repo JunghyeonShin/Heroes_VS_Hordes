@@ -60,7 +60,7 @@ public class ArcaneMage_Projectile : MonoBehaviour
             Utils.SetActive(damageTextGO, true);
 
             var monster = Utils.GetOrAddComponent<Monster>(collision.gameObject);
-            monster.OnDamaged(_attack);
+            monster.OnDamage(_attack);
         }
     }
 

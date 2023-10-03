@@ -10,6 +10,8 @@ public class ChapterInfoData
     private int[] _waveIndex;
     private string _mapType;
     private string[] _monsterTypes;
+    private string _bossMapType;
+    private string _bossMonsterType;
 
     public string ChapterName { get { return _chapterName; } }
     public float Time { get { return _time; } }
@@ -17,12 +19,16 @@ public class ChapterInfoData
     public int TotalWaveIndex { get { return _waveIndex.Length; } }
     public string MapType { get { return _mapType; } }
     public string[] MonsterTypes { get { return _monsterTypes; } }
+    public string BossMapType { get { return _bossMapType; } }
+    public string BossMonsterType { get { return _bossMonsterType; } }
 
     private const int INDEX_CHAPTER_NAME = 0;
     private const int INDEX_CHAPTER_INFO_TIME = 1;
     private const int INDEX_CHAPTER_INFO_WAVE_INDEX = 2;
     private const int INDEX_CHAPTER_INFO_MAP_TYPE = 3;
     private const int INDEX_CHAPTER_INFO_MONSTER_TYPES = 4;
+    private const int INDEX_CHAPTER_INFO_BOSS_MAP_TYPE = 5;
+    private const int INDEX_CHAPTER_INFO_BOSS_MONSTER_TYPE = 6;
 
     public ChapterInfoData(string[] splitData)
     {
@@ -37,5 +43,7 @@ public class ChapterInfoData
         _monsterTypes = new string[monsterTypeDatas.Length];
         for (int ii = 0; ii < monsterTypeDatas.Length; ++ii)
             _monsterTypes[ii] = monsterTypeDatas[ii].TrimEnd();
+        _bossMapType = splitData[INDEX_CHAPTER_INFO_BOSS_MAP_TYPE].TrimEnd();
+        _bossMonsterType = splitData[INDEX_CHAPTER_INFO_BOSS_MONSTER_TYPE].TrimEnd();
     }
 }

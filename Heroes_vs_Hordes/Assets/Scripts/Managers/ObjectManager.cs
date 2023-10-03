@@ -11,36 +11,43 @@ public class ObjectManager
 
     private Dictionary<string, GameObject> _mapDic = new Dictionary<string, GameObject>();
     private Dictionary<string, GameObject> _heroDic = new Dictionary<string, GameObject>();
+    private Dictionary<string, GameObject> _bossMapDic = new Dictionary<string, GameObject>();
     private Dictionary<string, ObjectPool> _dropItemDic = new Dictionary<string, ObjectPool>();
-    private Dictionary<string, ObjectPool> _monsterPoolDic = new Dictionary<string, ObjectPool>();
     private Dictionary<string, GameObject> _weaponControllerDic = new Dictionary<string, GameObject>();
+    private Dictionary<string, ObjectPool> _monsterPoolDic = new Dictionary<string, ObjectPool>();
+    private Dictionary<string, GameObject> _bossMonsterDic = new Dictionary<string, GameObject>();
     private ObjectPool _damageTextPool = new ObjectPool();
 
+    public GameObject HeroHealth { get; private set; }
     public GameObject RepositionArea { get; private set; }
     public GameObject MonsterSpawner { get; private set; }
     public GameObject LevelUpText { get; private set; }
+    public GameObject BossMapCameraFollower { get; private set; }
 
-    private const int INDEX_TOTAL_VALUE = 20;
-    private const int INDEX_REPOSITION_AREA = 0;
-    private const int INDEX_MONSTER_SPAWNER = 1;
-    private const int INDEX_LEVEL_UP_TEXT = 2;
-    private const int INDEX_DAMAGE_TEXT = 3;
-    private const int INDEX_EXP_GEM = 4;
-    private const int INDEX_GOLD = 5;
-    private const int INDEX_WEAPON_BOMB_CONTROLLER = 6;
-    private const int INDEX_WEAPON_BOOMERNAG_CONTROLLER = 7;
-    private const int INDEX_WEAPON_CROSSBOW_CONTROLLER = 8;
-    private const int INDEX_WEAPON_DIVINE_AURA_CONTROLLER = 9;
-    private const int INDEX_WEAPON_FIREBALL_CONTROLLER = 10;
-    private const int INDEX_MONSTER_NORMAL_BAT = 11;
-    private const int INDEX_MONSTER_SWARM_BAT = 12;
-    private const int INDEX_MONSTER_NORMAL_GOBLIN = 13;
-    private const int INDEX_MONSTER_CLUB_GOBLIN = 14;
-    private const int INDEX_MONSTER_ARMOR_GOBLIN = 15;
-    private const int INDEX_MONSTER_NORMAL_SKELETON = 16;
-    private const int INDEX_MONSTER_ARMOR_SKELETON = 17;
-    private const int INDEX_MONSTER_NORMAL_SPIDER = 18;
-    private const int INDEX_MONSTER_CAVE_SPIDER = 19;
+    private const int INDEX_TOTAL_VALUE = 23;
+    private const int INDEX_HERO_HEALTH = 0;
+    private const int INDEX_REPOSITION_AREA = 1;
+    private const int INDEX_MONSTER_SPAWNER = 2;
+    private const int INDEX_LEVEL_UP_TEXT = 3;
+    private const int INDEX_BOSS_MAP_CAMERA_FOLLOWER = 4;
+    private const int INDEX_DAMAGE_TEXT = 5;
+    private const int INDEX_EXP_GEM = 6;
+    private const int INDEX_GOLD = 7;
+    private const int INDEX_WEAPON_BOMB_CONTROLLER = 8;
+    private const int INDEX_WEAPON_BOOMERNAG_CONTROLLER = 9;
+    private const int INDEX_WEAPON_CROSSBOW_CONTROLLER = 10;
+    private const int INDEX_WEAPON_DIVINE_AURA_CONTROLLER = 11;
+    private const int INDEX_WEAPON_FIREBALL_CONTROLLER = 12;
+    private const int INDEX_MONSTER_NORMAL_BAT = 13;
+    private const int INDEX_MONSTER_SWARM_BAT = 14;
+    private const int INDEX_MONSTER_NORMAL_GOBLIN = 15;
+    private const int INDEX_MONSTER_CLUB_GOBLIN = 16;
+    private const int INDEX_MONSTER_ARMOR_GOBLIN = 17;
+    private const int INDEX_MONSTER_NORMAL_SKELETON = 18;
+    private const int INDEX_MONSTER_ARMOR_SKELETON = 19;
+    private const int INDEX_MONSTER_NORMAL_SPIDER = 20;
+    private const int INDEX_MONSTER_CAVE_SPIDER = 21;
+    private const int INDEX_MONSTER_BOSS_SPIDER = 22;
     private const string NAME_ROOT_OBJECT = "[ROOT_OBJECT]";
 
     public void Init()
@@ -48,6 +55,14 @@ public class ObjectManager
         _rootObject = new GameObject(NAME_ROOT_OBJECT);
 
         _loadCompletes = new bool[INDEX_TOTAL_VALUE];
+
+        Manager.Instance.Resource.Instantiate(Define.RESOURCE_HERO_HEALTH, _rootObject.transform, (heroHealth) =>
+        {
+            HeroHealth = heroHealth;
+            Utils.SetActive(heroHealth, false);
+            _loadCompletes[INDEX_HERO_HEALTH] = true;
+        });
+
         Manager.Instance.Resource.Instantiate(Define.RESOURCE_REPOSITION_AREA, _rootObject.transform, (repositionArea) =>
         {
             RepositionArea = repositionArea;
@@ -69,6 +84,13 @@ public class ObjectManager
             _loadCompletes[INDEX_LEVEL_UP_TEXT] = true;
         });
 
+        Manager.Instance.Resource.Instantiate(Define.RESOURCE_BOSS_MAP_CAMERA_FOLLOWER, _rootObject.transform, (bossMapCameraFollower) =>
+        {
+            BossMapCameraFollower = bossMapCameraFollower;
+            Utils.SetActive(BossMapCameraFollower, false);
+            _loadCompletes[INDEX_BOSS_MAP_CAMERA_FOLLOWER] = true;
+        });
+
         Manager.Instance.Resource.LoadAsync<GameObject>(Define.RESROUCE_DAMAGE_TEXT, (damageText) =>
         {
             _damageTextPool.InitPool(damageText, _rootObject, DEFAULT_INSTANTIATE_DAMAGE_TEXT_COUNT);
@@ -78,6 +100,7 @@ public class ObjectManager
         _InitDropItem();
         _InitWeaponController();
         _InitMonster();
+        _InitBossMonster();
     }
 
     public bool LoadComplete()
@@ -135,6 +158,30 @@ public class ObjectManager
     public void ReturnHero(string key)
     {
         Utils.SetActive(_heroDic[key], false);
+    }
+    #endregion
+
+    #region Boss Map
+    public void GetBossMap(string key, Action<GameObject> callback)
+    {
+        // 캐시 확인
+        if (_bossMapDic.TryGetValue(key, out var map))
+        {
+            callback?.Invoke(map);
+            return;
+        }
+
+        // 보스 맵 오브젝트 생성 후 캐싱
+        Manager.Instance.Resource.Instantiate(key, _rootObject.transform, (map) =>
+        {
+            _bossMapDic.Add(key, map);
+            callback?.Invoke(map);
+        });
+    }
+
+    public void ReturnBossMap(string key)
+    {
+        Utils.SetActive(_bossMapDic[key], false);
     }
     #endregion
 
@@ -275,6 +322,41 @@ public class ObjectManager
             objectPool.InitPool(monster, _rootObject, count);
             _monsterPoolDic.Add(key, objectPool);
             callback?.Invoke(objectPool.GetObject());
+        });
+    }
+    #endregion
+
+    #region BossMonster
+    public void GetBossMonster(string key, Action<GameObject> callback)
+    {
+        // 캐시 확인
+        if (_bossMonsterDic.TryGetValue(key, out var bossMonster))
+        {
+            callback?.Invoke(bossMonster);
+            return;
+        }
+
+        // 보스 몬스터 오브젝트 생성 후 캐싱
+        _InitBossMonster(key, callback);
+    }
+
+    public void ReturnBossMonster(string key)
+    {
+        Utils.SetActive(_bossMonsterDic[key], false);
+    }
+
+    private void _InitBossMonster()
+    {
+        _InitBossMonster(Define.RESOURCE_MONSTER_BOSS_SPIDER, (bossMonster) => { _loadCompletes[INDEX_MONSTER_BOSS_SPIDER] = true; });
+    }
+
+    private void _InitBossMonster(string key, Action<GameObject> callback)
+    {
+        Manager.Instance.Resource.Instantiate(key, _rootObject.transform, (bossMonster) =>
+        {
+            _bossMonsterDic.Add(key, bossMonster);
+            Utils.SetActive(bossMonster, false);
+            callback?.Invoke(bossMonster);
         });
     }
     #endregion

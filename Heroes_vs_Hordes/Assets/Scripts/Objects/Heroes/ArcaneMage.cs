@@ -74,8 +74,7 @@ public class ArcaneMage : Hero
             _attackMonster = false;
         }
 
-        var layerMask = 1 << LayerMask.NameToLayer(Define.LAYER_MONSTER);
-        var monsters = Physics2D.OverlapBoxAll(transform.position, OVERLAP_SIZE, DEFAULT_DETECT_BOX_ANGLE, layerMask);
+        var monsters = Physics2D.OverlapBoxAll(transform.position, OVERLAP_SIZE, DEFAULT_DETECT_BOX_ANGLE, Define.LAYER_MASK_MONSTER);
         if (monsters.Length > 0)
         {
             _ResetDetectContainer();

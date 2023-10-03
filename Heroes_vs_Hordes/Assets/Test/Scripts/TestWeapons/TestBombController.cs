@@ -113,8 +113,8 @@ public class TestBombController : MonoBehaviour
         _isAttack = false;
         _finishAttackCount = _projectileCount;
         _targetMonsterIndexList.Clear();
-        var layerMask = 1 << LayerMask.NameToLayer(Define.LAYER_MONSTER);
-        var monsters = Physics2D.OverlapBoxAll(_testHeroController.transform.position, OVERLAP_SIZE, DEFAULT_DETECT_BOX_ANGLE, layerMask);
+
+        var monsters = Physics2D.OverlapBoxAll(_testHeroController.transform.position, OVERLAP_SIZE, DEFAULT_DETECT_BOX_ANGLE, Define.LAYER_MASK_MONSTER);
         if (monsters.Length > 0)
         {
             for (int ii = 0; ii < _projectileCount; ++ii)

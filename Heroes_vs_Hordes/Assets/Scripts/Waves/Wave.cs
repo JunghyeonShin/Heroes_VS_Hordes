@@ -46,5 +46,14 @@ public abstract class Wave : MonoBehaviour
         _progressTime = INIT_PROGRESS_TIME;
     }
 
-    protected abstract void _ProgressWaveTime();
+    public virtual void OnDeadHero()
+    {
+        Manager.Instance.UI.ShowPopupUI<UI_DefeatWave>(Define.RESOURCE_UI_DEFEAT_WAVE);
+        Manager.Instance.Ingame.ControlIngame(false);
+    }
+
+    protected virtual void _ProgressWaveTime()
+    {
+
+    }
 }

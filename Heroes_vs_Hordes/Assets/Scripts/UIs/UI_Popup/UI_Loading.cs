@@ -89,7 +89,7 @@ public class UI_Loading : UI_Popup
         Utils.SetActive(_loadingText.gameObject, false);
         await UniTask.Delay(TimeSpan.FromSeconds(DELAY_LOAD_COMPLETE_TIME));
 
-        _ClosePopupUI();
+        ClosePopupUI();
         await UniTask.Delay(TimeSpan.FromSeconds(DELAY_LOAD_COMPLETE_EVENT_TIME));
 
         OnLoadCompleteHandler?.Invoke();

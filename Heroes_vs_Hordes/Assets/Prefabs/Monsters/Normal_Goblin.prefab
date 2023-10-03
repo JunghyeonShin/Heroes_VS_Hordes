@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 756718679740485859}
   - component: {fileID: 7063708031774308958}
   - component: {fileID: 6914377954266593953}
-  m_Layer: 10
+  m_Layer: 20
   m_Name: Normal_Goblin
   m_TagString: Monster
   m_Icon: {fileID: 0}

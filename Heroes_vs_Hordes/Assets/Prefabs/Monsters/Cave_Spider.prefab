@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2858512412727058480}
   - component: {fileID: 2760696818055034416}
   - component: {fileID: 9038767155269012979}
-  m_Layer: 10
+  m_Layer: 20
   m_Name: Cave_Spider
   m_TagString: Monster
   m_Icon: {fileID: 0}

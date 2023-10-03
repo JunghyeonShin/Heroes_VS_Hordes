@@ -91,8 +91,7 @@ public class Bomb : Weapon
         Utils.SetActive(_bombSprite.gameObject, false);
         _bombExplosionAnimator.SetTrigger(Define.ANIMATOR_TRIGGER_EXPLODE);
 
-        var layerMask = 1 << LayerMask.NameToLayer(Define.LAYER_MONSTER);
-        var monstersGO = Physics2D.OverlapCircleAll(_targetPos, _effectRange, layerMask);
+        var monstersGO = Physics2D.OverlapCircleAll(_targetPos, _effectRange, Define.LAYER_MASK_MONSTER);
         foreach (var monsterGO in monstersGO)
         {
             var randomPos = new Vector3(UnityEngine.Random.Range(MIN_DAMAGE_TEXT_POSITION_X, MAX_DAMAGE_TEXT_POSITION_X), DAMAGE_TEXT_POSITION_Y, 0f);
@@ -107,7 +106,7 @@ public class Bomb : Weapon
             Utils.SetActive(damageTextGO, true);
 
             var monster = Utils.GetOrAddComponent<Monster>(monsterGO.gameObject);
-            monster.OnDamaged(attack);
+            monster.OnDamage(attack);
         }
         await UniTask.Delay(TimeSpan.FromSeconds(DELAY_FINISH_ATTACK_TIME));
 
