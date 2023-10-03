@@ -7,6 +7,7 @@ using UnityEngine;
 public class BossBattleWave : Wave
 {
     private UI_Fade _fadeUI;
+    private BossMonster _usedBossMonster;
 
     private bool _loadCompleteBossMap;
     private bool _loadCompleteBossMonster;
@@ -19,6 +20,7 @@ public class BossBattleWave : Wave
 
     public override void StartWave()
     {
+        _usedBossMonster = null;
         _loadCompleteBossMap = false;
         _loadCompleteBossMonster = false;
         _StartWave().Forget();
@@ -36,6 +38,7 @@ public class BossBattleWave : Wave
         base.ExitWave();
 
         Manager.Instance.Object.ReturnBossMap(Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].BossMapType);
+        _usedBossMonster.ReturnMonster();
     }
 
     private async UniTaskVoid _StartWave()
@@ -75,11 +78,10 @@ public class BossBattleWave : Wave
 
         Manager.Instance.Object.GetBossMonster(currentChapterInfo.BossMonsterType, (bossMonsterGO) =>
         {
-            var bossMonster = Utils.GetOrAddComponent<BossMonster>(bossMonsterGO);
-            bossMonster.Target = Manager.Instance.Ingame.UsedHero.transform;
-            bossMonster.InitMonsterAbilities();
-            bossMonster.InitTransform();
-            Utils.SetActive(bossMonsterGO, true);
+            _usedBossMonster = Utils.GetOrAddComponent<BossMonster>(bossMonsterGO);
+            _usedBossMonster.Target = Manager.Instance.Ingame.UsedHero.transform;
+            _usedBossMonster.InitMonsterAbilities();
+            Utils.SetActive(_usedBossMonster.gameObject, true);
 
             _loadCompleteBossMonster = true;
         });
@@ -110,6 +112,7 @@ public class BossBattleWave : Wave
         {
             clearWaveUI.SetClearWaveText();
             clearWaveUI.UpdateWavePanel();
+            _usedBossMonster.ReturnMonster();
             Manager.Instance.Ingame.ReturnUsedMonster();
         });
     }
