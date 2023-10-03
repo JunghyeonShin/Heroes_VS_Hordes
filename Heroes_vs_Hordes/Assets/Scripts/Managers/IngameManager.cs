@@ -32,6 +32,8 @@ public class IngameManager : MonoBehaviour
     private const int NEXT_WAVE_INDEX = 1;
     private const string NAME_WAVE = "[WAVE]";
 
+    private readonly Vector3 FLOATING_HEALTH_SLIDER_POSITION = new Vector3(0f, 2.25f, 0f);
+
     /// <summary>
     /// 인게임을 처음 진입하여 초기 세팅할 때 호출
     /// </summary>
@@ -90,34 +92,38 @@ public class IngameManager : MonoBehaviour
                 var mapController = Utils.GetOrAddComponent<MapController>(mapGO);
                 mapController.SetHeroController(heroController);
 
-                // 체력바 연동
-                Utils.SetActive(Manager.Instance.Object.HeroHealth, true);
-                var heroHealth = Utils.GetOrAddComponent<HeroHealth>(Manager.Instance.Object.HeroHealth);
-                heroHealth.HeroTransform = UsedHero.transform;
-                UsedHero.ChangeHealthHandler -= heroHealth.ChangeHealthValue;
-                UsedHero.ChangeHealthHandler += heroHealth.ChangeHealthValue;
-
                 {
-                    var mapCollisionArea = Manager.Instance.Object.RepositionArea;
-                    var chaseHero = Utils.GetOrAddComponent<ChaseHero>(mapCollisionArea);
+                    var heroHealthGO = Manager.Instance.Object.HeroHealth;
+                    var heroHealth = Utils.GetOrAddComponent<HeroHealth>(heroHealthGO);
+                    UsedHero.ChangeHealthHandler -= heroHealth.ChangeHealthValue;
+                    UsedHero.ChangeHealthHandler += heroHealth.ChangeHealthValue;
+                    var chaseHero = Utils.GetOrAddComponent<ChaseHero>(heroHealthGO);
                     chaseHero.HeroTransform = UsedHero.transform;
-                    Utils.SetActive(mapCollisionArea, true);
+                    chaseHero.AdjustPosition = FLOATING_HEALTH_SLIDER_POSITION;
+                    Utils.SetActive(Manager.Instance.Object.HeroHealth, true);
                 }
 
                 {
-                    var monsterSpawner = Manager.Instance.Object.MonsterSpawner;
-                    var chaseHero = Utils.GetOrAddComponent<ChaseHero>(monsterSpawner);
+                    var repositionAreaGO = Manager.Instance.Object.RepositionArea;
+                    var chaseHero = Utils.GetOrAddComponent<ChaseHero>(repositionAreaGO);
                     chaseHero.HeroTransform = UsedHero.transform;
-                    _monsterSpawner = Utils.GetOrAddComponent<MonsterSpawner>(monsterSpawner);
+                    Utils.SetActive(repositionAreaGO, true);
+                }
+
+                {
+                    var monsterSpawnerGO = Manager.Instance.Object.MonsterSpawner;
+                    var chaseHero = Utils.GetOrAddComponent<ChaseHero>(monsterSpawnerGO);
+                    chaseHero.HeroTransform = UsedHero.transform;
+                    _monsterSpawner = Utils.GetOrAddComponent<MonsterSpawner>(monsterSpawnerGO);
                     _monsterSpawner.HeroController = heroController;
                     _monsterSpawner.InitSpawnMonster();
-                    Utils.SetActive(monsterSpawner, true);
+                    Utils.SetActive(monsterSpawnerGO, true);
                 }
 
                 // 카메라 팔로워 세팅
-                Manager.Instance.CameraController.SetFollower(heroGO.transform);
+                Manager.Instance.CameraController.SetFollower(UsedHero.transform);
 
-                Utils.SetActive(heroGO, true);
+                Utils.SetActive(UsedHero.gameObject, true);
 
                 loadingUI.CompleteLoading();
             });

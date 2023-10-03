@@ -11,7 +11,10 @@ public class BossBattleWave : Wave
     private bool _loadCompleteBossMap;
 
     private const float FADE_TIME = 0.3f;
-    private const string NAME_BOSS_BATTLE = "보스 웨이브";
+    private const float DELAY_LOADING_TIME = 1f;
+    private const string NAME_BOSS_BATTLE = "보스 전투";
+
+    private readonly Vector3 ADJUST_FOLLOW_POSITION = new Vector3(0f, 8f, 0f);
 
     public override void StartWave()
     {
@@ -21,6 +24,7 @@ public class BossBattleWave : Wave
 
     public override void ClearWave()
     {
+        Manager.Instance.CameraController.SetFollower(Manager.Instance.Ingame.UsedHero.transform);
         Manager.Instance.Object.ReturnBossMap(Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].BossMapType);
         _ClearWave().Forget();
     }
@@ -42,10 +46,25 @@ public class BossBattleWave : Wave
 
         Manager.Instance.Object.GetBossMap(Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].BossMapType, (bossMapGO) =>
         {
-            bossMapGO.transform.position = Manager.Instance.Ingame.UsedHero.transform.position;
+            var usedHero = Manager.Instance.Ingame.UsedHero;
+
+            bossMapGO.transform.position = usedHero.transform.position;
             Utils.SetActive(bossMapGO, true);
+
+            usedHero.transform.position -= ADJUST_FOLLOW_POSITION;
+
+            var bossMapCameraFollower = Manager.Instance.Object.BossMapCameraFollower;
+            var chaseHero = Utils.GetOrAddComponent<ChaseHero>(bossMapCameraFollower);
+            chaseHero.HeroTransform = usedHero.transform;
+            chaseHero.AdjustPosition = ADJUST_FOLLOW_POSITION;
+            Utils.SetActive(bossMapCameraFollower, true);
+
+            Manager.Instance.CameraController.SetFollower(bossMapCameraFollower.transform);
+
             _loadCompleteBossMap = true;
         });
+
+        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_LOADING_TIME));
 
         while (false == _loadCompleteBossMap)
             await UniTask.Yield();

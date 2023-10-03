@@ -11,15 +11,15 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Hero
+  - 
   - Water
   - UI
   - 
   - 
   - 
   - 
-  - 
-  - 
+  - Hero
+  - WallCheck
   - 
   - 
   - 

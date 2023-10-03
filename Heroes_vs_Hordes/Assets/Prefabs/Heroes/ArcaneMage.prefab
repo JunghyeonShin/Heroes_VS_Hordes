@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3900714926639687385}
   - component: {fileID: 729058143588503984}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ArcaneMage_RightEye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 217181283749731111}
   - component: {fileID: 2780546531800146125}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ArcaneMage_Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -178,7 +178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6642126018592614529}
   - component: {fileID: 8728448930452461769}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ArcaneMage_Hair01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -262,7 +262,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8854475716279445780}
   - component: {fileID: 1234789530178450452}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ArcaneMage_Cloak
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -346,7 +346,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5680264146950177786}
   - component: {fileID: 8693704244701412274}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ArcaneMage_Hand01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -430,7 +430,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5307853943654215176}
   - component: {fileID: 8718273123168810331}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ArcaneMage_LeftEye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -514,7 +514,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3896080211160949333}
   - component: {fileID: 48943733467916012}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ArcaneMage_Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -598,7 +598,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6818205148261740711}
   - component: {fileID: 8412606871123408200}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ArcaneMage_RightEar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -682,7 +682,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4919040315809844611}
   - component: {fileID: 5357133078227163170}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ArcaneMage_Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -771,7 +771,7 @@ GameObject:
   - component: {fileID: 7482478725188684888}
   - component: {fileID: 2883649255798308435}
   - component: {fileID: 6014556725729511180}
-  m_Layer: 3
+  m_Layer: 10
   m_Name: ArcaneMage
   m_TagString: Hero
   m_Icon: {fileID: 0}
@@ -803,6 +803,7 @@ Transform:
   - {fileID: 6642126018592614529}
   - {fileID: 1505207095532500330}
   - {fileID: 5680264146950177786}
+  - {fileID: 737318329466330021}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -953,7 +954,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3098619447936569811}
   - component: {fileID: 3373864684990166360}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ArcaneMage_LeftEar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1037,7 +1038,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6288967104182727187}
   - component: {fileID: 469725154969480509}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ArcaneMage_Hair02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1111,6 +1112,73 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &7601920676596849803
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 737318329466330021}
+  - component: {fileID: 901680140833058159}
+  m_Layer: 11
+  m_Name: WallCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &737318329466330021
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7601920676596849803}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4125355815493129157}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &901680140833058159
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7601920676596849803}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.5}
+  m_Size: {x: 2.25, y: 1}
+  m_Direction: 1
 --- !u!1 &8090295069786873163
 GameObject:
   m_ObjectHideFlags: 0
@@ -1121,7 +1189,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1505207095532500330}
   - component: {fileID: 2473517444262226814}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ArcaneMage_Hand00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1205,7 +1273,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1824933706743387489}
   - component: {fileID: 1527131262337145902}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ArcaneMage_Hair00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
