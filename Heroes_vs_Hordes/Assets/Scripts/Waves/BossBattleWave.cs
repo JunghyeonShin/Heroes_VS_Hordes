@@ -9,6 +9,7 @@ public class BossBattleWave : Wave
     private UI_Fade _fadeUI;
 
     private bool _loadCompleteBossMap;
+    private bool _loadCompleteBossMonster;
 
     private const float FADE_TIME = 0.3f;
     private const float DELAY_LOADING_TIME = 1f;
@@ -19,6 +20,7 @@ public class BossBattleWave : Wave
     public override void StartWave()
     {
         _loadCompleteBossMap = false;
+        _loadCompleteBossMonster = false;
         _StartWave().Forget();
     }
 
@@ -44,7 +46,9 @@ public class BossBattleWave : Wave
             _fadeUI.FadeOut(FADE_TIME, null);
         });
 
-        Manager.Instance.Object.GetBossMap(Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].BossMapType, (bossMapGO) =>
+        var currentChapterInfo = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX];
+
+        Manager.Instance.Object.GetBossMap(currentChapterInfo.BossMapType, (bossMapGO) =>
         {
             var usedHero = Manager.Instance.Ingame.UsedHero;
 
@@ -67,6 +71,20 @@ public class BossBattleWave : Wave
         await UniTask.Delay(TimeSpan.FromSeconds(DELAY_LOADING_TIME));
 
         while (false == _loadCompleteBossMap)
+            await UniTask.Yield();
+
+        Manager.Instance.Object.GetBossMonster(currentChapterInfo.BossMonsterType, (bossMonsterGO) =>
+        {
+            var bossMonster = Utils.GetOrAddComponent<BossMonster>(bossMonsterGO);
+            bossMonster.Target = Manager.Instance.Ingame.UsedHero.transform;
+            bossMonster.InitMonsterAbilities();
+            bossMonster.InitTransform();
+            Utils.SetActive(bossMonsterGO, true);
+
+            _loadCompleteBossMonster = true;
+        });
+
+        while (false == _loadCompleteBossMonster)
             await UniTask.Yield();
 
         _fadeUI.FadeIn(FADE_TIME, () =>

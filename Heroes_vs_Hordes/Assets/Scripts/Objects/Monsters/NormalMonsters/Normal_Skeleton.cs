@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Normal_Spider : Monster
+public class Normal_Skeleton : NormalMonster
 {
     protected override void Awake()
     {
         base.Awake();
-        _monsterName = Define.RESOURCE_MONSTER_NORMAL_SPIDER;
+
+        _monsterName = Define.RESOURCE_MONSTER_NORMAL_SKELETON;
     }
 }

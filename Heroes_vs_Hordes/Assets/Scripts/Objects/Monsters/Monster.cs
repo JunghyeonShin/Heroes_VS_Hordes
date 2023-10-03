@@ -11,28 +11,18 @@ public abstract class Monster : MonoBehaviour
     protected float _moveSpeed;
     protected float _attack;
 
-    private Rigidbody2D _rigidbody;
+    protected Rigidbody2D _rigidbody;
+    protected float _delayReattackTime;
 
     private bool _isAttack;
 
     public Transform Target { get; set; }
 
-    private const float REVERSE_ANGLE = -1f;
-    private const float CHECK_DIRECTION = 0f;
-    private const float ZERO_HEALTH = 0f;
-    private const float DELAY_REATTACK_TIME = 2f;
+    protected const float ZERO_HEALTH = 0f;
 
     protected virtual void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
-    }
-
-    private void FixedUpdate()
-    {
-        var monsterToHeroVec = Target.position - transform.position;
-        var monsterToHeroNormalVec = new Vector2(monsterToHeroVec.x, monsterToHeroVec.y).normalized;
-        _LookHero(monsterToHeroNormalVec);
-        _ChaseHero(monsterToHeroNormalVec);
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -49,6 +39,10 @@ public abstract class Monster : MonoBehaviour
         }
     }
 
+    public abstract void OnDamage(float damage);
+
+    public abstract void ReturnMonster();
+
     public void InitMonsterAbilities()
     {
         var monsterInfo = Manager.Instance.Data.MonsterInfoDic[_monsterName];
@@ -57,62 +51,9 @@ public abstract class Monster : MonoBehaviour
         _attack = monsterInfo.Attack;
     }
 
-    public virtual void OnDamage(float damage)
-    {
-        if (_health <= ZERO_HEALTH)
-            return;
-
-        _health -= damage;
-        if (_health <= ZERO_HEALTH)
-        {
-            var waveIndex = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[Manager.Instance.Ingame.CurrentWaveIndex];
-            if (Define.INDEX_GOLD_RUSH_WAVE == waveIndex)
-                _ShowDropItem<Gold>(Define.RESOURCE_GOLD);
-            else
-                _ShowDropItem<ExpGem>(Define.RESOURCE_EXP_GEM);
-        }
-    }
-
-    public void ReturnMonster()
-    {
-        Manager.Instance.Object.ReturnMonster(_monsterName, gameObject);
-    }
-
-    private void _LookHero(Vector2 monsterToHeroNormalVec)
-    {
-        var lookAngle = Vector2.Angle(Vector2.up, monsterToHeroNormalVec);
-        if (_IsLocatedTargetRightSide(monsterToHeroNormalVec.x))
-            lookAngle *= REVERSE_ANGLE;
-        _rigidbody.rotation = lookAngle;
-    }
-
-    private bool _IsLocatedTargetRightSide(float value)
-    {
-        return value >= CHECK_DIRECTION;
-    }
-
-    private void _ChaseHero(Vector2 monsterToHeroNormalVec)
-    {
-        var moveVec = monsterToHeroNormalVec * _moveSpeed * Time.fixedDeltaTime;
-        _rigidbody.MovePosition(_rigidbody.position + moveVec);
-    }
-
-    private void _ShowDropItem<T>(string dropItemKey) where T : DropItem
-    {
-        Manager.Instance.Object.GetDropItem(dropItemKey, (dropItemGO) =>
-        {
-            var dropItem = Utils.GetOrAddComponent<T>(dropItemGO);
-            dropItem.InitTransform(transform.position);
-            Utils.SetActive(dropItemGO, true);
-
-            Manager.Instance.Ingame.OnDeadMonster();
-            ReturnMonster();
-        });
-    }
-
     private async UniTaskVoid _Reattack()
     {
-        await UniTask.Delay(TimeSpan.FromSeconds(DELAY_REATTACK_TIME));
+        await UniTask.Delay(TimeSpan.FromSeconds(_delayReattackTime));
 
         _isAttack = false;
     }

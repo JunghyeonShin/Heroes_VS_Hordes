@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cave_Spider : Monster
+public class Club_Goblin : NormalMonster
 {
     protected override void Awake()
     {
         base.Awake();
-        _monsterName = Define.RESOURCE_MONSTER_CAVE_SPIDER;
+
+        _monsterName = Define.RESOURCE_MONSTER_CLUB_GOBLIN;
     }
 }

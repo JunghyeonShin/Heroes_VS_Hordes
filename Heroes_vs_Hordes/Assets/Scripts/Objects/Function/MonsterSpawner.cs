@@ -118,21 +118,21 @@ public class MonsterSpawner : MonoBehaviour
                 continue;
 
             var monsterType = _spawnMonsterQueues[ii].Dequeue();
-            Manager.Instance.Object.GetMonster(monsterType, (monsterGO) =>
+            Manager.Instance.Object.GetMonster(monsterType, (normalMonsterGO) =>
             {
-                var monster = Utils.GetOrAddComponent<Monster>(monsterGO);
-                monster.Target = HeroController.transform;
-                monster.InitMonsterAbilities();
+                var normalMonster = Utils.GetOrAddComponent<NormalMonster>(normalMonsterGO);
+                normalMonster.Target = HeroController.transform;
+                normalMonster.InitMonsterAbilities();
 
                 var randomPoint = _spawnPoints[ii];
-                monster.transform.position = randomPoint.position;
+                normalMonster.transform.position = randomPoint.position;
 
-                var repositionMonster = Utils.GetOrAddComponent<RepositionMonster>(monsterGO);
+                var repositionMonster = Utils.GetOrAddComponent<RepositionMonster>(normalMonsterGO);
                 repositionMonster.HeroController = HeroController;
 
-                Manager.Instance.Ingame.EnqueueUsedMonster(monster);
+                Manager.Instance.Ingame.EnqueueUsedMonster(normalMonster);
 
-                Utils.SetActive(monsterGO, true);
+                Utils.SetActive(normalMonsterGO, true);
 
                 _ReadyToRespawn(ii).Forget();
             });

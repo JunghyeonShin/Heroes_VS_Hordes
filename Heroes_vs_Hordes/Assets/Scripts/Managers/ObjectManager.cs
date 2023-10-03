@@ -13,8 +13,9 @@ public class ObjectManager
     private Dictionary<string, GameObject> _heroDic = new Dictionary<string, GameObject>();
     private Dictionary<string, GameObject> _bossMapDic = new Dictionary<string, GameObject>();
     private Dictionary<string, ObjectPool> _dropItemDic = new Dictionary<string, ObjectPool>();
-    private Dictionary<string, ObjectPool> _monsterPoolDic = new Dictionary<string, ObjectPool>();
     private Dictionary<string, GameObject> _weaponControllerDic = new Dictionary<string, GameObject>();
+    private Dictionary<string, ObjectPool> _monsterPoolDic = new Dictionary<string, ObjectPool>();
+    private Dictionary<string, GameObject> _bossMonsterDic = new Dictionary<string, GameObject>();
     private ObjectPool _damageTextPool = new ObjectPool();
 
     public GameObject HeroHealth { get; private set; }
@@ -23,7 +24,7 @@ public class ObjectManager
     public GameObject LevelUpText { get; private set; }
     public GameObject BossMapCameraFollower { get; private set; }
 
-    private const int INDEX_TOTAL_VALUE = 22;
+    private const int INDEX_TOTAL_VALUE = 23;
     private const int INDEX_HERO_HEALTH = 0;
     private const int INDEX_REPOSITION_AREA = 1;
     private const int INDEX_MONSTER_SPAWNER = 2;
@@ -46,6 +47,7 @@ public class ObjectManager
     private const int INDEX_MONSTER_ARMOR_SKELETON = 19;
     private const int INDEX_MONSTER_NORMAL_SPIDER = 20;
     private const int INDEX_MONSTER_CAVE_SPIDER = 21;
+    private const int INDEX_MONSTER_BOSS_SPIDER = 22;
     private const string NAME_ROOT_OBJECT = "[ROOT_OBJECT]";
 
     public void Init()
@@ -98,6 +100,7 @@ public class ObjectManager
         _InitDropItem();
         _InitWeaponController();
         _InitMonster();
+        _InitBossMonster();
     }
 
     public bool LoadComplete()
@@ -319,6 +322,41 @@ public class ObjectManager
             objectPool.InitPool(monster, _rootObject, count);
             _monsterPoolDic.Add(key, objectPool);
             callback?.Invoke(objectPool.GetObject());
+        });
+    }
+    #endregion
+
+    #region BossMonster
+    public void GetBossMonster(string key, Action<GameObject> callback)
+    {
+        // 캐시 확인
+        if (_bossMonsterDic.TryGetValue(key, out var bossMonster))
+        {
+            callback?.Invoke(bossMonster);
+            return;
+        }
+
+        // 보스 몬스터 오브젝트 생성 후 캐싱
+        _InitBossMonster(key, callback);
+    }
+
+    public void ReturnBossMonster(string key)
+    {
+        Utils.SetActive(_bossMonsterDic[key], false);
+    }
+
+    private void _InitBossMonster()
+    {
+        _InitBossMonster(Define.RESOURCE_MONSTER_BOSS_SPIDER, (bossMonster) => { _loadCompletes[INDEX_MONSTER_BOSS_SPIDER] = true; });
+    }
+
+    private void _InitBossMonster(string key, Action<GameObject> callback)
+    {
+        Manager.Instance.Resource.Instantiate(key, _rootObject.transform, (bossMonster) =>
+        {
+            _bossMonsterDic.Add(key, bossMonster);
+            Utils.SetActive(bossMonster, false);
+            callback?.Invoke(bossMonster);
         });
     }
     #endregion

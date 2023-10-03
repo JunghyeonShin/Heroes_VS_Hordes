@@ -32,8 +32,6 @@ public class IngameManager : MonoBehaviour
     private const int NEXT_WAVE_INDEX = 1;
     private const string NAME_WAVE = "[WAVE]";
 
-    private readonly Vector3 FLOATING_HEALTH_SLIDER_POSITION = new Vector3(0f, 2.25f, 0f);
-
     /// <summary>
     /// 인게임을 처음 진입하여 초기 세팅할 때 호출
     /// </summary>
@@ -92,16 +90,12 @@ public class IngameManager : MonoBehaviour
                 var mapController = Utils.GetOrAddComponent<MapController>(mapGO);
                 mapController.SetHeroController(heroController);
 
-                {
-                    var heroHealthGO = Manager.Instance.Object.HeroHealth;
-                    var heroHealth = Utils.GetOrAddComponent<HeroHealth>(heroHealthGO);
-                    UsedHero.ChangeHealthHandler -= heroHealth.ChangeHealthValue;
-                    UsedHero.ChangeHealthHandler += heroHealth.ChangeHealthValue;
-                    var chaseHero = Utils.GetOrAddComponent<ChaseHero>(heroHealthGO);
-                    chaseHero.HeroTransform = UsedHero.transform;
-                    chaseHero.AdjustPosition = FLOATING_HEALTH_SLIDER_POSITION;
-                    Utils.SetActive(Manager.Instance.Object.HeroHealth, true);
-                }
+                var heroHealthGO = Manager.Instance.Object.HeroHealth;
+                var heroHealth = Utils.GetOrAddComponent<HeroHealth>(heroHealthGO);
+                heroHealth.HeroTransform = UsedHero.transform;
+                UsedHero.ChangeHealthHandler -= heroHealth.ChangeHealthValue;
+                UsedHero.ChangeHealthHandler += heroHealth.ChangeHealthValue;
+                Utils.SetActive(heroHealthGO, true);
 
                 {
                     var repositionAreaGO = Manager.Instance.Object.RepositionArea;
@@ -257,7 +251,7 @@ public class IngameManager : MonoBehaviour
     #region Monster
     public event Action RemainingMonsterHandler;
 
-    private Queue<Monster> _usedMonsterQueue = new Queue<Monster>();
+    private Queue<NormalMonster> _usedMonsterQueue = new Queue<NormalMonster>();
 
     private MonsterSpawner _monsterSpawner;
     private int _remainingMonsterCount;
@@ -286,21 +280,21 @@ public class IngameManager : MonoBehaviour
         RemainingMonsterHandler?.Invoke();
     }
 
-    public void EnqueueUsedMonster(Monster monster)
+    public void EnqueueUsedMonster(NormalMonster normalMmonster)
     {
         ++_remainingMonsterCount;
-        _usedMonsterQueue.Enqueue(monster);
+        _usedMonsterQueue.Enqueue(normalMmonster);
     }
 
     public void ReturnUsedMonster()
     {
         while (_usedMonsterQueue.Count > EMPTY_USED_MONSTER)
         {
-            var monster = _usedMonsterQueue.Dequeue();
-            if (false == monster.gameObject.activeSelf)
+            var normalMonster = _usedMonsterQueue.Dequeue();
+            if (false == normalMonster.gameObject.activeSelf)
                 continue;
 
-            monster.ReturnMonster();
+            normalMonster.ReturnMonster();
         }
     }
     #endregion

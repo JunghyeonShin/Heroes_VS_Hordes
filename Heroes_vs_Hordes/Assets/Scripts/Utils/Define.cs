@@ -52,6 +52,7 @@ public class Define
     public const string RESOURCE_MONSTER_ARMOR_SKELETON = "Armor_Skeleton";
     public const string RESOURCE_MONSTER_NORMAL_SPIDER = "Normal_Spider";
     public const string RESOURCE_MONSTER_CAVE_SPIDER = "Cave_Spider";
+    public const string RESOURCE_MONSTER_BOSS_SPIDER = "Boss_Spider";
     public const string RESOURCE_BOSS_MAP_CAMERA_FOLLOWER = "BossMapCameraFollower";
     // Text
     public const string RESROUCE_DAMAGE_TEXT = "DamageText";

@@ -9,7 +9,11 @@ public class HeroHealth : MonoBehaviour
 
     private RectTransform _rectTransform;
 
+    public Transform HeroTransform { get; set; }
+
     private const float INIT_HEALTH_SLIDER_VALUE = 1f;
+
+    private readonly Vector3 FLOATING_HEALTH_SLIDER_POSITION = new Vector3(0f, 2.25f, 0f);
 
     private void Awake()
     {
@@ -19,6 +23,12 @@ public class HeroHealth : MonoBehaviour
     private void OnEnable()
     {
         _healthSlider.value = INIT_HEALTH_SLIDER_VALUE;
+    }
+
+    private void LateUpdate()
+    {
+        if (null != HeroTransform)
+            _rectTransform.anchoredPosition = HeroTransform.position + FLOATING_HEALTH_SLIDER_POSITION;
     }
 
     public void ChangeHealthValue(float value)

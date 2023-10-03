@@ -19,6 +19,7 @@ public class UI_IngameScene : UI_Scene
         ChapterCheckPanel,
         TimeCheckPanel,
         MonsterCheckPanel,
+        BossMonsterHealthPanel,
         GoldPanel,
         WavePanel,
         AnnihilationModePanel,
@@ -27,7 +28,8 @@ public class UI_IngameScene : UI_Scene
 
     private enum ESliders
     {
-        ExpSlider
+        ExpSlider,
+        BossMonsterHealthSlider
     }
 
     private enum ETexts
@@ -43,12 +45,14 @@ public class UI_IngameScene : UI_Scene
     private GameObject _chapterCheckPanel;
     private GameObject _timeCheckPanel;
     private GameObject _monsterCheckPanel;
+    private GameObject _bossMonsterhealthPanel;
     private GameObject _goldPanel;
 
     private Animator _wavePanelAnimator;
     private Animator _annihilationModePanelAnimator;
     private Animator _finishWavePanelAnimator;
     private Slider _expSlider;
+    private Slider _bossMonsterHealthSlider;
     private TextMeshProUGUI _levelText;
     private TextMeshProUGUI _timeText;
     private TextMeshProUGUI _monsterText;
@@ -59,7 +63,7 @@ public class UI_IngameScene : UI_Scene
     private const float DELAY_FINISHED_WAVE_PANEL = 1.2f;
     private const float DELAY_SPAWN_MONSTER = 0.2f;
     private const float SIXTY_SECONDS = 60f;
-    private const int ZERO_SECOND = 0;
+    private const int TEN_SECONDS = 10;
     private const int NON_REMAINING_MONSTER_COUNT = 0;
     private const string ANIMATOR_TRIGGER_MOVE_WAVE_PANEL = "MoveWavePanel";
 
@@ -74,6 +78,7 @@ public class UI_IngameScene : UI_Scene
         _chapterCheckPanel = _GetGameObject((int)EGameObjects.ChapterCheckPanel);
         _timeCheckPanel = _GetGameObject((int)EGameObjects.TimeCheckPanel);
         _monsterCheckPanel = _GetGameObject((int)EGameObjects.MonsterCheckPanel);
+        _bossMonsterhealthPanel = _GetGameObject((int)EGameObjects.BossMonsterHealthPanel);
         _goldPanel = _GetGameObject((int)EGameObjects.GoldPanel);
 
         _wavePanelAnimator = _GetGameObject((int)EGameObjects.WavePanel).GetComponent<Animator>();
@@ -83,6 +88,7 @@ public class UI_IngameScene : UI_Scene
         _BindEvent(_GetButton((int)EButtons.PauseButton).gameObject, _PauseIngame);
 
         _expSlider = _GetSlider((int)ESliders.ExpSlider);
+        _bossMonsterHealthSlider = _GetSlider((int)ESliders.BossMonsterHealthSlider);
 
         _levelText = _GetText((int)ETexts.LevelText);
         _timeText = _GetText((int)ETexts.TimeText);
@@ -137,6 +143,8 @@ public class UI_IngameScene : UI_Scene
         {
             Utils.SetActive(_expPanel, true);
             Utils.SetActive(_chapterCheckPanel, true);
+            Utils.SetActive(_monsterCheckPanel, false);
+            Utils.SetActive(_bossMonsterhealthPanel, false);
             Utils.SetActive(_goldPanel, false);
         }
         else if (Define.INDEX_GOLD_RUSH_WAVE == waveIndex)
@@ -144,8 +152,17 @@ public class UI_IngameScene : UI_Scene
             Utils.SetActive(_expPanel, false);
             Utils.SetActive(_chapterCheckPanel, false);
             Utils.SetActive(_monsterCheckPanel, false);
+            Utils.SetActive(_bossMonsterhealthPanel, false);
             Utils.SetActive(_goldPanel, true);
-        }        
+        }
+        else if (Define.INDEX_BOSS_BATTLE_WAVE == waveIndex)
+        {
+            Utils.SetActive(_expPanel, true);
+            Utils.SetActive(_chapterCheckPanel, false);
+            Utils.SetActive(_monsterCheckPanel, false);
+            Utils.SetActive(_bossMonsterhealthPanel, true);
+            Utils.SetActive(_goldPanel, false);
+        }
 
         _waveText.text = wavePanelText;
         _ShowWavePanel().Forget();
@@ -170,8 +187,8 @@ public class UI_IngameScene : UI_Scene
     {
         var minute = Mathf.FloorToInt(time / SIXTY_SECONDS);
         var second = Mathf.FloorToInt(time % SIXTY_SECONDS);
-        if (ZERO_SECOND == second)
-            _timeText.text = $"{minute}:00";
+        if (second < TEN_SECONDS)
+            _timeText.text = $"{minute}:0{second}";
         else
             _timeText.text = $"{minute}:{second}";
     }

@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Normal_Skeleton : Monster
+public class Armor_Goblin : NormalMonster
 {
     protected override void Awake()
     {
         base.Awake();
-        _monsterName = Define.RESOURCE_MONSTER_NORMAL_SKELETON;
+
+        _monsterName = Define.RESOURCE_MONSTER_ARMOR_GOBLIN;
     }
 }
