@@ -130,6 +130,7 @@ public class IngameManager : MonoBehaviour
     public void StartIngame()
     {
         Utils.SetTimeScale(RESTORE_TIMESCALE);
+        _remainingMonsterCount = INIT_REMAINIG_MONSTER_COUNT;
         CurrentWave = _waveList[Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[CurrentWaveIndex]];
         CurrentWave.StartWave();
     }
@@ -250,6 +251,7 @@ public class IngameManager : MonoBehaviour
 
     #region Monster
     public event Action RemainingMonsterHandler;
+    public event Action<float> ChangeBossMonsterHealthHandler;
 
     private Queue<NormalMonster> _usedMonsterQueue = new Queue<NormalMonster>();
 
@@ -278,6 +280,11 @@ public class IngameManager : MonoBehaviour
     {
         --_remainingMonsterCount;
         RemainingMonsterHandler?.Invoke();
+    }
+
+    public void SetBossMonsterHealth(float value)
+    {
+        ChangeBossMonsterHealthHandler?.Invoke(value);
     }
 
     public void EnqueueUsedMonster(NormalMonster normalMmonster)

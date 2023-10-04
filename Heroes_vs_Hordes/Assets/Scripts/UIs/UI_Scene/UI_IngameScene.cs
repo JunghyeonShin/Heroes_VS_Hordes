@@ -113,6 +113,8 @@ public class UI_IngameScene : UI_Scene
 
         ingame.RemainingMonsterHandler -= _SetMonsterText;
         ingame.RemainingMonsterHandler += _SetMonsterText;
+        ingame.ChangeBossMonsterHealthHandler -= _SetBossMonsterHealth;
+        ingame.ChangeBossMonsterHealthHandler += _SetBossMonsterHealth;
 
         ingame.ChangeGoldHandler -= _SetGoldText;
         ingame.ChangeGoldHandler += _SetGoldText;
@@ -234,6 +236,11 @@ public class UI_IngameScene : UI_Scene
         _monsterText.text = ingame.RemainingMonsterCount.ToString();
         if (ingame.RemainingMonsterCount <= NON_REMAINING_MONSTER_COUNT)
             _ShowFinishWavePanel().Forget();
+    }
+
+    private void _SetBossMonsterHealth(float value)
+    {
+        _bossMonsterHealthSlider.value = value;
     }
 
     private async UniTaskVoid _ShowFinishWavePanel()

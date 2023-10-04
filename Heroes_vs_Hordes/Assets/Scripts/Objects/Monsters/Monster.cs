@@ -7,6 +7,7 @@ using UnityEngine;
 public abstract class Monster : MonoBehaviour
 {
     protected string _monsterName;
+    protected float _totalHealth;
     protected float _health;
     protected float _moveSpeed;
     protected float _attack;
@@ -46,7 +47,8 @@ public abstract class Monster : MonoBehaviour
     public void InitMonsterAbilities()
     {
         var monsterInfo = Manager.Instance.Data.MonsterInfoDic[_monsterName];
-        _health = monsterInfo.Health;
+        _totalHealth = monsterInfo.Health;
+        _health = _totalHealth;
         _moveSpeed = monsterInfo.MoveSpeed;
         _attack = monsterInfo.Attack;
     }
