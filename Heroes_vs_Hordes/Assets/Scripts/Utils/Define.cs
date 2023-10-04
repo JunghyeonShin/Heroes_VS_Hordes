@@ -103,7 +103,8 @@ public class Define
     #region Layer
     public const string LAYER_LAND_MONSTER = "LandMonster";
     public const string LAYER_SKY_MONSTER = "SkyMonster";
-    public static readonly int LAYER_MASK_MONSTER = 1 << LayerMask.NameToLayer(LAYER_LAND_MONSTER) | 1 << LayerMask.NameToLayer(LAYER_SKY_MONSTER);
+    public const string LAYER_BOSS_MONSTER = "BossMonster";
+    public static readonly int LAYER_MASK_MONSTER = 1 << LayerMask.NameToLayer(LAYER_LAND_MONSTER) | 1 << LayerMask.NameToLayer(LAYER_SKY_MONSTER) | 1 << LayerMask.NameToLayer(LAYER_BOSS_MONSTER);
     #endregion
 
     #region Animator
