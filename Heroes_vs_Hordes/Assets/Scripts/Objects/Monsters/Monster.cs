@@ -9,7 +9,6 @@ public abstract class Monster : MonoBehaviour
     protected string _monsterName;
     protected float _totalHealth;
     protected float _health;
-    protected float _moveSpeed;
     protected float _attack;
 
     protected Rigidbody2D _rigidbody;
@@ -18,12 +17,18 @@ public abstract class Monster : MonoBehaviour
     private bool _isAttack;
 
     public Transform Target { get; set; }
+    public float MoveSpeed { get; private set; }
 
     protected const float ZERO_HEALTH = 0f;
 
     protected virtual void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+    }
+
+    protected virtual void OnEnable()
+    {
+
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -49,7 +54,7 @@ public abstract class Monster : MonoBehaviour
         var monsterInfo = Manager.Instance.Data.MonsterInfoDic[_monsterName];
         _totalHealth = monsterInfo.Health;
         _health = _totalHealth;
-        _moveSpeed = monsterInfo.MoveSpeed;
+        MoveSpeed = monsterInfo.MoveSpeed;
         _attack = monsterInfo.Attack;
     }
 

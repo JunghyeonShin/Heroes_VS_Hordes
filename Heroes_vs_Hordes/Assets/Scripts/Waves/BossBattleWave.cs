@@ -49,13 +49,14 @@ public class BossBattleWave : Wave
             _fadeUI.FadeOut(FADE_TIME, null);
         });
 
+        var bossMapPosition = Vector3.zero;
         var currentChapterInfo = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX];
-
         Manager.Instance.Object.GetBossMap(currentChapterInfo.BossMapType, (bossMapGO) =>
         {
             var usedHero = Manager.Instance.Ingame.UsedHero;
 
             bossMapGO.transform.position = usedHero.transform.position;
+            bossMapPosition = bossMapGO.transform.position;
             Utils.SetActive(bossMapGO, true);
 
             usedHero.transform.position -= ADJUST_FOLLOW_POSITION;
@@ -80,6 +81,7 @@ public class BossBattleWave : Wave
         {
             _usedBossMonster = Utils.GetOrAddComponent<BossMonster>(bossMonsterGO);
             _usedBossMonster.Target = Manager.Instance.Ingame.UsedHero.transform;
+            _usedBossMonster.BossMapPosition = bossMapPosition;
             _usedBossMonster.InitMonsterAbilities();
             Utils.SetActive(_usedBossMonster.gameObject, true);
 

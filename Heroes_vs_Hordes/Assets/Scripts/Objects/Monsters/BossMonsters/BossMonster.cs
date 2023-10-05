@@ -4,12 +4,19 @@ using UnityEngine;
 
 public abstract class BossMonster : Monster
 {
+    protected FiniteStateMachine _bossMonsterFSM;
+
+    public Vector3 BossMapPosition { get; set; }
+
     private const float INIT_BOSS_MONSTER_HEALTH_VALUE = 1f;
     private const float INIT_ROTATION_ANGLE = 180f;
+    private const float RANDOM_POSITION_X = 9.5f;
+    private const float MIN_RANDOM_POSITION_Y = -11f;
+    private const float MAX_RANDOM_POSITION_Y = 5.5f;
 
     private readonly Vector3 INIT_POSITION = new Vector3(0f, 11f, 0f);
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
         if (null == Target)
             return;
@@ -30,13 +37,23 @@ public abstract class BossMonster : Monster
             _health = ZERO_HEALTH;
         Manager.Instance.Ingame.SetBossMonsterHealth(_health / _totalHealth);
         if (_health <= ZERO_HEALTH)
-        {
-
-        }
+            ChangeState(EStateTypes.Dead);
     }
 
     public override void ReturnMonster()
     {
         Manager.Instance.Object.ReturnBossMonster(_monsterName);
+    }
+
+    public void ChangeState(EStateTypes state)
+    {
+        _bossMonsterFSM.ChangeState(state);
+    }
+
+    public Vector3 GetRandomPosition()
+    {
+        var randomPosX = UnityEngine.Random.Range(-RANDOM_POSITION_X, RANDOM_POSITION_X);
+        var randomPosY = UnityEngine.Random.Range(MIN_RANDOM_POSITION_Y, MAX_RANDOM_POSITION_Y);
+        return new Vector3(BossMapPosition.x + randomPosX, BossMapPosition.y + randomPosY, 0f);
     }
 }
