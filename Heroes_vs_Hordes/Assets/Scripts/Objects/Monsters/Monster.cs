@@ -26,6 +26,11 @@ public abstract class Monster : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody2D>();
     }
 
+    protected virtual void OnEnable()
+    {
+
+    }
+
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (_isAttack)
