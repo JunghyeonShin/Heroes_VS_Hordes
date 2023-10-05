@@ -65,7 +65,7 @@ public abstract class NormalMonster : Monster
 
     private void _ChaseHero(Vector2 monsterToHeroNormalVec)
     {
-        var moveVec = monsterToHeroNormalVec * _moveSpeed * Time.fixedDeltaTime;
+        var moveVec = monsterToHeroNormalVec * MoveSpeed * Time.fixedDeltaTime;
         _rigidbody.MovePosition(_rigidbody.position + moveVec);
     }
 

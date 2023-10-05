@@ -11,7 +11,7 @@ public class BossSpider_AttackState : BossMonsterState
 
     public override void EnterState()
     {
-
+        _bossMonster.ChangeState(EStateTypes.Idle);
     }
 
     public override void ExitState()
