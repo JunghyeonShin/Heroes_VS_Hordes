@@ -23,7 +23,7 @@ public class BossSpider_AttackState : BossMonsterState
         _bossSpiderAttackDic.Add(EBossSpiderAttackTypes.SprayWeb, new BossSpiderAttack_SprayWeb());
 
         foreach (var bossSpiderAttack in _bossSpiderAttackDic)
-            bossSpiderAttack.Value.Init();
+            bossSpiderAttack.Value.Init(_owner);
     }
 
     public override void EnterState()

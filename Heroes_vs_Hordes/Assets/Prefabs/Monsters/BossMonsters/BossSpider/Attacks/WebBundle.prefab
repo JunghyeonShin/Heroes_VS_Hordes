@@ -347,7 +347,7 @@ GameObject:
   - component: {fileID: 6886143821425697892}
   - component: {fileID: -9146542555956375517}
   m_Layer: 0
-  m_Name: WebBuddle
+  m_Name: WebBundle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

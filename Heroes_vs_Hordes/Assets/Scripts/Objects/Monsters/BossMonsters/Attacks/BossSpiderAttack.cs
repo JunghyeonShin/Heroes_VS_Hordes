@@ -10,7 +10,7 @@ public enum EBossSpiderAttackTypes
 
 public interface IBossSpiderAttack
 {
-    public void Init();
+    public void Init(GameObject owner);
     public void Attack(Vector3 targetPos);
 }
 
@@ -19,7 +19,10 @@ public abstract class BossSpiderAttack : IBossSpiderAttack
     protected GameObject _owner;
     protected Vector3 _targetPos;
 
-    public abstract void Init();
+    public virtual void Init(GameObject owner)
+    {
+        _owner = owner;
+    }
 
     public virtual void Attack(Vector3 targetPos)
     {

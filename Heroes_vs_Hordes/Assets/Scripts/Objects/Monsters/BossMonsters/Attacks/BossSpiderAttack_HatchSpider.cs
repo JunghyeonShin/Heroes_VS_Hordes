@@ -14,8 +14,10 @@ public class BossSpiderAttack_HatchSpider : BossSpiderAttack
     private const int CREATE_SPIDER_COUNT = 10;
     private const string ANIMATOR_BOOL_HATCH = "Hatch";
 
-    public override void Init()
+    public override void Init(GameObject owner)
     {
+        base.Init(owner);
+
         Manager.Instance.Resource.LoadAsync<GameObject>(Define.RESOURCE_BOSS_SPIDER_WEB_BUNDLE, (webBundle) =>
         {
             _webBundlePool.InitPool(webBundle, Manager.Instance.Object.RootObject, CREATE_WEB_BUNDLE_COUNT);
