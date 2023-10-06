@@ -19,6 +19,8 @@ public class RepositionMonster : MonoBehaviour
         {
             if (false == _collider.enabled)
                 return;
+            if (null == HeroController)
+                return;
 
             var repositionVec = HeroController.transform.position + new Vector3(HeroController.InputVec.x * 22f, HeroController.InputVec.y * 22f, 0f);
             transform.position = repositionVec;
