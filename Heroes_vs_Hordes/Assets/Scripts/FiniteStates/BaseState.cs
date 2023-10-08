@@ -20,4 +20,6 @@ public abstract class BaseState : IFiniteState
     public abstract void FixedUpdateState();
 
     public abstract void UpdateState();
+
+    public abstract void ReturnObject();
 }

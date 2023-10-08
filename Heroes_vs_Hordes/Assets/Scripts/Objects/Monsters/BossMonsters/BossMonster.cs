@@ -42,6 +42,8 @@ public abstract class BossMonster : Monster
 
     public override void ReturnMonster()
     {
+        _bossMonsterFSM.ReturnObject();
+        ChangeState(EStateTypes.None);
         Manager.Instance.Object.ReturnBossMonster(_monsterName);
     }
 

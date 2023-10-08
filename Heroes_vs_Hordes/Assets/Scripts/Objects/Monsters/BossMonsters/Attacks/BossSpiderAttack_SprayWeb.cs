@@ -6,7 +6,10 @@ public class BossSpiderAttack_SprayWeb : BossSpiderAttack
 {
     private ObjectPool _spiderWebPool = new ObjectPool();
 
+    private Queue<GameObject> _usedWpiderWebQueue = new Queue<GameObject>();
+
     private const int CREATE_SPIDER_WEB = 10;
+    private const int EMPTY_SPIDER_WEB = 0;
 
     public override void Init(GameObject owner)
     {
@@ -20,14 +23,23 @@ public class BossSpiderAttack_SprayWeb : BossSpiderAttack
 
     public override void Attack(Vector3 targetPos)
     {
-        base.Attack(targetPos);
-
         var spiderWebGO = _spiderWebPool.GetObject();
+        _usedWpiderWebQueue.Enqueue(spiderWebGO);
         var spiderWeb = Utils.GetOrAddComponent<Spider_Web>(spiderWebGO);
         spiderWeb.InitTransform(_owner.transform.position, targetPos);
         spiderWeb.ReturnHandler -= _ReturnSpiderWeb;
         spiderWeb.ReturnHandler += _ReturnSpiderWeb;
         Utils.SetActive(spiderWebGO, true);
+    }
+
+    public override void ReturnObject()
+    {
+        while (_usedWpiderWebQueue.Count > EMPTY_SPIDER_WEB)
+        {
+            var spiderWebGO = _usedWpiderWebQueue.Dequeue();
+            if (spiderWebGO.activeSelf)
+                Utils.SetActive(spiderWebGO, false);
+        }
     }
 
     private void _ReturnSpiderWeb(GameObject go)

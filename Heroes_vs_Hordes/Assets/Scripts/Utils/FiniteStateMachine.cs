@@ -18,6 +18,7 @@ public interface IFiniteState
     public void ExitState();
     public void FixedUpdateState();
     public void UpdateState();
+    public void ReturnObject();
 }
 
 public class FiniteStateMachine : MonoBehaviour
@@ -55,5 +56,11 @@ public class FiniteStateMachine : MonoBehaviour
         }
         else
             _currentState = null;
+    }
+
+    public void ReturnObject()
+    {
+        foreach (var state in _stateDic.Values)
+            state.ReturnObject();
     }
 }

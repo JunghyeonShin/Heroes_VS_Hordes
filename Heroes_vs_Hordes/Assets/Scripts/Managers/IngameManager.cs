@@ -176,6 +176,7 @@ public class IngameManager : MonoBehaviour
         ReturnUsedMonster();
         ReturnUsedExpGem();
         ReturnUsedGold();
+        _ReturnHeroAbility();
         _ReturnWeaponController();
         Manager.Instance.CameraController.SetFollower();
         Utils.SetActive(Manager.Instance.Object.MonsterSpawner, false);
@@ -246,6 +247,11 @@ public class IngameManager : MonoBehaviour
         }
         else
             ChangeHeroLevelUpPostProcessingHandler?.Invoke();
+    }
+
+    private void _ReturnHeroAbility()
+    {
+        UsedHero.ReturnAbilities();
     }
     #endregion
 

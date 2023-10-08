@@ -12,9 +12,11 @@ public class Spider_Web : MonoBehaviour
     [SerializeField] private GameObject _webContainer;
     [SerializeField] private GameObject[] _webs;
 
+    private const float CHECK_DIRECTION = 0f;
+    private const float ANGLE_360 = 360f;
     private const float ZERO_SECOND = 0f;
     private const float ONE_SECOND = 1f;
-    private const float MOVE_SPEED = 5f;
+    private const float MOVE_SPEED = 2f;
     private const float DELAY_RETURN = 5f;
 
     public void InitTransform(Vector3 startPos, Vector3 targetPos)
@@ -24,10 +26,24 @@ public class Spider_Web : MonoBehaviour
 
         _webContainer.transform.position = targetPos;
         foreach (var web in _webs)
-        {
             Utils.SetActive(web, false);
-        }
+        
+        _RotateWebSpit(targetPos);
         _MoveWebSpit(targetPos).Forget();
+    }
+
+    private void _RotateWebSpit(Vector3 targetPos)
+    {
+        var targetVec = targetPos - _webSpit.transform.position;
+        var angle = Vector3.Angle(Vector3.up, targetVec);
+        if (_IsRightSide(targetVec.x))
+            angle = ANGLE_360 - angle;
+        _webSpit.transform.eulerAngles = new Vector3(0f, 0f, angle);
+    }
+
+    private bool _IsRightSide(float value)
+    {
+        return value >= CHECK_DIRECTION;
     }
 
     private async UniTaskVoid _MoveWebSpit(Vector3 targetPos)
@@ -42,7 +58,6 @@ public class Spider_Web : MonoBehaviour
             _webSpit.transform.position = BezierCurve.LinearCurve(startPos, targetPos, time);
             await UniTask.Delay(TimeSpan.FromSeconds(Time.fixedDeltaTime));
         }
-
         Utils.SetActive(_webSpit, false);
         _ControlWeb().Forget();
     }

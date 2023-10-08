@@ -7,11 +7,13 @@ using UnityEngine;
 public class BossSpiderAttack_HatchSpider : BossSpiderAttack
 {
     private ObjectPool _webBundlePool = new ObjectPool();
+    private Queue<GameObject> _usedWebBundleQueue = new Queue<GameObject>();
 
     private const float DELAY_SPAWN_SPIDER_TIME = 0.7f;
     private const float DELAY_RETURN_WEB_BUNDLE = 1f;
     private const int CREATE_WEB_BUNDLE_COUNT = 10;
     private const int CREATE_SPIDER_COUNT = 10;
+    private const int EMPTY_USED_WEB_BUNDLE = 0;
     private const string ANIMATOR_BOOL_HATCH = "Hatch";
 
     public override void Init(GameObject owner)
@@ -26,15 +28,19 @@ public class BossSpiderAttack_HatchSpider : BossSpiderAttack
 
     public override void Attack(Vector3 targetPos)
     {
-        base.Attack(targetPos);
-
-        _Hatch().Forget();
+        _Hatch(targetPos).Forget();
     }
 
-    private async UniTaskVoid _Hatch()
+    public override void ReturnObject()
+    {
+        _ReturnAllWebBundle();
+    }
+
+    private async UniTaskVoid _Hatch(Vector3 targetPos)
     {
         var webBundleGO = _webBundlePool.GetObject();
-        webBundleGO.transform.position = _targetPos;
+        _usedWebBundleQueue.Enqueue(webBundleGO);
+        webBundleGO.transform.position = targetPos;
         Utils.SetActive(webBundleGO, true);
         var webBundleAnimator = Utils.GetOrAddComponent<Animator>(webBundleGO);
         webBundleAnimator.SetBool(ANIMATOR_BOOL_HATCH, true);
@@ -42,12 +48,15 @@ public class BossSpiderAttack_HatchSpider : BossSpiderAttack
 
         for (int ii = 0; ii < CREATE_SPIDER_COUNT; ++ii)
         {
+            if (false == _owner.activeSelf)
+                return;
+
             Manager.Instance.Object.GetMonster(Define.RESOURCE_MONSTER_NORMAL_SPIDER, (normalSpiderGO) =>
             {
                 var normalSpider = Utils.GetOrAddComponent<Normal_Spider>(normalSpiderGO);
                 normalSpider.Target = Manager.Instance.Ingame.UsedHero.transform;
                 normalSpider.InitMonsterAbilities();
-                normalSpider.transform.position = _targetPos;
+                normalSpider.transform.position = targetPos;
 
                 Manager.Instance.Ingame.EnqueueUsedMonster(normalSpider);
 
@@ -58,5 +67,15 @@ public class BossSpiderAttack_HatchSpider : BossSpiderAttack
         await UniTask.Delay(TimeSpan.FromSeconds(DELAY_RETURN_WEB_BUNDLE));
 
         _webBundlePool.ReturnObject(webBundleGO);
+    }
+
+    private void _ReturnAllWebBundle()
+    {
+        while (_usedWebBundleQueue.Count > EMPTY_USED_WEB_BUNDLE)
+        {
+            var webBundleGO = _usedWebBundleQueue.Dequeue();
+            if (webBundleGO.activeSelf)
+                _webBundlePool.ReturnObject(webBundleGO);
+        }
     }
 }
