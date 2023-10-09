@@ -37,7 +37,7 @@ public abstract class NormalMonster : Monster
         _health -= damage;
         if (_health <= ZERO_HEALTH)
         {
-            var waveIndex = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[Manager.Instance.Ingame.CurrentWaveIndex];
+            var waveIndex = Manager.Instance.Data.ChapterInfoDataList[Manager.Instance.Ingame.CurrentChapterIndex].WaveIndex[Manager.Instance.Ingame.CurrentWaveIndex];
             if (Define.INDEX_GOLD_RUSH_WAVE == waveIndex)
                 _ShowDropItem<Gold>(Define.RESOURCE_GOLD);
             else

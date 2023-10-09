@@ -37,6 +37,9 @@ public class MainScene : MonoBehaviour
         while (false == Manager.Instance.LoadComplete())
             await UniTask.Yield();
 
+        var mainSceneUI = Manager.Instance.UI.CurrentSceneUI as UI_MainScene;
+        mainSceneUI.SetChapter(Manager.Instance.SaveData.ClearChapter + Define.ADJUSE_CHAPTER_INDEX);
+
         _completeLoadingHandler?.Invoke();
     }
 }

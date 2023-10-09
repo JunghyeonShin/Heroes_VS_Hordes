@@ -32,8 +32,9 @@ public class Define
     // Map
     public const string RESOURCE_REPOSITION_AREA = "RepositionArea";
     // Hero
-    public const string RESOURCE_HERO_HEALTH = "Hero_Health";
     public const string RESOURCE_HERO_ARCANE_MAGE = "ArcaneMage";
+    public const string RESOURCE_HERO_HEALTH = "HeroHealth";
+    public const string RESOURCE_HERO_DEATH = "HeroDeath";
     // Weapon
     public const string RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE = "ArcaneMage_Projectile";
     public const string RESOURCE_WEAPON_BOMB_CONTROLLER = "BombController";
@@ -118,17 +119,13 @@ public class Define
 
     #region IngameManager
     public const float INCREASE_HERO_EXP_VALUE = 1;
-    public const float INCREASE_GOLD_VALUE = 1;
+    public const int INCREASE_GOLD_VALUE = 1;
     public const int INDEX_NORMAL_BATTLE_WAVE = 0;
     public const int INDEX_GOLD_RUSH_WAVE = 1;
     public const int INDEX_BOSS_BATTLE_WAVE = 2;
     public const int INDEX_TIME_ATTACK_MODE = 0;
     public const int INDEX_ANNIHILATION_MODE = 1;
     public const int INIT_HERO_LEVEL_UP_COUNT = 0;
-    #endregion
-
-    #region TEST
-    public const int CURRENT_CHAPTER_INDEX = 0;
     #endregion
 
     #region Wave Panel Transform
@@ -200,4 +197,6 @@ public class Define
         {BOOK_RANGE, new AbilityInfo() { AbilityType = EAbilityTypes.Book, SpriteName = RESOURCE_SPRITES_ICON_BOOK_RANGE } }
     };
     #endregion
+
+    public const int ADJUSE_CHAPTER_INDEX = 1;
 }

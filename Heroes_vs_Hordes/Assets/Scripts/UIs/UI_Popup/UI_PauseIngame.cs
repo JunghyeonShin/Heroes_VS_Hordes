@@ -63,7 +63,7 @@ public class UI_PauseIngame : UI_Popup
         _wavePanelList.Clear();
 
         // 사용할 WaveUI를 가져옴
-        var waveIndices = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex;
+        var waveIndices = Manager.Instance.Data.ChapterInfoDataList[Manager.Instance.Ingame.CurrentChapterIndex].WaveIndex;
         for (int ii = 0; ii < Manager.Instance.Ingame.TotalWaveIndex; ++ii)
         {
             switch (waveIndices[ii])

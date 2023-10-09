@@ -181,7 +181,7 @@ GameObject:
   - component: {fileID: 113038047016421060}
   - component: {fileID: 2873868592060480206}
   m_Layer: 0
-  m_Name: Hero_Health
+  m_Name: HeroHealth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -253,7 +253,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &3070775399645628868
 MonoBehaviour:
   m_ObjectHideFlags: 0

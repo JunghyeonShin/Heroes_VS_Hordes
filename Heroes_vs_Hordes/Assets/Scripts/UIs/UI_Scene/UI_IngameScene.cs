@@ -140,7 +140,7 @@ public class UI_IngameScene : UI_Scene
 
     private void _SetWaveIndex(string wavePanelText)
     {
-        var waveIndex = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[Manager.Instance.Ingame.CurrentWaveIndex];
+        var waveIndex = Manager.Instance.Data.ChapterInfoDataList[Manager.Instance.Ingame.CurrentChapterIndex].WaveIndex[Manager.Instance.Ingame.CurrentWaveIndex];
         if (Define.INDEX_NORMAL_BATTLE_WAVE == waveIndex)
         {
             Utils.SetActive(_expPanel, true);
@@ -180,7 +180,7 @@ public class UI_IngameScene : UI_Scene
         Manager.Instance.Ingame.CurrentWave.ProgressWave = true;
         await UniTask.Delay(TimeSpan.FromSeconds(DELAY_SPAWN_MONSTER));
 
-        var waveIndex = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[Manager.Instance.Ingame.CurrentWaveIndex];
+        var waveIndex = Manager.Instance.Data.ChapterInfoDataList[Manager.Instance.Ingame.CurrentChapterIndex].WaveIndex[Manager.Instance.Ingame.CurrentWaveIndex];
         if (Define.INDEX_NORMAL_BATTLE_WAVE == waveIndex || Define.INDEX_GOLD_RUSH_WAVE == waveIndex)
             Manager.Instance.Ingame.StartSpawnMonster();
     }

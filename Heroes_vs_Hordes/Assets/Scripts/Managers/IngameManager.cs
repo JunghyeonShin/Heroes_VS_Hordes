@@ -20,8 +20,11 @@ public class IngameManager : MonoBehaviour
     private List<Wave> _waveList = new List<Wave>();
 
     public Wave CurrentWave { get; private set; }
+    public int CurrentChapterIndex { get; private set; }
     public int CurrentWaveIndex { get; private set; }
     public int TotalWaveIndex { get; private set; }
+    public int ClearChapterReward { get; set; }
+    public int ClearWaveReward { get; set; }
     public bool DefeatIngame { get; set; }
     public bool ExitIngameForce { get; set; }
 
@@ -30,17 +33,22 @@ public class IngameManager : MonoBehaviour
     private const float RESTORE_TIMESCALE = 1f;
     private const int INIT_WAVE_INDEX = 0;
     private const int NEXT_WAVE_INDEX = 1;
+    private const int INIT_REWARD = 0;
     private const string NAME_WAVE = "[WAVE]";
 
     /// <summary>
     /// 인게임을 처음 진입하여 초기 세팅할 때 호출
     /// </summary>
-    public void InitIngame(UI_Loading loadingUI)
+    public void InitIngame(int chapterIndex, UI_Loading loadingUI)
     {
         HeroLevelUpCount = Define.INIT_HERO_LEVEL_UP_COUNT;
 
+        CurrentChapterIndex = chapterIndex;
         CurrentWaveIndex = INIT_WAVE_INDEX;
-        TotalWaveIndex = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].TotalWaveIndex;
+        TotalWaveIndex = Manager.Instance.Data.ChapterInfoDataList[CurrentChapterIndex].TotalWaveIndex;
+
+        ClearChapterReward = INIT_REWARD;
+        ClearWaveReward = INIT_REWARD;
 
         DefeatIngame = false;
         ExitIngameForce = false;
@@ -48,7 +56,7 @@ public class IngameManager : MonoBehaviour
         _remainingMonsterCount = INIT_REMAINIG_MONSTER_COUNT;
         _remainingExp = INIT_REMAINING_EXP;
 
-        AcquiredGold = INIT_REMAINING_GOLD;
+        AcquiredGold = INIT_REWARD;
         _remainingGold = INIT_REMAINING_GOLD;
 
         _InitWeaponController();
@@ -72,7 +80,7 @@ public class IngameManager : MonoBehaviour
         levelUpHeroUI.InitAbilityUI();
 
         // 맵 생성
-        Manager.Instance.Object.GetMap(Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].MapType, (mapGO) =>
+        Manager.Instance.Object.GetMap(Manager.Instance.Data.ChapterInfoDataList[CurrentChapterIndex].MapType, (mapGO) =>
         {
             Utils.SetActive(mapGO, true);
 
@@ -131,7 +139,7 @@ public class IngameManager : MonoBehaviour
     {
         Utils.SetTimeScale(RESTORE_TIMESCALE);
         _remainingMonsterCount = INIT_REMAINIG_MONSTER_COUNT;
-        CurrentWave = _waveList[Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[CurrentWaveIndex]];
+        CurrentWave = _waveList[Manager.Instance.Data.ChapterInfoDataList[CurrentChapterIndex].WaveIndex[CurrentWaveIndex]];
         CurrentWave.StartWave();
     }
 
@@ -183,8 +191,16 @@ public class IngameManager : MonoBehaviour
         Utils.SetActive(Manager.Instance.Object.RepositionArea, false);
         Utils.SetActive(Manager.Instance.Object.HeroHealth, false);
         Manager.Instance.Object.ReturnHero(Define.RESOURCE_HERO_ARCANE_MAGE);
-        Manager.Instance.Object.ReturnMap(Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].MapType);
-        Manager.Instance.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE);
+        Manager.Instance.Object.ReturnMap(Manager.Instance.Data.ChapterInfoDataList[CurrentChapterIndex].MapType);
+
+        if (false == ExitIngameForce)
+            Manager.Instance.SaveData.OwnedGold += (ClearChapterReward + ClearWaveReward + AcquiredGold);
+
+        Manager.Instance.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE, (mainsceneUI) =>
+        {
+            if (false == DefeatIngame && false == ExitIngameForce)
+                mainsceneUI.SetChapter(CurrentChapterIndex + Define.ADJUSE_CHAPTER_INDEX);
+        });
     }
 
     public void ShowWavePanel(string wavePanelText)
@@ -277,7 +293,7 @@ public class IngameManager : MonoBehaviour
     public void StopSpawnMonster()
     {
         _monsterSpawner.StopSpawnMonster();
-        var waveIndex = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[CurrentWaveIndex];
+        var waveIndex = Manager.Instance.Data.ChapterInfoDataList[CurrentChapterIndex].WaveIndex[CurrentWaveIndex];
         if (Define.INDEX_GOLD_RUSH_WAVE != waveIndex)
             RemainingMonsterHandler?.Invoke();
     }
@@ -355,9 +371,9 @@ public class IngameManager : MonoBehaviour
 
     private Queue<Gold> _usedGoldQueue = new Queue<Gold>();
 
-    private float _remainingGold;
+    private int _remainingGold;
 
-    public float AcquiredGold { get; private set; }
+    public int AcquiredGold { get; private set; }
 
     private const int INIT_REMAINING_GOLD = 0;
 
@@ -389,7 +405,7 @@ public class IngameManager : MonoBehaviour
         ChangeGoldHandler?.Invoke();
     }
 
-    public void GetGold(float gold)
+    public void GetGold(int gold)
     {
         AcquiredGold += gold;
         ChangeGold();

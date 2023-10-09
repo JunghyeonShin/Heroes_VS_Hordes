@@ -80,6 +80,9 @@ public class BossSpider_DeadState : BossMonsterState
     {
         var ingame = Manager.Instance.Ingame;
         if (ingame.RemainingMonsterCount <= EMPTY_NORMAL_MONSTER_COUNT)
-            ingame.ClearIngame();
+        {
+            var ingameSceneUI = Manager.Instance.UI.CurrentSceneUI as UI_IngameScene;
+            ingameSceneUI.FinishIngame();
+        }
     }
 }

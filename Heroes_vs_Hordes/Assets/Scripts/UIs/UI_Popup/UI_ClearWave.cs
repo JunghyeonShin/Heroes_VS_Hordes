@@ -23,11 +23,13 @@ public class UI_ClearWave : UI_Popup
     }
 
     private TextMeshProUGUI _clearWaveText;
+    private TextMeshProUGUI _rewardGoldText;
 
     private GameObject _totalWaves;
     private List<UI_Wave> _wavePanelList = new List<UI_Wave>();
 
     private const int PREV_WAVE_INDEX = 1;
+    private const int REWARD_GOLD = 100;
 
     protected override void _Init()
     {
@@ -40,12 +42,15 @@ public class UI_ClearWave : UI_Popup
         _BindEvent(_GetButton((int)EButtons.StartNextWaveButton).gameObject, _StartNextWave);
 
         _clearWaveText = _GetText((int)ETexts.ClearWaveText);
+        _rewardGoldText = _GetText((int)ETexts.RewardGoldText);
+        _rewardGoldText.text = REWARD_GOLD.ToString();
     }
 
     #region Event
     private void _StartNextWave()
     {
         ClosePopupUI();
+        Manager.Instance.Ingame.ClearWaveReward += REWARD_GOLD;
         Manager.Instance.Ingame.StartIngame();
     }
     #endregion
@@ -63,7 +68,7 @@ public class UI_ClearWave : UI_Popup
         _wavePanelList.Clear();
 
         // 사용할 WaveUI를 가져옴
-        var waveIndices = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex;
+        var waveIndices = Manager.Instance.Data.ChapterInfoDataList[Manager.Instance.Ingame.CurrentChapterIndex].WaveIndex;
         for (int ii = 0; ii < Manager.Instance.Ingame.TotalWaveIndex; ++ii)
         {
             switch (waveIndices[ii])

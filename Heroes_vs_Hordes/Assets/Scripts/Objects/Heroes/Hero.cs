@@ -23,7 +23,6 @@ public abstract class Hero : MonoBehaviour, IAbilityController
     protected bool _attackMonster;
 
     private float _totalHealth;
-    private bool _isDead;
 
     private float _moveSpeed;
 
@@ -45,6 +44,7 @@ public abstract class Hero : MonoBehaviour, IAbilityController
             return _moveSpeed;
         }
     }
+    public bool IsDead { get; private set; }
     public bool IsSlow { get; set; }
 
     private const float DELAY_LEVEL_UP = 0.2f;
@@ -75,7 +75,7 @@ public abstract class Hero : MonoBehaviour, IAbilityController
 
     private void OnEnable()
     {
-        _isDead = false;
+        IsDead = false;
 
         _exp = INIT_EXP;
         _level = INIT_LEVEL;
@@ -85,7 +85,7 @@ public abstract class Hero : MonoBehaviour, IAbilityController
 
     private void Update()
     {
-        if (false == _isDead)
+        if (false == IsDead)
             _DetectMonster();
     }
 
@@ -125,13 +125,24 @@ public abstract class Hero : MonoBehaviour, IAbilityController
         ChangeHealthHandler?.Invoke(_health / _totalHealth);
         if (_health <= ZERO_HEALTH)
         {
-            _isDead = true;
+            IsDead = true;
+
+            var heroDeath = Manager.Instance.Object.HeroDeath;
+            var floatHeroDeath = Utils.GetOrAddComponent<FloatHeroDeath>(heroDeath);
+            floatHeroDeath.SetTransform(transform.position);
+            Utils.SetActive(heroDeath, true);
+
+            Utils.SetActive(gameObject, false);
+
             Manager.Instance.Ingame.CurrentWave.OnDeadHero();
         }
     }
 
     public void GetExp(float exp)
     {
+        if (IsDead)
+            return;
+
         _exp += exp;
         if (_levelUp)
             return;

@@ -43,7 +43,7 @@ public class MonsterSpawner : MonoBehaviour
         StopSpawnMonster();
 
         _spawnMonsterList.Clear();
-        var monsterTypes = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].MonsterTypes;
+        var monsterTypes = Manager.Instance.Data.ChapterInfoDataList[Manager.Instance.Ingame.CurrentChapterIndex].MonsterTypes;
         foreach (var monsterType in monsterTypes)
         {
             switch (monsterType)
