@@ -32,8 +32,9 @@ public class Define
     // Map
     public const string RESOURCE_REPOSITION_AREA = "RepositionArea";
     // Hero
-    public const string RESOURCE_HERO_HEALTH = "Hero_Health";
     public const string RESOURCE_HERO_ARCANE_MAGE = "ArcaneMage";
+    public const string RESOURCE_HERO_HEALTH = "HeroHealth";
+    public const string RESOURCE_HERO_DEATH = "HeroDeath";
     // Weapon
     public const string RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE = "ArcaneMage_Projectile";
     public const string RESOURCE_WEAPON_BOMB_CONTROLLER = "BombController";

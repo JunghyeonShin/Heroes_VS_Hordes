@@ -19,37 +19,39 @@ public class ObjectManager
 
     public GameObject RootObject { get; private set; }
     public GameObject HeroHealth { get; private set; }
+    public GameObject HeroDeath { get; private set; }
     public GameObject RepositionArea { get; private set; }
     public GameObject MonsterSpawner { get; private set; }
     public GameObject LevelUpText { get; private set; }
     public GameObject BossMapCameraFollower { get; private set; }
     public GameObject SlowEffect { get; private set; }
 
-    private const int INDEX_TOTAL_VALUE = 24;
+    private const int INDEX_TOTAL_VALUE = 25;
     private const int INDEX_HERO_HEALTH = 0;
-    private const int INDEX_REPOSITION_AREA = 1;
-    private const int INDEX_MONSTER_SPAWNER = 2;
-    private const int INDEX_LEVEL_UP_TEXT = 3;
-    private const int INDEX_BOSS_MAP_CAMERA_FOLLOWER = 4;
-    private const int INDEX_DAMAGE_TEXT = 5;
-    private const int INDEX_EXP_GEM = 6;
-    private const int INDEX_GOLD = 7;
-    private const int INDEX_WEAPON_BOMB_CONTROLLER = 8;
-    private const int INDEX_WEAPON_BOOMERNAG_CONTROLLER = 9;
-    private const int INDEX_WEAPON_CROSSBOW_CONTROLLER = 10;
-    private const int INDEX_WEAPON_DIVINE_AURA_CONTROLLER = 11;
-    private const int INDEX_WEAPON_FIREBALL_CONTROLLER = 12;
-    private const int INDEX_MONSTER_NORMAL_BAT = 13;
-    private const int INDEX_MONSTER_SWARM_BAT = 14;
-    private const int INDEX_MONSTER_NORMAL_GOBLIN = 15;
-    private const int INDEX_MONSTER_CLUB_GOBLIN = 16;
-    private const int INDEX_MONSTER_ARMOR_GOBLIN = 17;
-    private const int INDEX_MONSTER_NORMAL_SKELETON = 18;
-    private const int INDEX_MONSTER_ARMOR_SKELETON = 19;
-    private const int INDEX_MONSTER_NORMAL_SPIDER = 20;
-    private const int INDEX_MONSTER_CAVE_SPIDER = 21;
-    private const int INDEX_MONSTER_BOSS_SPIDER = 22;
-    private const int INDEX_SLOW_EFFECT = 23;
+    private const int INDEX_HERO_DEATH = 1;
+    private const int INDEX_REPOSITION_AREA = 2;
+    private const int INDEX_MONSTER_SPAWNER = 3;
+    private const int INDEX_LEVEL_UP_TEXT = 4;
+    private const int INDEX_BOSS_MAP_CAMERA_FOLLOWER = 5;
+    private const int INDEX_DAMAGE_TEXT = 6;
+    private const int INDEX_EXP_GEM = 7;
+    private const int INDEX_GOLD = 8;
+    private const int INDEX_WEAPON_BOMB_CONTROLLER = 9;
+    private const int INDEX_WEAPON_BOOMERNAG_CONTROLLER = 10;
+    private const int INDEX_WEAPON_CROSSBOW_CONTROLLER = 11;
+    private const int INDEX_WEAPON_DIVINE_AURA_CONTROLLER = 12;
+    private const int INDEX_WEAPON_FIREBALL_CONTROLLER = 13;
+    private const int INDEX_MONSTER_NORMAL_BAT = 14;
+    private const int INDEX_MONSTER_SWARM_BAT = 15;
+    private const int INDEX_MONSTER_NORMAL_GOBLIN = 16;
+    private const int INDEX_MONSTER_CLUB_GOBLIN = 17;
+    private const int INDEX_MONSTER_ARMOR_GOBLIN = 18;
+    private const int INDEX_MONSTER_NORMAL_SKELETON = 19;
+    private const int INDEX_MONSTER_ARMOR_SKELETON = 20;
+    private const int INDEX_MONSTER_NORMAL_SPIDER = 21;
+    private const int INDEX_MONSTER_CAVE_SPIDER = 22;
+    private const int INDEX_MONSTER_BOSS_SPIDER = 23;
+    private const int INDEX_SLOW_EFFECT = 24;
     private const string NAME_ROOT_OBJECT = "[ROOT_OBJECT]";
 
     public void Init()
@@ -63,6 +65,13 @@ public class ObjectManager
             HeroHealth = heroHealth;
             Utils.SetActive(heroHealth, false);
             _loadCompletes[INDEX_HERO_HEALTH] = true;
+        });
+
+        Manager.Instance.Resource.Instantiate(Define.RESOURCE_HERO_DEATH, RootObject.transform, (heroDeath) =>
+        {
+            HeroDeath = heroDeath;
+            Utils.SetActive(heroDeath, false);
+            _loadCompletes[INDEX_HERO_DEATH] = true;
         });
 
         Manager.Instance.Resource.Instantiate(Define.RESOURCE_REPOSITION_AREA, RootObject.transform, (repositionArea) =>

@@ -40,6 +40,8 @@ public abstract class WeaponController : MonoBehaviour, IAbilityController
     {
         if (false == _startAttack)
             return false;
+        if (Manager.Instance.Ingame.UsedHero.IsDead)
+            return false;
         return true;
     }
 
