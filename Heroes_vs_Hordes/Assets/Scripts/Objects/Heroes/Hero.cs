@@ -25,6 +25,8 @@ public abstract class Hero : MonoBehaviour, IAbilityController
     private float _totalHealth;
     private bool _isDead;
 
+    private float _moveSpeed;
+
     private event Action _levelUpAbilityHandler;
     private event Action<float> _changeExpHandler;
     private event Action<int> _changeLevelHandler;
@@ -34,7 +36,16 @@ public abstract class Hero : MonoBehaviour, IAbilityController
 
     public string HeroName { get { return _heroName; } }
     public string HeroWeaponName { get { return _heroWeaponName; } }
-    public float MoveSpeed { get; private set; }
+    public float MoveSpeed
+    {
+        get
+        {
+            if (IsSlow)
+                return _moveSpeed * SLOW_VALUE;
+            return _moveSpeed;
+        }
+    }
+    public bool IsSlow { get; set; }
 
     private const float DELAY_LEVEL_UP = 0.2f;
     private const float DELAY_ENHANCE_ABILITY = 1f;
@@ -42,6 +53,7 @@ public abstract class Hero : MonoBehaviour, IAbilityController
     private const float INIT_EXP = 0f;
     private const float ZERO_HEALTH = 0f;
     private const float ADJUST_RECOVERY_CYCLE = 0.1f;
+    private const float SLOW_VALUE = 0.65f;
     private const int INIT_LEVEL = 1;
     private const int ADJUST_LEVEL = 1;
     private const int INCREASE_LEVEL_VALUE = 1;
@@ -80,7 +92,7 @@ public abstract class Hero : MonoBehaviour, IAbilityController
     public virtual void SetAbilities()
     {
         _attackCooldown = HeroAbility.GetHeroAttackCooldown(_heroName);
-        MoveSpeed = HeroAbility.GetHeroMoveSpeed(_heroName);
+        _moveSpeed = HeroAbility.GetHeroMoveSpeed(_heroName);
         _recovery = HeroAbility.GetHeroRecovery();
     }
 

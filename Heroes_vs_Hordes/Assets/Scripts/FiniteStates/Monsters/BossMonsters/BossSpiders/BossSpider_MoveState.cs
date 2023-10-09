@@ -24,6 +24,9 @@ public class BossSpider_MoveState : BossMonsterState
 
     public override void EnterState()
     {
+        if (false == _owner.activeSelf)
+            return;
+
         _randomPos = _GetRandomPosition();
         _RotateToRandomPosition().Forget();
     }
@@ -50,6 +53,11 @@ public class BossSpider_MoveState : BossMonsterState
     }
 
     public override void UpdateState()
+    {
+
+    }
+
+    public override void ReturnObject()
     {
 
     }

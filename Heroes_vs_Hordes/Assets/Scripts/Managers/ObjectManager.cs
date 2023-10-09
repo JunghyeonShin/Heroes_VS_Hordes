@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class ObjectManager
 {
-    private GameObject _rootObject;
     private bool[] _loadCompletes;
 
     private Dictionary<string, GameObject> _mapDic = new Dictionary<string, GameObject>();
@@ -18,13 +17,15 @@ public class ObjectManager
     private Dictionary<string, GameObject> _bossMonsterDic = new Dictionary<string, GameObject>();
     private ObjectPool _damageTextPool = new ObjectPool();
 
+    public GameObject RootObject { get; private set; }
     public GameObject HeroHealth { get; private set; }
     public GameObject RepositionArea { get; private set; }
     public GameObject MonsterSpawner { get; private set; }
     public GameObject LevelUpText { get; private set; }
     public GameObject BossMapCameraFollower { get; private set; }
+    public GameObject SlowEffect { get; private set; }
 
-    private const int INDEX_TOTAL_VALUE = 23;
+    private const int INDEX_TOTAL_VALUE = 24;
     private const int INDEX_HERO_HEALTH = 0;
     private const int INDEX_REPOSITION_AREA = 1;
     private const int INDEX_MONSTER_SPAWNER = 2;
@@ -48,43 +49,44 @@ public class ObjectManager
     private const int INDEX_MONSTER_NORMAL_SPIDER = 20;
     private const int INDEX_MONSTER_CAVE_SPIDER = 21;
     private const int INDEX_MONSTER_BOSS_SPIDER = 22;
+    private const int INDEX_SLOW_EFFECT = 23;
     private const string NAME_ROOT_OBJECT = "[ROOT_OBJECT]";
 
     public void Init()
     {
-        _rootObject = new GameObject(NAME_ROOT_OBJECT);
+        RootObject = new GameObject(NAME_ROOT_OBJECT);
 
         _loadCompletes = new bool[INDEX_TOTAL_VALUE];
 
-        Manager.Instance.Resource.Instantiate(Define.RESOURCE_HERO_HEALTH, _rootObject.transform, (heroHealth) =>
+        Manager.Instance.Resource.Instantiate(Define.RESOURCE_HERO_HEALTH, RootObject.transform, (heroHealth) =>
         {
             HeroHealth = heroHealth;
             Utils.SetActive(heroHealth, false);
             _loadCompletes[INDEX_HERO_HEALTH] = true;
         });
 
-        Manager.Instance.Resource.Instantiate(Define.RESOURCE_REPOSITION_AREA, _rootObject.transform, (repositionArea) =>
+        Manager.Instance.Resource.Instantiate(Define.RESOURCE_REPOSITION_AREA, RootObject.transform, (repositionArea) =>
         {
             RepositionArea = repositionArea;
             Utils.SetActive(RepositionArea, false);
             _loadCompletes[INDEX_REPOSITION_AREA] = true;
         });
 
-        Manager.Instance.Resource.Instantiate(Define.RESOURCE_MONSTER_SPAWNER, _rootObject.transform, (monsterSpawner) =>
+        Manager.Instance.Resource.Instantiate(Define.RESOURCE_MONSTER_SPAWNER, RootObject.transform, (monsterSpawner) =>
         {
             MonsterSpawner = monsterSpawner;
             Utils.SetActive(MonsterSpawner, false);
             _loadCompletes[INDEX_MONSTER_SPAWNER] = true;
         });
 
-        Manager.Instance.Resource.Instantiate(Define.RESROUCE_LEVEL_UP_TEXT, _rootObject.transform, (levelUpText) =>
+        Manager.Instance.Resource.Instantiate(Define.RESROUCE_LEVEL_UP_TEXT, RootObject.transform, (levelUpText) =>
         {
             LevelUpText = levelUpText;
             Utils.SetActive(LevelUpText, false);
             _loadCompletes[INDEX_LEVEL_UP_TEXT] = true;
         });
 
-        Manager.Instance.Resource.Instantiate(Define.RESOURCE_BOSS_MAP_CAMERA_FOLLOWER, _rootObject.transform, (bossMapCameraFollower) =>
+        Manager.Instance.Resource.Instantiate(Define.RESOURCE_BOSS_MAP_CAMERA_FOLLOWER, RootObject.transform, (bossMapCameraFollower) =>
         {
             BossMapCameraFollower = bossMapCameraFollower;
             Utils.SetActive(BossMapCameraFollower, false);
@@ -93,7 +95,7 @@ public class ObjectManager
 
         Manager.Instance.Resource.LoadAsync<GameObject>(Define.RESROUCE_DAMAGE_TEXT, (damageText) =>
         {
-            _damageTextPool.InitPool(damageText, _rootObject, DEFAULT_INSTANTIATE_DAMAGE_TEXT_COUNT);
+            _damageTextPool.InitPool(damageText, RootObject, DEFAULT_INSTANTIATE_DAMAGE_TEXT_COUNT);
             _loadCompletes[INDEX_DAMAGE_TEXT] = true;
         });
 
@@ -101,6 +103,13 @@ public class ObjectManager
         _InitWeaponController();
         _InitMonster();
         _InitBossMonster();
+
+        Manager.Instance.Resource.Instantiate(Define.RESOURCE_SLOW_EFFECT, RootObject.transform, (slowEffect) =>
+        {
+            SlowEffect = slowEffect;
+            Utils.SetActive(SlowEffect, false);
+            _loadCompletes[INDEX_SLOW_EFFECT] = true;
+        });
     }
 
     public bool LoadComplete()
@@ -124,7 +133,7 @@ public class ObjectManager
         }
 
         // 맵 오브젝트 생성 후 캐싱
-        Manager.Instance.Resource.Instantiate(key, _rootObject.transform, (map) =>
+        Manager.Instance.Resource.Instantiate(key, RootObject.transform, (map) =>
         {
             _mapDic.Add(key, map);
             callback?.Invoke(map);
@@ -148,7 +157,7 @@ public class ObjectManager
         }
 
         // 영웅 오브젝트 생성 후 캐싱
-        Manager.Instance.Resource.Instantiate(key, _rootObject.transform, (hero) =>
+        Manager.Instance.Resource.Instantiate(key, RootObject.transform, (hero) =>
         {
             _heroDic.Add(key, hero);
             callback?.Invoke(hero);
@@ -172,7 +181,7 @@ public class ObjectManager
         }
 
         // 보스 맵 오브젝트 생성 후 캐싱
-        Manager.Instance.Resource.Instantiate(key, _rootObject.transform, (map) =>
+        Manager.Instance.Resource.Instantiate(key, RootObject.transform, (map) =>
         {
             _bossMapDic.Add(key, map);
             callback?.Invoke(map);
@@ -233,7 +242,7 @@ public class ObjectManager
 
         Manager.Instance.Resource.LoadAsync<GameObject>(key, (dropItem) =>
         {
-            objectPool.InitPool(dropItem, _rootObject, count);
+            objectPool.InitPool(dropItem, RootObject, count);
             _dropItemDic.Add(key, objectPool);
             callback?.Invoke(objectPool.GetObject());
         });
@@ -270,7 +279,7 @@ public class ObjectManager
 
     private void _InitWeaponController(string key, Action<GameObject> callback = null)
     {
-        Manager.Instance.Resource.Instantiate(key, _rootObject.transform, (weaponController) =>
+        Manager.Instance.Resource.Instantiate(key, RootObject.transform, (weaponController) =>
         {
             _weaponControllerDic.Add(key, weaponController);
             Utils.SetActive(weaponController, false);
@@ -319,7 +328,7 @@ public class ObjectManager
 
         Manager.Instance.Resource.LoadAsync<GameObject>(key, (monster) =>
         {
-            objectPool.InitPool(monster, _rootObject, count);
+            objectPool.InitPool(monster, RootObject, count);
             _monsterPoolDic.Add(key, objectPool);
             callback?.Invoke(objectPool.GetObject());
         });
@@ -352,7 +361,7 @@ public class ObjectManager
 
     private void _InitBossMonster(string key, Action<GameObject> callback)
     {
-        Manager.Instance.Resource.Instantiate(key, _rootObject.transform, (bossMonster) =>
+        Manager.Instance.Resource.Instantiate(key, RootObject.transform, (bossMonster) =>
         {
             _bossMonsterDic.Add(key, bossMonster);
             Utils.SetActive(bossMonster, false);

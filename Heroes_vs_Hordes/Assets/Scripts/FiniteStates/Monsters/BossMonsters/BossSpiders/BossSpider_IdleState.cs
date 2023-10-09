@@ -31,6 +31,9 @@ public class BossSpider_IdleState : BossMonsterState
 
     public override void EnterState()
     {
+        if (false == _owner.activeSelf)
+            return;
+
         _SelectNextState().Forget();
     }
 
@@ -49,12 +52,19 @@ public class BossSpider_IdleState : BossMonsterState
 
     }
 
+    public override void ReturnObject()
+    {
+
+    }
+
     private async UniTaskVoid _SelectNextState()
     {
         await UniTask.Delay(TimeSpan.FromSeconds(DELAY_SELECT_STATE_TIME));
 
-        var randomState = UnityEngine.Random.value * _totalStateChance;
+        if (false == _owner.activeSelf)
+            return;
 
+        var randomState = UnityEngine.Random.value * _totalStateChance;
         foreach (var selectStateChance in _selectStateChanceDic)
         {
             if (randomState <= selectStateChance.Value)
