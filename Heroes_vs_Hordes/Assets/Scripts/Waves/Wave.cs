@@ -48,7 +48,10 @@ public abstract class Wave : MonoBehaviour
 
     public virtual void OnDeadHero()
     {
-        Manager.Instance.UI.ShowPopupUI<UI_DefeatWave>(Define.RESOURCE_UI_DEFEAT_WAVE);
+        Manager.Instance.UI.ShowPopupUI<UI_DefeatWave>(Define.RESOURCE_UI_DEFEAT_WAVE, (defeatWaveUI) =>
+        {
+            defeatWaveUI.SetRewardItem();
+        });
         Manager.Instance.Ingame.ControlIngame(false);
     }
 

@@ -38,7 +38,10 @@ public class GoldRushWave : Wave
         Manager.Instance.Ingame.GetGoldAtOnce();
         await UniTask.Delay(TimeSpan.FromSeconds(DELAY_CLEAR_CHAPTER_TIME));
 
-        Manager.Instance.UI.ShowPopupUI<UI_ClearChapter>(Define.RESOURCE_UI_CLEAR_CHAPTER);
+        Manager.Instance.UI.ShowPopupUI<UI_ClearChapter>(Define.RESOURCE_UI_CLEAR_CHAPTER, (clearChapterUI) =>
+        {
+            clearChapterUI.SetClearChapterUI();
+        });
         Manager.Instance.Ingame.ReturnUsedMonster();
     }
 }

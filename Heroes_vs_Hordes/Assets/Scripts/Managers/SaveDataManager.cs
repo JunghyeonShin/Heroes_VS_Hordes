@@ -36,6 +36,7 @@ public class SaveDataManager
         set
         {
             _gameData.OwnedGold = value;
+            SaveGameData();
         }
     }
 

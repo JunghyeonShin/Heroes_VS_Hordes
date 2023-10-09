@@ -118,7 +118,7 @@ public class Define
 
     #region IngameManager
     public const float INCREASE_HERO_EXP_VALUE = 1;
-    public const float INCREASE_GOLD_VALUE = 1;
+    public const int INCREASE_GOLD_VALUE = 1;
     public const int INDEX_NORMAL_BATTLE_WAVE = 0;
     public const int INDEX_GOLD_RUSH_WAVE = 1;
     public const int INDEX_BOSS_BATTLE_WAVE = 2;
