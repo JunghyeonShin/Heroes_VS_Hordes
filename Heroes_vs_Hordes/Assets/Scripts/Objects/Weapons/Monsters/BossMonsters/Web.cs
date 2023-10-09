@@ -10,6 +10,11 @@ public class Web : MonoBehaviour
         {
             var usedHero = Utils.GetOrAddComponent<Hero>(collision.gameObject);
             usedHero.IsSlow = true;
+
+            var slowEffectGO = Manager.Instance.Object.SlowEffect;
+            var chaseHero = Utils.GetOrAddComponent<ChaseHero>(slowEffectGO);
+            chaseHero.HeroTransform = collision.transform;
+            Utils.SetActive(slowEffectGO, true);
         }
     }
 
@@ -19,6 +24,8 @@ public class Web : MonoBehaviour
         {
             var usedHero = Utils.GetOrAddComponent<Hero>(collision.gameObject);
             usedHero.IsSlow = false;
+
+            Utils.SetActive(Manager.Instance.Object.SlowEffect, false);
         }
     }
 }

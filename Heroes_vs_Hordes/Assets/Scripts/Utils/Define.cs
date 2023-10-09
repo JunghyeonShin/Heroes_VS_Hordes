@@ -57,6 +57,7 @@ public class Define
     // Boss Monster Attack
     public const string RESOURCE_BOSS_SPIDER_WEB = "SpiderWeb";
     public const string RESOURCE_BOSS_SPIDER_WEB_BUNDLE = "WebBundle";
+    public const string RESOURCE_SLOW_EFFECT = "SlowEffect";
     // Text
     public const string RESROUCE_DAMAGE_TEXT = "DamageText";
     public const string RESROUCE_LEVEL_UP_TEXT = "LevelUpText";

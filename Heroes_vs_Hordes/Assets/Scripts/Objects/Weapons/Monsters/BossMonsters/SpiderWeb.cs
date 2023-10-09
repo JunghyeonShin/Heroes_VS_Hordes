@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spider_Web : MonoBehaviour
+public class SpiderWeb : MonoBehaviour
 {
     public event Action<GameObject> ReturnHandler;
 

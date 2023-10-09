@@ -25,7 +25,7 @@ public class BossSpiderAttack_SprayWeb : BossSpiderAttack
     {
         var spiderWebGO = _spiderWebPool.GetObject();
         _usedWpiderWebQueue.Enqueue(spiderWebGO);
-        var spiderWeb = Utils.GetOrAddComponent<Spider_Web>(spiderWebGO);
+        var spiderWeb = Utils.GetOrAddComponent<SpiderWeb>(spiderWebGO);
         spiderWeb.InitTransform(_owner.transform.position, targetPos);
         spiderWeb.ReturnHandler -= _ReturnSpiderWeb;
         spiderWeb.ReturnHandler += _ReturnSpiderWeb;

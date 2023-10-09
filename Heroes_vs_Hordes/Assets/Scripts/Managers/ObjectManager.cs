@@ -23,8 +23,9 @@ public class ObjectManager
     public GameObject MonsterSpawner { get; private set; }
     public GameObject LevelUpText { get; private set; }
     public GameObject BossMapCameraFollower { get; private set; }
+    public GameObject SlowEffect { get; private set; }
 
-    private const int INDEX_TOTAL_VALUE = 23;
+    private const int INDEX_TOTAL_VALUE = 24;
     private const int INDEX_HERO_HEALTH = 0;
     private const int INDEX_REPOSITION_AREA = 1;
     private const int INDEX_MONSTER_SPAWNER = 2;
@@ -48,6 +49,7 @@ public class ObjectManager
     private const int INDEX_MONSTER_NORMAL_SPIDER = 20;
     private const int INDEX_MONSTER_CAVE_SPIDER = 21;
     private const int INDEX_MONSTER_BOSS_SPIDER = 22;
+    private const int INDEX_SLOW_EFFECT = 23;
     private const string NAME_ROOT_OBJECT = "[ROOT_OBJECT]";
 
     public void Init()
@@ -101,6 +103,13 @@ public class ObjectManager
         _InitWeaponController();
         _InitMonster();
         _InitBossMonster();
+
+        Manager.Instance.Resource.Instantiate(Define.RESOURCE_SLOW_EFFECT, RootObject.transform, (slowEffect) =>
+        {
+            SlowEffect = slowEffect;
+            Utils.SetActive(SlowEffect, false);
+            _loadCompletes[INDEX_SLOW_EFFECT] = true;
+        });
     }
 
     public bool LoadComplete()
