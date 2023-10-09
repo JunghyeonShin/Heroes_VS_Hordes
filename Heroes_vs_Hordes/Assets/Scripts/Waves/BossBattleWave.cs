@@ -29,7 +29,7 @@ public class BossBattleWave : Wave
     public override void ClearWave()
     {
         Manager.Instance.CameraController.SetFollower(Manager.Instance.Ingame.UsedHero.transform);
-        Manager.Instance.Object.ReturnBossMap(Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].BossMapType);
+        Manager.Instance.Object.ReturnBossMap(Manager.Instance.Data.ChapterInfoDataList[Manager.Instance.Ingame.CurrentChapterIndex].BossMapType);
         _ClearWave().Forget();
     }
 
@@ -37,7 +37,7 @@ public class BossBattleWave : Wave
     {
         base.ExitWave();
 
-        Manager.Instance.Object.ReturnBossMap(Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].BossMapType);
+        Manager.Instance.Object.ReturnBossMap(Manager.Instance.Data.ChapterInfoDataList[Manager.Instance.Ingame.CurrentChapterIndex].BossMapType);
         _usedBossMonster.ReturnMonster();
     }
 
@@ -50,7 +50,7 @@ public class BossBattleWave : Wave
         });
 
         var bossMapPosition = Vector3.zero;
-        var currentChapterInfo = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX];
+        var currentChapterInfo = Manager.Instance.Data.ChapterInfoDataList[Manager.Instance.Ingame.CurrentChapterIndex];
         Manager.Instance.Object.GetBossMap(currentChapterInfo.BossMapType, (bossMapGO) =>
         {
             var usedHero = Manager.Instance.Ingame.UsedHero;

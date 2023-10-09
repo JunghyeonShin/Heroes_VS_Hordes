@@ -36,8 +36,9 @@ public class UI_ClearChapter : UI_Popup
     private void _ExitIngame()
     {
         var manager = Manager.Instance;
+        if (manager.Ingame.CurrentChapterIndex > manager.SaveData.ClearChapter)
+            manager.SaveData.ClearChapter = manager.Ingame.CurrentChapterIndex;
         manager.Ingame.ExitIngame();
-        manager.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE);
     }
 
     private void _GetReward()

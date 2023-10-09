@@ -30,12 +30,14 @@ public class Manager : MonoBehaviour
     private IngameManager _ingame;
     private ObjectManager _object;
     private ResourceManager _resource;
+    private SaveDataManager _saveData;
     private UIManager _uI;
 
     public DataManager Data { get { return _data; } }
     public IngameManager Ingame { get { return _ingame; } }
     public ObjectManager Object { get { return _object; } }
     public ResourceManager Resource { get { return _resource; } }
+    public SaveDataManager SaveData { get { return _saveData; } }
     public UIManager UI { get { return _uI; } }
     public CameraController CameraController { get; set; }
 
@@ -43,12 +45,14 @@ public class Manager : MonoBehaviour
     {
         CreateInstance();
 
-        _resource = new ResourceManager();
-        _object = new ObjectManager();
-        _uI = new UIManager();
         _data = Utils.GetOrAddComponent<DataManager>(gameObject);
         _ingame = Utils.GetOrAddComponent<IngameManager>(gameObject);
+        _object = new ObjectManager();
+        _resource = new ResourceManager();
+        _saveData = new SaveDataManager();
+        _uI = new UIManager();
 
+        _saveData.Init();
         _resource.Init();
         _data.Init();
         _object.Init();

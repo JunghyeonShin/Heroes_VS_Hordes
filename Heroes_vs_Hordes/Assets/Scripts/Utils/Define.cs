@@ -127,10 +127,6 @@ public class Define
     public const int INIT_HERO_LEVEL_UP_COUNT = 0;
     #endregion
 
-    #region TEST
-    public const int CURRENT_CHAPTER_INDEX = 0;
-    #endregion
-
     #region Wave Panel Transform
     public const int FOUR_WAVE = 4;
     public const int FIVE_WAVE = 5;
@@ -200,4 +196,6 @@ public class Define
         {BOOK_RANGE, new AbilityInfo() { AbilityType = EAbilityTypes.Book, SpriteName = RESOURCE_SPRITES_ICON_BOOK_RANGE } }
     };
     #endregion
+
+    public const int ADJUSE_CHAPTER_INDEX = 1;
 }

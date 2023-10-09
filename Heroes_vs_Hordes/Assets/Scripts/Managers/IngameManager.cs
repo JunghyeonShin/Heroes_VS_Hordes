@@ -20,6 +20,7 @@ public class IngameManager : MonoBehaviour
     private List<Wave> _waveList = new List<Wave>();
 
     public Wave CurrentWave { get; private set; }
+    public int CurrentChapterIndex { get; private set; }
     public int CurrentWaveIndex { get; private set; }
     public int TotalWaveIndex { get; private set; }
     public bool DefeatIngame { get; set; }
@@ -35,12 +36,13 @@ public class IngameManager : MonoBehaviour
     /// <summary>
     /// 인게임을 처음 진입하여 초기 세팅할 때 호출
     /// </summary>
-    public void InitIngame(UI_Loading loadingUI)
+    public void InitIngame(int chapterIndex, UI_Loading loadingUI)
     {
         HeroLevelUpCount = Define.INIT_HERO_LEVEL_UP_COUNT;
 
+        CurrentChapterIndex = chapterIndex;
         CurrentWaveIndex = INIT_WAVE_INDEX;
-        TotalWaveIndex = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].TotalWaveIndex;
+        TotalWaveIndex = Manager.Instance.Data.ChapterInfoDataList[CurrentChapterIndex].TotalWaveIndex;
 
         DefeatIngame = false;
         ExitIngameForce = false;
@@ -72,7 +74,7 @@ public class IngameManager : MonoBehaviour
         levelUpHeroUI.InitAbilityUI();
 
         // 맵 생성
-        Manager.Instance.Object.GetMap(Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].MapType, (mapGO) =>
+        Manager.Instance.Object.GetMap(Manager.Instance.Data.ChapterInfoDataList[CurrentChapterIndex].MapType, (mapGO) =>
         {
             Utils.SetActive(mapGO, true);
 
@@ -131,7 +133,7 @@ public class IngameManager : MonoBehaviour
     {
         Utils.SetTimeScale(RESTORE_TIMESCALE);
         _remainingMonsterCount = INIT_REMAINIG_MONSTER_COUNT;
-        CurrentWave = _waveList[Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[CurrentWaveIndex]];
+        CurrentWave = _waveList[Manager.Instance.Data.ChapterInfoDataList[CurrentChapterIndex].WaveIndex[CurrentWaveIndex]];
         CurrentWave.StartWave();
     }
 
@@ -183,8 +185,12 @@ public class IngameManager : MonoBehaviour
         Utils.SetActive(Manager.Instance.Object.RepositionArea, false);
         Utils.SetActive(Manager.Instance.Object.HeroHealth, false);
         Manager.Instance.Object.ReturnHero(Define.RESOURCE_HERO_ARCANE_MAGE);
-        Manager.Instance.Object.ReturnMap(Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].MapType);
-        Manager.Instance.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE);
+        Manager.Instance.Object.ReturnMap(Manager.Instance.Data.ChapterInfoDataList[CurrentChapterIndex].MapType);
+        Manager.Instance.UI.ShowSceneUI<UI_MainScene>(Define.RESOURCE_UI_MAIN_SCENE, (mainsceneUI) =>
+        {
+            if (false == DefeatIngame && false == ExitIngameForce)
+                mainsceneUI.SetChapter(CurrentChapterIndex + Define.ADJUSE_CHAPTER_INDEX);
+        });
     }
 
     public void ShowWavePanel(string wavePanelText)
@@ -277,7 +283,7 @@ public class IngameManager : MonoBehaviour
     public void StopSpawnMonster()
     {
         _monsterSpawner.StopSpawnMonster();
-        var waveIndex = Manager.Instance.Data.ChapterInfoDataList[Define.CURRENT_CHAPTER_INDEX].WaveIndex[CurrentWaveIndex];
+        var waveIndex = Manager.Instance.Data.ChapterInfoDataList[CurrentChapterIndex].WaveIndex[CurrentWaveIndex];
         if (Define.INDEX_GOLD_RUSH_WAVE != waveIndex)
             RemainingMonsterHandler?.Invoke();
     }
