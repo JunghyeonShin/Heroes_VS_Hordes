@@ -36,6 +36,10 @@ public class Define
     public const string RESOURCE_HERO_KNIGHT = "Knight";
     public const string RESOURCE_HERO_HEALTH = "HeroHealth";
     public const string RESOURCE_HERO_DEATH = "HeroDeath";
+    public const string RESOURCE_HERO_PORTRAIT_ARCANE_MAGE = "Hero_Portrait_ArcaneMage";
+    public const string RESOURCE_HERO_PORTRAIT_KNIGHT = "Hero_Portrait_Knight";
+    public const string RESOURCE_SELECTABLE_HERO_ARCANE_MAGE = "Selectable_Hero_ArcaneMage";
+    public const string RESOURCE_SELECTABLE_HERO_KNIGHT = "Selectable_Hero_Knight";
     // Weapon
     public const string RESOURCE_WEAPON_ARCANE_MAGE_PROJECTILE = "ArcaneMage_Projectile";
     public const string RESOURCE_WEAPON_BOMB_CONTROLLER = "BombController";
@@ -84,6 +88,8 @@ public class Define
     public const string RESOURCE_UI_BOSS_BATTLE_WAVE = "UI_BossBattleWave";
     public const string RESOURCE_UI_ABILITY = "UI_Ability";
     public const string RESOURCE_UI_SELECT_ABILITY = "UI_SelectAbility";
+    public const string RESOURCE_UI_SELECTABLE_HERO = "UI_SelectableHero";
+    public const string RESOURCE_UI_BLANK_SELECTABLE_HERO = "UI_BlankSelectableHero";
     // Sprite
     public const string RESOURCE_SPRITES_SLIDER_YELLOW = "Slider_Yellow";
     public const string RESOURCE_SPRITES_SLIDER_RED = "Slider_Red";

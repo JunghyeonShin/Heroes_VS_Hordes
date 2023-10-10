@@ -75,7 +75,10 @@ public class UI_MainScene : UI_Scene
 
     private void _ClickSelectHeroButton()
     {
-        Manager.Instance.UI.ShowPopupUI<UI_SelectHero>(Define.RESOURCE_UI_SELECT_HERO);
+        Manager.Instance.UI.ShowPopupUI<UI_SelectHero>(Define.RESOURCE_UI_SELECT_HERO, (selectHeroUI) =>
+        {
+            selectHeroUI.SetSelectHero();
+        });
     }
     #endregion
 
