@@ -12,7 +12,7 @@ public class UI_DefeatWave : UI_Popup
 
     private enum EGameObjects
     {
-        RewardItem
+        RewardPanel
     }
 
     private enum ETexts
@@ -20,7 +20,7 @@ public class UI_DefeatWave : UI_Popup
         RewardGoldText
     }
 
-    private GameObject _rewardItem;
+    private GameObject _rewardPanel;
 
     private TextMeshProUGUI _rewardGoldText;
 
@@ -34,7 +34,7 @@ public class UI_DefeatWave : UI_Popup
 
         _BindEvent(_GetButton((int)EButtons.ExitIngameButton).gameObject, _ExitIngame);
 
-        _rewardItem = _GetGameObject((int)EGameObjects.RewardItem);
+        _rewardPanel = _GetGameObject((int)EGameObjects.RewardPanel);
 
         _rewardGoldText = _GetText((int)ETexts.RewardGoldText);
     }
@@ -52,10 +52,10 @@ public class UI_DefeatWave : UI_Popup
     {
         var rewardGold = Manager.Instance.Ingame.ClearWaveReward;
         if (rewardGold <= EMPTY_REWARD_GOLD)
-            Utils.SetActive(_rewardItem, false);
+            Utils.SetActive(_rewardPanel, false);
         else
         {
-            Utils.SetActive(_rewardItem, true);
+            Utils.SetActive(_rewardPanel, true);
             _rewardGoldText.text = rewardGold.ToString();
         }
     }

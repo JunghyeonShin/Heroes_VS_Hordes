@@ -9,7 +9,9 @@ public class UI_MainScene : UI_Scene
     {
         PlayButton,
         NextChapterButton,
-        PrevChapterButton
+        PrevChapterButton,
+        TalentButton,
+        SelectHeroButton
     }
 
     private enum ETexts
@@ -36,6 +38,8 @@ public class UI_MainScene : UI_Scene
         _BindEvent(_GetButton((int)EButtons.PlayButton).gameObject, _PlayChapter);
         _BindEvent(_nextChapterButton, _ClickNextChapterButton);
         _BindEvent(_prevChapterButton, _ClickPrevChapterButton);
+        _BindEvent(_GetButton((int)EButtons.TalentButton).gameObject, _ClickTalentButton);
+        _BindEvent(_GetButton((int)EButtons.SelectHeroButton).gameObject, _ClickSelectHeroButton);
 
         _chapterText = _GetText((int)ETexts.ChapterText);
     }
@@ -62,6 +66,16 @@ public class UI_MainScene : UI_Scene
     private void _ClickPrevChapterButton()
     {
         SetChapter(--_selectChapter);
+    }
+
+    private void _ClickTalentButton()
+    {
+
+    }
+
+    private void _ClickSelectHeroButton()
+    {
+        Manager.Instance.UI.ShowPopupUI<UI_SelectHero>(Define.RESOURCE_UI_SELECT_HERO);
     }
     #endregion
 

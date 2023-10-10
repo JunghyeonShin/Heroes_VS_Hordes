@@ -77,6 +77,7 @@ public class Define
     public const string RESOURCE_UI_PAUSE_INGAME = "UI_PauseIngame";
     public const string RESOURCE_UI_LEVEL_UP_HERO = "UI_LevelUpHero";
     public const string RESOURCE_UI_FADE = "UI_Fade";
+    public const string RESOURCE_UI_SELECT_HERO = "UI_SelectHero";
     // UI_Element
     public const string RESOURCE_UI_NORMAL_BATTLE_WAVE = "UI_NormalBattleWave";
     public const string RESOURCE_UI_GOLD_RUSH_WAVE = "UI_GoldRushWave";
