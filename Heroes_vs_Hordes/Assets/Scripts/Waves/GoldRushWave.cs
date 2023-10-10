@@ -24,6 +24,11 @@ public class GoldRushWave : Wave
 
     public override void OnDeadHero()
     {
+        var heroDeath = Manager.Instance.Object.HeroDeath;
+        var floatHeroDeath = Utils.GetOrAddComponent<FloatHeroDeath>(heroDeath);
+        floatHeroDeath.SetTransform(Manager.Instance.Ingame.UsedHero.transform.position);
+        Utils.SetActive(heroDeath, true);
+
         var ingameSceneUI = Manager.Instance.UI.CurrentSceneUI as UI_IngameScene;
         ingameSceneUI.FinishIngame();
     }

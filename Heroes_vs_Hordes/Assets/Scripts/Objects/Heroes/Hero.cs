@@ -47,6 +47,8 @@ public abstract class Hero : MonoBehaviour, IAbilityController
     public bool IsDead { get; private set; }
     public bool IsSlow { get; set; }
 
+    protected const float DEFAULT_DETECT_BOX_ANGLE = 0f;
+
     private const float DELAY_LEVEL_UP = 0.2f;
     private const float DELAY_ENHANCE_ABILITY = 1f;
     private const float DELAY_RECOVERY = 6f;
@@ -126,14 +128,7 @@ public abstract class Hero : MonoBehaviour, IAbilityController
         if (_health <= ZERO_HEALTH)
         {
             IsDead = true;
-
-            var heroDeath = Manager.Instance.Object.HeroDeath;
-            var floatHeroDeath = Utils.GetOrAddComponent<FloatHeroDeath>(heroDeath);
-            floatHeroDeath.SetTransform(transform.position);
-            Utils.SetActive(heroDeath, true);
-
             Utils.SetActive(gameObject, false);
-
             Manager.Instance.Ingame.CurrentWave.OnDeadHero();
         }
     }

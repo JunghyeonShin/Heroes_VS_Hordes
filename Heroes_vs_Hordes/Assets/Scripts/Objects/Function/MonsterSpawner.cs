@@ -12,10 +12,10 @@ public class MonsterSpawner : MonoBehaviour
     private Dictionary<string, SpawnMonster> _allSpawnMonsterDic = new Dictionary<string, SpawnMonster>();
     private List<SpawnMonster> _spawnMonsterList = new List<SpawnMonster>();
     private Queue<string>[] _spawnMonsterQueues;
+    private bool _spawnMonster;
     private bool[] _spawnMonsters;
 
     public HeroController HeroController { get; set; }
-    public bool SpawnMonster { get; private set; }
     public int SpawnPointTotalIndex { get { return _spawnPoints.Length - 1; } }
 
     private const float DELAY_RESPAWN_TIME = 0.3f;
@@ -34,7 +34,7 @@ public class MonsterSpawner : MonoBehaviour
 
     private void Update()
     {
-        if (SpawnMonster)
+        if (_spawnMonster)
             _SpawnMonster();
     }
 
@@ -80,7 +80,7 @@ public class MonsterSpawner : MonoBehaviour
 
     public void StartSpawnMonster()
     {
-        SpawnMonster = true;
+        _spawnMonster = true;
 
         foreach (var spawnMonster in _spawnMonsterList)
             spawnMonster.Spawn();
@@ -88,7 +88,10 @@ public class MonsterSpawner : MonoBehaviour
 
     public void StopSpawnMonster()
     {
-        SpawnMonster = false;
+        _spawnMonster = false;
+
+        foreach (var spawnMonster in _spawnMonsterList)
+            spawnMonster.StopSpawn();
 
         for (int ii = 0; ii < _spawnMonsterQueues.Length; ++ii)
             _spawnMonsterQueues[ii].Clear();
@@ -103,6 +106,7 @@ public class MonsterSpawner : MonoBehaviour
         {
             spawnMonster = new T();
             spawnMonster.MonsterSpawner = this;
+            _allSpawnMonsterDic.Add(monsterType, spawnMonster);
         }
         _spawnMonsterList.Add(spawnMonster);
     }

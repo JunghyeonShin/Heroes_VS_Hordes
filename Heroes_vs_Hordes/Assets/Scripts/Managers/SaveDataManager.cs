@@ -40,6 +40,19 @@ public class SaveDataManager
         }
     }
 
+    public string SelectHero
+    {
+        get
+        {
+            return _gameData.SelectHero;
+        }
+        set
+        {
+            _gameData.SelectHero = value;
+            SaveGameData();
+        }
+    }
+
     public void Init()
     {
         if (_LoadGameData())
@@ -47,6 +60,7 @@ public class SaveDataManager
 
         _gameData = new GameData();
         _gameData.ClearChapter = INIT_CLEAR_CHAPTER;
+        _gameData.SelectHero = Define.RESOURCE_HERO_ARCANE_MAGE;
         SaveGameData();
     }
 

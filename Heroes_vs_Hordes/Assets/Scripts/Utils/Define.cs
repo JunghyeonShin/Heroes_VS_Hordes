@@ -33,6 +33,7 @@ public class Define
     public const string RESOURCE_REPOSITION_AREA = "RepositionArea";
     // Hero
     public const string RESOURCE_HERO_ARCANE_MAGE = "ArcaneMage";
+    public const string RESOURCE_HERO_KNIGHT = "Knight";
     public const string RESOURCE_HERO_HEALTH = "HeroHealth";
     public const string RESOURCE_HERO_DEATH = "HeroDeath";
     // Weapon
