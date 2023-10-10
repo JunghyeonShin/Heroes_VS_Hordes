@@ -126,14 +126,7 @@ public abstract class Hero : MonoBehaviour, IAbilityController
         if (_health <= ZERO_HEALTH)
         {
             IsDead = true;
-
-            var heroDeath = Manager.Instance.Object.HeroDeath;
-            var floatHeroDeath = Utils.GetOrAddComponent<FloatHeroDeath>(heroDeath);
-            floatHeroDeath.SetTransform(transform.position);
-            Utils.SetActive(heroDeath, true);
-
             Utils.SetActive(gameObject, false);
-
             Manager.Instance.Ingame.CurrentWave.OnDeadHero();
         }
     }
