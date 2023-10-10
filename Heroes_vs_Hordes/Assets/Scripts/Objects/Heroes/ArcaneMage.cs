@@ -11,7 +11,6 @@ public class ArcaneMage : Hero
 
     private float _projectileCount;
 
-    private const float DEFAULT_DETECT_BOX_ANGLE = 0f;
     private const float DELAY_CREATE_PROJECTILE_TIME = 0.06f;
     private const float MIN_DISTANCE = 987654321f;
     private const int CREATE_PROJECTILE_COUNT = 50;

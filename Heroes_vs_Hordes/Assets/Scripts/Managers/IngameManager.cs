@@ -513,6 +513,7 @@ public class IngameManager : MonoBehaviour
                 break;
             case Define.BOOK_COOLDOWN:
             case Define.BOOK_PROJECTILE_COPY:
+            case Define.BOOK_RANGE:
                 _ownedAbilityInfoDic.Add(abilityName, new OwnedAbilityInfo() { Level = INIT_OWNED_ABILITY_LEVEL, AbilityControllerList = new List<IAbilityController>() { UsedHero, _usedWeaponControllerDic[Define.RESOURCE_WEAPON_BOMB_CONTROLLER], _usedWeaponControllerDic[Define.RESOURCE_WEAPON_BOOMERANG_CONTROLLER], _usedWeaponControllerDic[Define.RESOURCE_WEAPON_CROSSBOW_CONTROLLER], _usedWeaponControllerDic[Define.RESOURCE_WEAPON_DIVINE_AURA_CONTROLLER], _usedWeaponControllerDic[Define.RESOURCE_WEAPON_FIREBALL_CONTROLLER] } });
                 break;
             case Define.BOOK_HERO_MOVE_SPEED:
@@ -520,7 +521,6 @@ public class IngameManager : MonoBehaviour
                 _ownedAbilityInfoDic.Add(abilityName, new OwnedAbilityInfo() { Level = INIT_OWNED_ABILITY_LEVEL, AbilityControllerList = new List<IAbilityController>() { UsedHero } });
                 break;
             case Define.BOOK_PROJECTILE_SPEED:
-            case Define.BOOK_RANGE:
                 _ownedAbilityInfoDic.Add(abilityName, new OwnedAbilityInfo() { Level = INIT_OWNED_ABILITY_LEVEL, AbilityControllerList = new List<IAbilityController>() { _usedWeaponControllerDic[Define.RESOURCE_WEAPON_BOMB_CONTROLLER], _usedWeaponControllerDic[Define.RESOURCE_WEAPON_BOOMERANG_CONTROLLER], _usedWeaponControllerDic[Define.RESOURCE_WEAPON_CROSSBOW_CONTROLLER], _usedWeaponControllerDic[Define.RESOURCE_WEAPON_DIVINE_AURA_CONTROLLER], _usedWeaponControllerDic[Define.RESOURCE_WEAPON_FIREBALL_CONTROLLER] } });
                 break;
             default:
