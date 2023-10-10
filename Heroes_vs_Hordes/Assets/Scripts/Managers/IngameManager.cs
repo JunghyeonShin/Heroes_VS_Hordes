@@ -85,7 +85,7 @@ public class IngameManager : MonoBehaviour
             Utils.SetActive(mapGO, true);
 
             // ¿µ¿õ »ý¼º
-            Manager.Instance.Object.GetHero(Define.RESOURCE_HERO_ARCANE_MAGE, (heroGO) =>
+            Manager.Instance.Object.GetHero(Manager.Instance.SaveData.SelectHero, (heroGO) =>
             {
                 var hero = heroGO.GetComponent<Hero>();
                 UsedHero = hero;
@@ -190,7 +190,7 @@ public class IngameManager : MonoBehaviour
         Utils.SetActive(Manager.Instance.Object.MonsterSpawner, false);
         Utils.SetActive(Manager.Instance.Object.RepositionArea, false);
         Utils.SetActive(Manager.Instance.Object.HeroHealth, false);
-        Manager.Instance.Object.ReturnHero(Define.RESOURCE_HERO_ARCANE_MAGE);
+        Manager.Instance.Object.ReturnHero(Manager.Instance.SaveData.SelectHero);
         Manager.Instance.Object.ReturnMap(Manager.Instance.Data.ChapterInfoDataList[CurrentChapterIndex].MapType);
 
         if (false == ExitIngameForce)
@@ -488,6 +488,7 @@ public class IngameManager : MonoBehaviour
         switch (abilityName)
         {
             case Define.WEAPON_ARCANE_MAGE_WAND:
+            case Define.WEAPON_KNIGHT_SWORD:
                 _ownedAbilityInfoDic.Add(abilityName, new OwnedAbilityInfo() { Level = INIT_OWNED_ABILITY_LEVEL, AbilityControllerList = new List<IAbilityController>() { UsedHero } });
                 break;
             case Define.WEAPON_BOMB:

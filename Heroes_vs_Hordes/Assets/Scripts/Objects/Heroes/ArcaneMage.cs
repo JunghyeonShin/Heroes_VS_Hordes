@@ -45,7 +45,7 @@ public class ArcaneMage : Hero
     {
         base.SetAbilities();
         var weaponLevel = Manager.Instance.Ingame.GetOwnedAbilityLevel(_heroWeaponName);
-        _projectileCount = WeaponAbility.GetWeaponProjectileCount(Define.WEAPON_ARCANE_MAGE_WAND, weaponLevel);
+        _projectileCount = WeaponAbility.GetWeaponProjectileCount(_heroWeaponName, weaponLevel);
     }
 
     public override void ReturnAbilities()
