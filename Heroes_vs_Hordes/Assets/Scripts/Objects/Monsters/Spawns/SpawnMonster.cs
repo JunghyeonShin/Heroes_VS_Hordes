@@ -6,6 +6,7 @@ public abstract class SpawnMonster
 {
     protected float _delaySpawnMonsterTime;
     protected int _spawnMonsterCount;
+    protected bool _stopSpawnMonster;
 
     public MonsterSpawner MonsterSpawner { get; set; }
 
@@ -13,4 +14,9 @@ public abstract class SpawnMonster
     protected const float MIN_SPAWN_MONSTER_TIME = 5f;
 
     public abstract void Spawn();
+
+    public void StopSpawn()
+    {
+        _stopSpawnMonster = true;
+    }
 }

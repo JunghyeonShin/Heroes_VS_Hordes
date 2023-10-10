@@ -11,12 +11,13 @@ public class SpawnArmorGoblin : SpawnMonster
 
     public override void Spawn()
     {
+        _stopSpawnMonster = false;
         _Spawn().Forget();
     }
 
     private async UniTaskVoid _Spawn()
     {
-        if (false == MonsterSpawner.SpawnMonster)
+        if (_stopSpawnMonster)
             return;
 
         _spawnMonsterCount = UnityEngine.Random.Range(MIN_SPAWN_MONSTER_COUNT, SPAWN_ARMOR_GOBLIN_COUNT);
