@@ -372,6 +372,36 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1d2cca0f0f579fe4a90f48df8757757a
+    m_Address: Icon_Talent_Bomb
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 41033bb998d3c014eba320c7f3c5b0e0
+    m_Address: Icon_Talent_Boots
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a2ad94c45e8cb4d40a3566527219d0f9
+    m_Address: Icon_Talent_Heart
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 76518e48caab221438884645f626cf84
+    m_Address: Icon_Talent_Stopwatch
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1b4c19056e1cb1b47b8778b5beb53698
+    m_Address: Icon_Talent_Sword
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 16870b0d6c903374a99dbc6e920b6b91
+    m_Address: UI_SelectTalent
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 517234b9da778344482246fd1d937838, type: 2}
   m_SchemaSet:

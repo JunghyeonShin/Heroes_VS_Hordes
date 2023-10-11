@@ -24,11 +24,17 @@ public class UI_DrawTalent : UI_Popup
         NeedToGoldText
     }
 
+    public event Action<int> ChangeTalentHandler;
+
     private GameObject _talentContent;
 
     private TextMeshProUGUI _totalTalentLevelText;
     private TextMeshProUGUI _ownedGoldText;
     private TextMeshProUGUI _needToGoldText;
+
+    private int _drawTalentIndex;
+
+    private const int MIN_DRAW_TALENT_INDEX = 0;
 
     private readonly string[] TALENT_ICONS_NAMES = new string[]
     {
@@ -55,6 +61,8 @@ public class UI_DrawTalent : UI_Popup
             {
                 var talentUI = Utils.GetOrAddComponent<UI_Talent>(talentGO);
                 talentUI.SetTalent(ii, TALENT_ICONS_NAMES[ii]);
+                ChangeTalentHandler -= talentUI.ChangeTalent;
+                ChangeTalentHandler += talentUI.ChangeTalent;
             });
         }
 
@@ -71,7 +79,18 @@ public class UI_DrawTalent : UI_Popup
 
     private void _DrawTalentButton()
     {
+        var totlaOwnedTalentLevel = Manager.Instance.SaveData.TotalOwnedTalentsLevel;
+        var needGold = Manager.Instance.Data.CostToObtainTalentDataList[totlaOwnedTalentLevel].NeedGold;
+        if (Manager.Instance.SaveData.OwnedGold < needGold)
+            return;
 
+        _drawTalentIndex = UnityEngine.Random.Range(MIN_DRAW_TALENT_INDEX, Manager.Instance.SaveData.OwnedTalents.Length);
+        Manager.Instance.UI.ShowPopupUI<UI_SelectTalent>(Define.RESOURCE_UI_SELECT_TALENT, (selectTalentUI) =>
+        {
+            selectTalentUI.SetSelectTalent(_drawTalentIndex, TALENT_ICONS_NAMES[_drawTalentIndex]);
+            selectTalentUI.CloseSelectTalentUIHandler -= _ChangeSelectTalent;
+            selectTalentUI.CloseSelectTalentUIHandler += _ChangeSelectTalent;
+        });
     }
     #endregion
 
@@ -87,5 +106,15 @@ public class UI_DrawTalent : UI_Popup
             _needToGoldText.color = Color.red;
         else
             _needToGoldText.color = Color.white;
+    }
+
+    private void _ChangeSelectTalent()
+    {
+        var totlaOwnedTalentLevel = Manager.Instance.SaveData.TotalOwnedTalentsLevel;
+        var needGold = Manager.Instance.Data.CostToObtainTalentDataList[totlaOwnedTalentLevel].NeedGold;
+        Manager.Instance.SaveData.SetOwnedTalent(_drawTalentIndex);
+        SetDrawTalent();
+        ChangeTalentHandler?.Invoke(_drawTalentIndex);
+        Manager.Instance.SaveData.OwnedGold -= needGold;
     }
 }

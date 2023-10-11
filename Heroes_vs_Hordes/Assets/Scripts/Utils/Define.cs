@@ -83,6 +83,7 @@ public class Define
     public const string RESOURCE_UI_FADE = "UI_Fade";
     public const string RESOURCE_UI_SELECT_HERO = "UI_SelectHero";
     public const string RESOURCE_UI_DRAW_TALENT = "UI_DrawTalent";
+    public const string RESOURCE_UI_SELECT_TALENT = "UI_SelectTalent";
     // UI_Element
     public const string RESOURCE_UI_NORMAL_BATTLE_WAVE = "UI_NormalBattleWave";
     public const string RESOURCE_UI_GOLD_RUSH_WAVE = "UI_GoldRushWave";
