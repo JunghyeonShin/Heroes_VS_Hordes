@@ -8,6 +8,9 @@ public class SaveDataManager
     private GameData _gameData;
 
     private const int INIT_CLEAR_CHAPTER = -1;
+    private const int INIT_HERO_LEVEL = 1;
+    private const int TOTAL_HEROES_COUNT = 2;
+    private const int INDEX_HERO_ARCANE_MAGE = 0;
 
     private readonly string SAVE_DATA_PATH = Application.persistentDataPath + "/SaveData.json";
 
@@ -53,6 +56,12 @@ public class SaveDataManager
         }
     }
 
+    public int[] OwnedHeroes { get { return _gameData.OwnedHeroes; } }
+    public void SetOwnedHero(int index)
+    {
+        _gameData.OwnedHeroes[index] = INIT_HERO_LEVEL;
+    }
+
     public void Init()
     {
         if (_LoadGameData())
@@ -61,6 +70,8 @@ public class SaveDataManager
         _gameData = new GameData();
         _gameData.ClearChapter = INIT_CLEAR_CHAPTER;
         _gameData.SelectHero = Define.RESOURCE_HERO_ARCANE_MAGE;
+        _gameData.OwnedHeroes = new int[TOTAL_HEROES_COUNT];
+        _gameData.OwnedHeroes[INDEX_HERO_ARCANE_MAGE] = INIT_HERO_LEVEL;
         SaveGameData();
     }
 

@@ -19,7 +19,7 @@ public class ResourceManager
     #region InitResource
     private bool[] _loadCompletes;
 
-    private const int INDEX_TOTAL_VALUE = 15;
+    private const int INDEX_TOTAL_VALUE = 21;
     private const int INDEX_SPRITE_SLIDER_YELLOW = 0;
     private const int INDEX_SPRITE_SLIDER_RED = 1;
     private const int INDEX_SPRITE_ICON_WEAPON_HERO_ARCANE_WAND = 2;
@@ -35,6 +35,12 @@ public class ResourceManager
     private const int INDEX_SPRITE_ICON_BOOK_PROJECTILE_COPY = 12;
     private const int INDEX_SPRITE_ICON_BOOK_PROJECTILE_SPEED = 13;
     private const int INDEX_SPRITE_ICON_BOOK_RANGE = 14;
+    private const int INDEX_SPRITE_HERO_PORTRAIT_ARCANE_MAGE = 15;
+    private const int INDEX_SPRITE_HERO_PORTRAIT_KNIGHT = 16;
+    private const int INDEX_SPRITE_SELECTABLE_HERO_ARCANE_MAGE = 17;
+    private const int INDEX_SPRITE_SELECTABLE_HERO_KNIGHT = 18;
+    private const int INDEX_UI_SELECTABLE_HERO = 19;
+    private const int INDEX_UI_BLANK_SELECTABLE_HERO = 20;
 
     public bool LoadComplete()
     {
@@ -64,6 +70,12 @@ public class ResourceManager
         LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_BOOK_PROJECTILE_COPY, (sprite) => { _loadCompletes[INDEX_SPRITE_ICON_BOOK_PROJECTILE_COPY] = true; });
         LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_BOOK_PROJECTILE_SPEED, (sprite) => { _loadCompletes[INDEX_SPRITE_ICON_BOOK_PROJECTILE_SPEED] = true; });
         LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_BOOK_RANGE, (sprite) => { _loadCompletes[INDEX_SPRITE_ICON_BOOK_RANGE] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_HERO_PORTRAIT_ARCANE_MAGE, (sprite) => { _loadCompletes[INDEX_SPRITE_HERO_PORTRAIT_ARCANE_MAGE] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_HERO_PORTRAIT_KNIGHT, (sprite) => { _loadCompletes[INDEX_SPRITE_HERO_PORTRAIT_KNIGHT] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_SELECTABLE_HERO_ARCANE_MAGE, (sprite) => { _loadCompletes[INDEX_SPRITE_SELECTABLE_HERO_ARCANE_MAGE] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_SELECTABLE_HERO_KNIGHT, (sprite) => { _loadCompletes[INDEX_SPRITE_SELECTABLE_HERO_KNIGHT] = true; });
+        LoadAsync<GameObject>(Define.RESOURCE_UI_SELECTABLE_HERO, (gameObject) => { _loadCompletes[INDEX_UI_SELECTABLE_HERO] = true; });
+        LoadAsync<GameObject>(Define.RESOURCE_UI_BLANK_SELECTABLE_HERO, (gameObject) => { _loadCompletes[INDEX_UI_BLANK_SELECTABLE_HERO] = true; });
     }
     #endregion
 

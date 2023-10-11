@@ -9,4 +9,5 @@ public class GameData
     public int ClearChapter;
     public int OwnedGold;
     public string SelectHero;
+    public int[] OwnedHeroes;
 }
