@@ -10,4 +10,5 @@ public class GameData
     public int OwnedGold;
     public string SelectHero;
     public int[] OwnedHeroes;
+    public int[] OwnedTalents;
 }

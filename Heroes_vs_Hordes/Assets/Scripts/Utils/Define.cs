@@ -82,6 +82,8 @@ public class Define
     public const string RESOURCE_UI_LEVEL_UP_HERO = "UI_LevelUpHero";
     public const string RESOURCE_UI_FADE = "UI_Fade";
     public const string RESOURCE_UI_SELECT_HERO = "UI_SelectHero";
+    public const string RESOURCE_UI_DRAW_TALENT = "UI_DrawTalent";
+    public const string RESOURCE_UI_SELECT_TALENT = "UI_SelectTalent";
     // UI_Element
     public const string RESOURCE_UI_NORMAL_BATTLE_WAVE = "UI_NormalBattleWave";
     public const string RESOURCE_UI_GOLD_RUSH_WAVE = "UI_GoldRushWave";
@@ -90,6 +92,7 @@ public class Define
     public const string RESOURCE_UI_SELECT_ABILITY = "UI_SelectAbility";
     public const string RESOURCE_UI_SELECTABLE_HERO = "UI_SelectableHero";
     public const string RESOURCE_UI_BLANK_SELECTABLE_HERO = "UI_BlankSelectableHero";
+    public const string RESOURCE_UI_TALENT = "UI_Talent";
     // Sprite
     public const string RESOURCE_SPRITES_SLIDER_YELLOW = "Slider_Yellow";
     public const string RESOURCE_SPRITES_SLIDER_RED = "Slider_Red";
@@ -106,6 +109,11 @@ public class Define
     public const string RESOURCE_SPRITES_ICON_BOOK_PROJECTILE_COPY = "Icon_Book_Projectile_Copy";
     public const string RESOURCE_SPRITES_ICON_BOOK_PROJECTILE_SPEED = "Icon_Book_Projectile_Speed";
     public const string RESOURCE_SPRITES_ICON_BOOK_RANGE = "Icon_Book_Range";
+    public const string RESOURCE_SPRITES_ICON_TALENT_BOMB = "Icon_Talent_Bomb";
+    public const string RESOURCE_SPRITES_ICON_TALENT_BOOTS = "Icon_Talent_Boots";
+    public const string RESOURCE_SPRITES_ICON_TALENT_HEART = "Icon_Talent_Heart";
+    public const string RESOURCE_SPRITES_ICON_TALENT_STOPWATCH = "Icon_Talent_Stopwatch";
+    public const string RESOURCE_SPRITES_ICON_TALENT_SWORD = "Icon_Talent_Sword";
 
     #region TAG
     public const string TAG_REPOSITION_AREA = "RepositionArea";
@@ -207,4 +215,12 @@ public class Define
     #endregion
 
     public const int ADJUSE_CHAPTER_INDEX = 1;
+
+    #region Talent
+    public const int INDEX_TALENT_SWORD = 0;
+    public const int INDEX_TALENT_HEART = 1;
+    public const int INDEX_TALENT_BOOST = 2;
+    public const int INDEX_TALENT_BOMB = 3;
+    public const int INDEX_TALENT_STOPWATCH = 4;
+    #endregion
 }

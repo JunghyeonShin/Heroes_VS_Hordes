@@ -19,7 +19,7 @@ public class ResourceManager
     #region InitResource
     private bool[] _loadCompletes;
 
-    private const int INDEX_TOTAL_VALUE = 21;
+    private const int INDEX_TOTAL_VALUE = 27;
     private const int INDEX_SPRITE_SLIDER_YELLOW = 0;
     private const int INDEX_SPRITE_SLIDER_RED = 1;
     private const int INDEX_SPRITE_ICON_WEAPON_HERO_ARCANE_WAND = 2;
@@ -41,6 +41,12 @@ public class ResourceManager
     private const int INDEX_SPRITE_SELECTABLE_HERO_KNIGHT = 18;
     private const int INDEX_UI_SELECTABLE_HERO = 19;
     private const int INDEX_UI_BLANK_SELECTABLE_HERO = 20;
+    private const int INDEX_UI_TALENT = 21;
+    private const int INDEX_SPRITES_ICON_TALENT_BOMB = 22;
+    private const int INDEX_SPRITES_ICON_TALENT_BOOTS = 23;
+    private const int INDEX_SPRITES_ICON_TALENT_HEART = 24;
+    private const int INDEX_SPRITES_ICON_TALENT_STOPWATCH = 25;
+    private const int INDEX_SPRITES_ICON_TALENT_SWORD = 26;
 
     public bool LoadComplete()
     {
@@ -76,6 +82,12 @@ public class ResourceManager
         LoadAsync<Sprite>(Define.RESOURCE_SELECTABLE_HERO_KNIGHT, (sprite) => { _loadCompletes[INDEX_SPRITE_SELECTABLE_HERO_KNIGHT] = true; });
         LoadAsync<GameObject>(Define.RESOURCE_UI_SELECTABLE_HERO, (gameObject) => { _loadCompletes[INDEX_UI_SELECTABLE_HERO] = true; });
         LoadAsync<GameObject>(Define.RESOURCE_UI_BLANK_SELECTABLE_HERO, (gameObject) => { _loadCompletes[INDEX_UI_BLANK_SELECTABLE_HERO] = true; });
+        LoadAsync<GameObject>(Define.RESOURCE_UI_TALENT, (gameObject) => { _loadCompletes[INDEX_UI_TALENT] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_TALENT_BOMB, (sprite) => { _loadCompletes[INDEX_SPRITES_ICON_TALENT_BOMB] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_TALENT_BOOTS, (sprite) => { _loadCompletes[INDEX_SPRITES_ICON_TALENT_BOOTS] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_TALENT_HEART, (sprite) => { _loadCompletes[INDEX_SPRITES_ICON_TALENT_HEART] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_TALENT_STOPWATCH, (sprite) => { _loadCompletes[INDEX_SPRITES_ICON_TALENT_STOPWATCH] = true; });
+        LoadAsync<Sprite>(Define.RESOURCE_SPRITES_ICON_TALENT_SWORD, (sprite) => { _loadCompletes[INDEX_SPRITES_ICON_TALENT_SWORD] = true; });
     }
     #endregion
 

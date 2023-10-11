@@ -70,7 +70,10 @@ public class UI_MainScene : UI_Scene
 
     private void _ClickTalentButton()
     {
-
+        Manager.Instance.UI.ShowPopupUI<UI_DrawTalent>(Define.RESOURCE_UI_DRAW_TALENT, (drawTalentUI) =>
+        {
+            drawTalentUI.SetDrawTalent();
+        });
     }
 
     private void _ClickSelectHeroButton()

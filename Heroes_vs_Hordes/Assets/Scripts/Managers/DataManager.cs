@@ -19,8 +19,10 @@ public class DataManager : MonoBehaviour
     public Dictionary<string, List<AbilityDescriptionData>> AbilityDescriptionDataDic { get; private set; }
     public Dictionary<string, MonsterInfoData> MonsterInfoDic { get; private set; }
     public List<CostToObtainHeroData> CostToObtainHeroDataList { get; private set; }
+    public List<CostToObtainTalentData> CostToObtainTalentDataList { get; private set; }
+    public List<List<TalentInfoData>> TalentInfoDataList { get; private set; }
 
-    private const int INDEX_LOAD_TOTAL_VALUE = 10;
+    private const int INDEX_LOAD_TOTAL_VALUE = 12;
     private const int INDEX_LOAD_HERO_COMMON_ABILITY = 0;
     private const int INDEX_LOAD_HERO_INDIVIDUAL_ABILITY = 1;
     private const int INDEX_LOAD_REQUIRED_EXP = 2;
@@ -31,6 +33,8 @@ public class DataManager : MonoBehaviour
     private const int INDEX_LOAD_ABILITY_DESCRIPTION = 7;
     private const int INDEX_LOAD_MONSTER_INFO = 8;
     private const int INDEX_LOAD_COST_TO_OBTAIN_HERO = 9;
+    private const int INDEX_LOAD_COST_TO_OBTAIN_TALENT = 10;
+    private const int INDEX_LOAD_TALENT_INFO = 11;
 
     private const int KEY_HERO_ABILITY = 0;
     private const int KEY_WEAPON_ABILITY = 0;
@@ -44,6 +48,7 @@ public class DataManager : MonoBehaviour
     private const string URL_WEAPON_ABILITY = "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&range=A2:H";
     private const string URL_MONSTER_INFO = "https://docs.google.com/spreadsheets/d/1IoSyWsESeudzCxpTH7C9OuVO4DSK9dxACgsTze3T64g/export?format=tsv&range=A2:D";
     private const string URL_COST_TO_OBTAIN_HERO = "https://docs.google.com/spreadsheets/d/1CD6C-4wPzAcKiNm6oVV5L8NXekxnrYair2ZzAd8fvdg/export?format=tsv&range=B2:B";
+    private const string URL_COST_TO_OBTAIN_TALENT = "https://docs.google.com/spreadsheets/d/1kTAR9iiYYLndKOaBaxOCNf_-1mHc-MFmWS8uAuCjHVo/export?format=tsv&range=B2:B";
 
     private readonly Dictionary<string, string> URL_WEAPON_LEVEL_ABILITY_DIC = new Dictionary<string, string>()
     {
@@ -80,6 +85,14 @@ public class DataManager : MonoBehaviour
         {Define.BOOK_PROJECTILE_SPEED,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&gid=1592589412&range=B2:D" },
         {Define.BOOK_RANGE,"https://docs.google.com/spreadsheets/d/1xUKd9Z1qmH8t1cuHQzwhaMA1ecgDtNoaiNK2lgxpFBQ/export?format=tsv&gid=789511474&range=B2:D" }
     };
+    private readonly List<string> URL_TALENT_INFO_LIST = new List<string>()
+    {
+        "https://docs.google.com/spreadsheets/d/14wyDog8U24Z4--gX5hxvvTq-jTgReSfqr0k0NKW_aIs/export?format=tsv&range=B2:C",
+        "https://docs.google.com/spreadsheets/d/14wyDog8U24Z4--gX5hxvvTq-jTgReSfqr0k0NKW_aIs/export?format=tsv&gid=437398318&range=B2:C",
+        "https://docs.google.com/spreadsheets/d/14wyDog8U24Z4--gX5hxvvTq-jTgReSfqr0k0NKW_aIs/export?format=tsv&gid=2066300398&range=B2:C",
+        "https://docs.google.com/spreadsheets/d/14wyDog8U24Z4--gX5hxvvTq-jTgReSfqr0k0NKW_aIs/export?format=tsv&gid=823390193&range=B2:C",
+        "https://docs.google.com/spreadsheets/d/14wyDog8U24Z4--gX5hxvvTq-jTgReSfqr0k0NKW_aIs/export?format=tsv&gid=1652080876&range=B2:C"
+    };
 
     public void Init()
     {
@@ -94,6 +107,8 @@ public class DataManager : MonoBehaviour
         _LoadAbilityDescription().Forget();
         _LoadMonsterInfo().Forget();
         _LoadCostToObtainHero().Forget();
+        _LoadCostToObtainTalent().Forget();
+        _LoadTalentInfo().Forget();
     }
 
     public bool LoadComplete()
@@ -280,6 +295,45 @@ public class DataManager : MonoBehaviour
             CostToObtainHeroDataList.Add(new CostToObtainHeroData(splitData));
         }
         _loadCompletes[INDEX_LOAD_COST_TO_OBTAIN_HERO] = true;
+    }
+    #endregion
+
+    #region CostToObtainTalent
+    private async UniTaskVoid _LoadCostToObtainTalent()
+    {
+        var webRequest = UnityWebRequest.Get(URL_COST_TO_OBTAIN_TALENT);
+        var op = await webRequest.SendWebRequest();
+
+        CostToObtainTalentDataList = new List<CostToObtainTalentData>();
+        var splitRawData = op.downloadHandler.text.Split('\n');
+        foreach (var data in splitRawData)
+        {
+            var splitData = data.Split('\t');
+            CostToObtainTalentDataList.Add(new CostToObtainTalentData(splitData));
+        }
+        _loadCompletes[INDEX_LOAD_COST_TO_OBTAIN_TALENT] = true;
+    }
+    #endregion
+
+    #region TalentInfo
+    private async UniTaskVoid _LoadTalentInfo()
+    {
+        TalentInfoDataList = new List<List<TalentInfoData>>();
+        foreach (var talentInfoURL in URL_TALENT_INFO_LIST)
+        {
+            var webRequest = UnityWebRequest.Get(talentInfoURL);
+            var op = await webRequest.SendWebRequest();
+
+            var talentInfoDataList = new List<TalentInfoData>();
+            var splitRawData = op.downloadHandler.text.Split('\n');
+            foreach (var data in splitRawData)
+            {
+                var splitData = data.Split('\t');
+                talentInfoDataList.Add(new TalentInfoData(splitData));
+            }
+            TalentInfoDataList.Add(talentInfoDataList);
+        }
+        _loadCompletes[INDEX_LOAD_TALENT_INFO] = true;
     }
     #endregion
 }
