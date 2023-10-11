@@ -83,7 +83,7 @@ public class UI_SelectAbility : UI_Element
         {
             _selectAbilityIcon.sprite = sprite;
 
-            var abilityDescription = Manager.Instance.Data.AbilityDescriptionDic[_abilityName][Manager.Instance.Ingame.GetOwnedAbilityLevel(_abilityName)];
+            var abilityDescription = Manager.Instance.Data.AbilityDescriptionDataDic[_abilityName][Manager.Instance.Ingame.GetOwnedAbilityLevel(_abilityName)];
             _selectAbilityLevelText.text = abilityDescription.AbilityLevel;
             _selectAbilityNameText.text = abilityDescription.AbilityName;
             _selectAbilityDescriptionText.text = abilityDescription.AbilityDescription;

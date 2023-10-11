@@ -16,10 +16,11 @@ public class DataManager : MonoBehaviour
     public Dictionary<string, WeaponAbilityData> WeaponAbilityDataDic { get; private set; }
     public Dictionary<string, List<WeaponAbilityData>> WeaponLevelAbilityDataDic { get; private set; }
     public Dictionary<string, List<float>> BookAbilityDataDic { get; private set; }
-    public Dictionary<string, List<AbilityDescriptionData>> AbilityDescriptionDic { get; private set; }
+    public Dictionary<string, List<AbilityDescriptionData>> AbilityDescriptionDataDic { get; private set; }
     public Dictionary<string, MonsterInfoData> MonsterInfoDic { get; private set; }
+    public List<CostToObtainHeroData> CostToObtainHeroDataList { get; private set; }
 
-    private const int INDEX_LOAD_TOTAL_VALUE = 9;
+    private const int INDEX_LOAD_TOTAL_VALUE = 10;
     private const int INDEX_LOAD_HERO_COMMON_ABILITY = 0;
     private const int INDEX_LOAD_HERO_INDIVIDUAL_ABILITY = 1;
     private const int INDEX_LOAD_REQUIRED_EXP = 2;
@@ -29,6 +30,7 @@ public class DataManager : MonoBehaviour
     private const int INDEX_LOAD_BOOK_ABILITY = 6;
     private const int INDEX_LOAD_ABILITY_DESCRIPTION = 7;
     private const int INDEX_LOAD_MONSTER_INFO = 8;
+    private const int INDEX_LOAD_COST_TO_OBTAIN_HERO = 9;
 
     private const int KEY_HERO_ABILITY = 0;
     private const int KEY_WEAPON_ABILITY = 0;
@@ -41,6 +43,7 @@ public class DataManager : MonoBehaviour
     private const string URL_CHAPTER_INFO = "https://docs.google.com/spreadsheets/d/1ptxHR2aiz_O8_7dHXWig4HZfOraFTpzJJWPBpDrn5Yw/export?format=tsv&range=A2:G";
     private const string URL_WEAPON_ABILITY = "https://docs.google.com/spreadsheets/d/1xWD3vUbZbW5n3M9wpjq1kzT2R3nonKkUXNb1lIu4dmY/export?format=tsv&range=A2:H";
     private const string URL_MONSTER_INFO = "https://docs.google.com/spreadsheets/d/1IoSyWsESeudzCxpTH7C9OuVO4DSK9dxACgsTze3T64g/export?format=tsv&range=A2:D";
+    private const string URL_COST_TO_OBTAIN_HERO = "https://docs.google.com/spreadsheets/d/1CD6C-4wPzAcKiNm6oVV5L8NXekxnrYair2ZzAd8fvdg/export?format=tsv&range=B2:B";
 
     private readonly Dictionary<string, string> URL_WEAPON_LEVEL_ABILITY_DIC = new Dictionary<string, string>()
     {
@@ -90,6 +93,7 @@ public class DataManager : MonoBehaviour
         _LoadBookAbility().Forget();
         _LoadAbilityDescription().Forget();
         _LoadMonsterInfo().Forget();
+        _LoadCostToObtainHero().Forget();
     }
 
     public bool LoadComplete()
@@ -226,7 +230,7 @@ public class DataManager : MonoBehaviour
     #region AbilityDescription
     private async UniTaskVoid _LoadAbilityDescription()
     {
-        AbilityDescriptionDic = new Dictionary<string, List<AbilityDescriptionData>>();
+        AbilityDescriptionDataDic = new Dictionary<string, List<AbilityDescriptionData>>();
         foreach (var abilityDescriptionURL in URL_ABILITY_DESCRIPTION_DIC)
         {
             var webRequest = UnityWebRequest.Get(abilityDescriptionURL.Value);
@@ -239,7 +243,7 @@ public class DataManager : MonoBehaviour
                 var splitData = data.Split('\t');
                 abilityDescriptionList.Add(new AbilityDescriptionData(splitData));
             }
-            AbilityDescriptionDic.Add(abilityDescriptionURL.Key, abilityDescriptionList);
+            AbilityDescriptionDataDic.Add(abilityDescriptionURL.Key, abilityDescriptionList);
         }
         _loadCompletes[INDEX_LOAD_ABILITY_DESCRIPTION] = true;
     }
@@ -259,6 +263,23 @@ public class DataManager : MonoBehaviour
             MonsterInfoDic.Add(splitData[KEY_MONSTER_INFO], new MonsterInfoData(splitData));
         }
         _loadCompletes[INDEX_LOAD_MONSTER_INFO] = true;
+    }
+    #endregion
+
+    #region CostToObtainHero
+    private async UniTaskVoid _LoadCostToObtainHero()
+    {
+        var webRequest = UnityWebRequest.Get(URL_COST_TO_OBTAIN_HERO);
+        var op = await webRequest.SendWebRequest();
+
+        CostToObtainHeroDataList = new List<CostToObtainHeroData>();
+        var splitRawData = op.downloadHandler.text.Split('\n');
+        foreach (var data in splitRawData)
+        {
+            var splitData = data.Split('\t');
+            CostToObtainHeroDataList.Add(new CostToObtainHeroData(splitData));
+        }
+        _loadCompletes[INDEX_LOAD_COST_TO_OBTAIN_HERO] = true;
     }
     #endregion
 }

@@ -86,4 +86,12 @@ public class UI_SelectableHero : UI_Element
         else
             Utils.SetActive(_selectHeroBorder, false);
     }
+
+    public void SetNeedToGold()
+    {
+        if (false == _needToGoldTag.activeSelf)
+            return;
+
+        _needToGoldText.text = Manager.Instance.Data.CostToObtainHeroDataList[_selectableIndex].NeedGold.ToString();
+    }
 }

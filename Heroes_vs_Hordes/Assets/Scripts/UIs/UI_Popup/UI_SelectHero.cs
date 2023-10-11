@@ -40,6 +40,7 @@ public class UI_SelectHero : UI_Popup
     }
 
     public event Action<int> ChangeSelectedHeroHandler;
+    public event Action NeedToGoldHandler;
 
     private GameObject _selectHeroButton;
     private GameObject _selectedHeroPanel;
@@ -86,6 +87,8 @@ public class UI_SelectHero : UI_Popup
                 selectableHeroUI.SetSelectableHero(ii, SELECTABLE_HERO_INFO[ii].HeroName, SELECTABLE_HERO_INFO[ii].SelectHeroButtonName);
                 ChangeSelectedHeroHandler -= selectableHeroUI.ChangeSelectHero;
                 ChangeSelectedHeroHandler += selectableHeroUI.ChangeSelectHero;
+                NeedToGoldHandler -= selectableHeroUI.SetNeedToGold;
+                NeedToGoldHandler += selectableHeroUI.SetNeedToGold;
 
                 selectableHeroUI.SelectHeroHandler -= _SelectHero;
                 selectableHeroUI.SelectHeroHandler += _SelectHero;
@@ -109,19 +112,24 @@ public class UI_SelectHero : UI_Popup
 
     private void _ClickSelectHeroButton()
     {
-
+        _selectedHeroIndex = _selectHeroIndex;
+        ChangeSelectedHeroHandler?.Invoke(_selectedHeroIndex);
+        Manager.Instance.SaveData.SelectHero = SELECTABLE_HERO_INFO[_selectedHeroIndex].HeroName;
+        _ActiveHeroButton(false, true, false);
     }
 
     private void _ClickUnlockHeroButton()
     {
-
+        _ownedGoldText.text = Manager.Instance.SaveData.OwnedGold.ToString();
+        _ActiveHeroButton(true, false, false);
+        Manager.Instance.SaveData.SetOwnedHero(_selectHeroIndex);
+        Manager.Instance.SaveData.OwnedGold -= Manager.Instance.Data.CostToObtainHeroDataList[_selectHeroIndex].NeedGold;
     }
     #endregion
 
     public void SetSelectHero()
     {
         _ownedGoldText.text = Manager.Instance.SaveData.OwnedGold.ToString();
-
         var selectHeroName = Manager.Instance.SaveData.SelectHero;
         for (int ii = 0; ii < SELECTABLE_HERO_INFO.Length; ++ii)
         {
@@ -135,7 +143,7 @@ public class UI_SelectHero : UI_Popup
                 break;
             }
         }
-
+        NeedToGoldHandler?.Invoke();
         _ActiveHeroButton(false, true, false);
     }
 
@@ -146,9 +154,13 @@ public class UI_SelectHero : UI_Popup
 
         _selectHeroIndex = index;
         _SetHeroPortrait();
-
         if (Manager.Instance.SaveData.OwnedHeroes[_selectHeroIndex] < INIT_HERO_LEVEL)
-            _ActiveHeroButton(false, false, true);
+        {
+            if (Manager.Instance.SaveData.OwnedGold < Manager.Instance.Data.CostToObtainHeroDataList[_selectHeroIndex].NeedGold)
+                _ActiveHeroButton(false, false, false);
+            else
+                _ActiveHeroButton(false, false, true);
+        }
         else
         {
             if (index == _selectedHeroIndex)
