@@ -82,6 +82,7 @@ public class Define
     public const string RESOURCE_UI_LEVEL_UP_HERO = "UI_LevelUpHero";
     public const string RESOURCE_UI_FADE = "UI_Fade";
     public const string RESOURCE_UI_SELECT_HERO = "UI_SelectHero";
+    public const string RESOURCE_UI_DRAW_TALENT = "UI_DrawTalent";
     // UI_Element
     public const string RESOURCE_UI_NORMAL_BATTLE_WAVE = "UI_NormalBattleWave";
     public const string RESOURCE_UI_GOLD_RUSH_WAVE = "UI_GoldRushWave";
@@ -90,6 +91,7 @@ public class Define
     public const string RESOURCE_UI_SELECT_ABILITY = "UI_SelectAbility";
     public const string RESOURCE_UI_SELECTABLE_HERO = "UI_SelectableHero";
     public const string RESOURCE_UI_BLANK_SELECTABLE_HERO = "UI_BlankSelectableHero";
+    public const string RESOURCE_UI_TALENT = "UI_Talent";
     // Sprite
     public const string RESOURCE_SPRITES_SLIDER_YELLOW = "Slider_Yellow";
     public const string RESOURCE_SPRITES_SLIDER_RED = "Slider_Red";
