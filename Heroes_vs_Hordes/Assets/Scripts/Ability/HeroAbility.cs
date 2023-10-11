@@ -12,7 +12,11 @@ public class HeroAbility
     public static float GetHeroHealth(string heroName)
     {
         (var heroCommonAbility, var heroIndividualAbility) = _GetHeroAbilityData(heroName);
-        return heroCommonAbility.Health + heroIndividualAbility.Health;
+
+        var heartTalentLevel = Manager.Instance.SaveData.OwnedTalents[Define.INDEX_TALENT_HEART];
+        var heartTalentAbility = Manager.Instance.Data.TalentInfoDataList[Define.INDEX_TALENT_HEART][heartTalentLevel].Ability;
+
+        return heroCommonAbility.Health + heroIndividualAbility.Health + heartTalentAbility;
     }
 
     public static float GetHeroDeffence(string heroName)
@@ -24,7 +28,11 @@ public class HeroAbility
     public static float GetHeroAttack(string heroName)
     {
         (var heroCommonAbility, var heroIndividualAbility) = _GetHeroAbilityData(heroName);
-        return heroCommonAbility.Attack * (DEFAULT_ABILITY_VALUE + heroIndividualAbility.Attack);
+
+        var swordTalentLevel = Manager.Instance.SaveData.OwnedTalents[Define.INDEX_TALENT_SWORD];
+        var swordTalentAbility = Manager.Instance.Data.TalentInfoDataList[Define.INDEX_TALENT_SWORD][swordTalentLevel].Ability;
+
+        return heroCommonAbility.Attack * (DEFAULT_ABILITY_VALUE + heroIndividualAbility.Attack + swordTalentAbility);
     }
 
     public static float GetHeroAttackCooldown(string heroName)
@@ -53,14 +61,17 @@ public class HeroAbility
         (var heroCommonAbility, var heroIndividualAbility) = _GetHeroAbilityData(heroName);
         var heroMoveSpeedValue = heroCommonAbility.MoveSpeed * (DEFAULT_ABILITY_VALUE + heroIndividualAbility.MoveSpeed);
 
+        var boostTalentLevel = Manager.Instance.SaveData.OwnedTalents[Define.INDEX_TALENT_BOOST];
+        var boostTalentAbility = Manager.Instance.Data.TalentInfoDataList[Define.INDEX_TALENT_BOOST][boostTalentLevel].Ability;
+
         var heroMoveSpeedBookLevel = Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_HERO_MOVE_SPEED);
         if (heroMoveSpeedBookLevel - ADJUST_BOOK_LEVEL >= 0)
         {
             var bookAbility = Manager.Instance.Data.BookAbilityDataDic[Define.BOOK_HERO_MOVE_SPEED];
-            return heroMoveSpeedValue * (DEFAULT_ABILITY_VALUE + bookAbility[Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_HERO_MOVE_SPEED) - ADJUST_BOOK_LEVEL]);
+            return heroMoveSpeedValue * (DEFAULT_ABILITY_VALUE + bookAbility[Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_HERO_MOVE_SPEED) - ADJUST_BOOK_LEVEL] + boostTalentAbility);
         }
         else
-            return heroMoveSpeedValue;
+            return heroMoveSpeedValue * (DEFAULT_ABILITY_VALUE + boostTalentAbility);
     }
 
     public static float GetHeroProjectileSpeed(string heroName)

@@ -17,7 +17,11 @@ public class WeaponAbility
             for (int ii = 0; ii <= weaponLevel - ADJUST_WEAPON_LEVEL; ++ii)
                 weaponAdditionalAttack += weaponLevelAbilityList[ii].Attack;
         }
-        return (weaponAbility.Attack + HeroAbility.GetHeroAttack(heroName)) * (DEFAULT_ABILITY_VALUE + weaponAdditionalAttack);
+
+        var swordTalentLevel = Manager.Instance.SaveData.OwnedTalents[Define.INDEX_TALENT_SWORD];
+        var swordTalentAbility = Manager.Instance.Data.TalentInfoDataList[Define.INDEX_TALENT_SWORD][swordTalentLevel].Ability;
+
+        return (weaponAbility.Attack + HeroAbility.GetHeroAttack(heroName)) * (DEFAULT_ABILITY_VALUE + weaponAdditionalAttack + swordTalentAbility);
     }
 
     public static float GetWeaponAttackCooldown(string weaponName, int weaponLevel)
@@ -73,14 +77,17 @@ public class WeaponAbility
         }
         var weaponEffectRangeValue = weaponAbility.EffectRange * (DEFAULT_ABILITY_VALUE + weaponAdditionalEffectRange);
 
+        var bombTalentLevel = Manager.Instance.SaveData.OwnedTalents[Define.INDEX_TALENT_BOMB];
+        var bombTalentAbility = Manager.Instance.Data.TalentInfoDataList[Define.INDEX_TALENT_BOMB][bombTalentLevel].Ability;
+
         var effectRangeBookLevel = Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_RANGE);
         if (effectRangeBookLevel - ADJUST_BOOK_LEVEL >= 0)
         {
             var bookAbility = Manager.Instance.Data.BookAbilityDataDic[Define.BOOK_RANGE];
-            return weaponEffectRangeValue * (DEFAULT_ABILITY_VALUE + bookAbility[Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_RANGE) - ADJUST_BOOK_LEVEL]);
+            return weaponEffectRangeValue * (DEFAULT_ABILITY_VALUE + bookAbility[Manager.Instance.Ingame.GetOwnedAbilityLevel(Define.BOOK_RANGE) - ADJUST_BOOK_LEVEL] + bombTalentAbility);
         }
         else
-            return weaponEffectRangeValue;
+            return weaponEffectRangeValue * (DEFAULT_ABILITY_VALUE + bombTalentAbility);
     }
 
     public static float GetWeaponEffectTime(string weaponName, int weaponLevel)
@@ -92,7 +99,11 @@ public class WeaponAbility
             for (int ii = 0; ii <= weaponLevel - ADJUST_WEAPON_LEVEL; ++ii)
                 weaponEffectTime += weaponLevelAbilityList[ii].EffectTime;
         }
-        return weaponAbility.EffectTime + weaponEffectTime;
+
+        var stopwatchTalentLevel = Manager.Instance.SaveData.OwnedTalents[Define.INDEX_TALENT_STOPWATCH];
+        var stopwatchTalentAbility = Manager.Instance.Data.TalentInfoDataList[Define.INDEX_TALENT_STOPWATCH][stopwatchTalentLevel].Ability;
+
+        return (weaponAbility.EffectTime + weaponEffectTime) * (DEFAULT_ABILITY_VALUE + stopwatchTalentAbility);
     }
 
     public static float GetWeaponProjectileCount(string weaponName, int weaponLevel)

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CostToObtainHeroData
+public class CostToObtainTalentData
 {
     private int _needGold;
 
@@ -10,7 +10,7 @@ public class CostToObtainHeroData
 
     private const int INDEX_NEED_GOLD = 0;
 
-    public CostToObtainHeroData(string[] splitData)
+    public CostToObtainTalentData(string[] splitData)
     {
         int.TryParse(splitData[INDEX_NEED_GOLD].TrimEnd(), out _needGold);
     }

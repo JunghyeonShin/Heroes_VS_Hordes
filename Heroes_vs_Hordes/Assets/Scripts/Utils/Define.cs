@@ -108,6 +108,11 @@ public class Define
     public const string RESOURCE_SPRITES_ICON_BOOK_PROJECTILE_COPY = "Icon_Book_Projectile_Copy";
     public const string RESOURCE_SPRITES_ICON_BOOK_PROJECTILE_SPEED = "Icon_Book_Projectile_Speed";
     public const string RESOURCE_SPRITES_ICON_BOOK_RANGE = "Icon_Book_Range";
+    public const string RESOURCE_SPRITES_ICON_TALENT_BOMB = "Icon_Talent_Bomb";
+    public const string RESOURCE_SPRITES_ICON_TALENT_BOOTS = "Icon_Talent_Boots";
+    public const string RESOURCE_SPRITES_ICON_TALENT_HEART = "Icon_Talent_Heart";
+    public const string RESOURCE_SPRITES_ICON_TALENT_STOPWATCH = "Icon_Talent_Stopwatch";
+    public const string RESOURCE_SPRITES_ICON_TALENT_SWORD = "Icon_Talent_Sword";
 
     #region TAG
     public const string TAG_REPOSITION_AREA = "RepositionArea";
@@ -209,4 +214,12 @@ public class Define
     #endregion
 
     public const int ADJUSE_CHAPTER_INDEX = 1;
+
+    #region Talent
+    public const int INDEX_TALENT_SWORD = 0;
+    public const int INDEX_TALENT_HEART = 1;
+    public const int INDEX_TALENT_BOOST = 2;
+    public const int INDEX_TALENT_BOMB = 3;
+    public const int INDEX_TALENT_STOPWATCH = 4;
+    #endregion
 }
