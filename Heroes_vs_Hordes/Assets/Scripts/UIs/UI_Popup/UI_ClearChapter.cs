@@ -49,7 +49,7 @@ public class UI_ClearChapter : UI_Popup
     private const int MIN_REWARD_GOLD = 1000;
     private const int MAX_REWARD_GOLD = 1750;
 
-    private readonly Vector3 INIT_REWARD_GOLD_POSITION = new Vector3(0f, -242.5f, 0f);
+    private readonly Vector3 INIT_REWARD_GOLD_POSITION = new Vector3(0f, -365f, 0f);
     private readonly Vector3 CHANGE_REWARD_GOLD_POSITION = new Vector3(0f, 140f, 0f);
 
     protected override void _Init()
